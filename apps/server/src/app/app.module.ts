@@ -1,6 +1,7 @@
 import { Module, Logger } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
         return {
           uri: mongoURI,
+          dbName:
+            configService.get('NODE_ENV') === 'development' ? 'test' : 'prod',
           onConnectionCreate: (connection) => {
             connection.on('connected', () => {
               logger.log(
@@ -37,6 +40,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60 * 60,
+        limit: 100,
+      },
+    ]),
   ],
 })
 export class AppModule {}
