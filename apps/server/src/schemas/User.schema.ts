@@ -6,7 +6,11 @@ import crypto from 'crypto';
 
 export type UserDocument = User & Document;
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+})
 export class User {
   @Prop({
     type: String,
