@@ -12,7 +12,9 @@ import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { JwtAuthGuard } from './auth.guard';
+import { JwtAuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -27,8 +29,9 @@ export class AuthController {
     return this.authService.signup(createUserDto, req, res);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get('admin-dashboard')
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   getProfile(@Req() req) {
     return req.user;
   }
