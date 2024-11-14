@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Query } from 'mongoose';
 import bcrypt from 'bcrypt';
-import slugify from 'slugify';
 import crypto from 'crypto';
 
 export type UserDocument = User & Document;
@@ -103,7 +102,11 @@ UserSchema.pre<UserDocument>('save', async function (next) {
   next();
 });
 
-// TODO: Query hook to exclude inactive users
+// Query hook to exclude inactive users
+UserSchema.pre<Query<UserDocument, UserDocument>>(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 /**
  *
