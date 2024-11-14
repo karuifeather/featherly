@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
@@ -11,11 +11,11 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private userService: UserService
+    private readonly userService: UserService
   ) {}
 
-  private signToken(id: string): string {
-    return this.jwtService.sign(
+  private async signToken(id: string): Promise<string> {
+    return await this.jwtService.signAsync(
       { id },
       {
         secret: this.configService.get<string>('JWT_PRIVATE'),
@@ -27,7 +27,7 @@ export class AuthService {
   async signup(createUserDto: CreateUserDto, req: Request, res: Response) {
     const newUser = await this.userService.create(createUserDto, req);
 
-    const token = this.signToken(newUser.id);
+    const token = await this.signToken(newUser.id);
 
     // Remove password from the newUser object
     newUser.password = undefined;
@@ -46,7 +46,7 @@ export class AuthService {
       secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
     });
 
-    return res.status(201).json({
+    return res.status(HttpStatus.CREATED).json({
       status: 'success',
       token,
       data: {
