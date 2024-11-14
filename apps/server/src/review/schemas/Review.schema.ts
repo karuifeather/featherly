@@ -1,8 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 
-import { Tour } from '../tour/schemas/tour.schema';
-import { User } from '../user/schemas/user.schema';
+import { Tour } from '../../tour/schemas/tour.schema';
+import { User } from '../../user/schemas/user.schema';
 
 export interface ReviewDocument extends Document {
   review: string;

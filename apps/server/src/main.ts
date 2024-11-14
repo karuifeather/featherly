@@ -1,6 +1,6 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
+import { AppModule } from './app.module';
 import helmet from 'helmet';
 
 process.on('uncaughtException', (err) => {
@@ -22,6 +22,8 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors();
+  const { default: cookierParser } = await import('cookie-parser');
+  app.use(cookierParser());
 
   // Add security headers
   app.use(
@@ -60,6 +62,15 @@ async function bootstrap() {
   // Compress responses to improve performance
   const { default: compression } = await import('compression');
   app.use(compression());
+
+  // This will enable the automatic validation of all payloads
+  app.useGlobalPipes(
+    new ValidationPipe({
+      disableErrorMessages: false, // error messages will be not be shown in the response
+      whitelist: true, // remove any extra fields that are not in the DTO
+      transform: true, // transform the incoming payload to the DTO
+    })
+  );
 
   // Handle unhandled promise rejections
   process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {

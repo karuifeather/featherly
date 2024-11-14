@@ -3,8 +3,6 @@ import { Document, Query } from 'mongoose';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
-export type UserDocument = User & Document;
-
 @Schema({
   timestamps: true,
   toJSON: { virtuals: true },
@@ -15,7 +13,7 @@ export class User extends Document {
     type: String,
     required: [true, 'A fname must be given'],
     trim: true,
-    minlength: [6, 'A fname must be at least 6 characters long'],
+    minlength: [3, 'A fname must be at least 3 characters long'],
   })
   fname: string;
 
@@ -23,7 +21,7 @@ export class User extends Document {
     type: String,
     required: [true, 'A lname must be given'],
     trim: true,
-    minlength: [6, 'A lname must be at least 6 characters long'],
+    minlength: [3, 'A lname must be at least 3 characters long'],
   })
   lname: string;
 
@@ -87,6 +85,14 @@ export class User extends Document {
   active: boolean;
 }
 
+export interface UserDocument extends User, Document {
+  isCorrectPassword(candidatePassword: string): Promise<boolean>;
+  hasPasswordChangedAfterTokenIssued(JWTTimestamp: number): boolean;
+  createPasswordResetToken(): string;
+  createEmailConfirmToken(): string;
+  correctPassword(candidatePassword: string): Promise<boolean>;
+}
+
 export const UserSchema = SchemaFactory.createForClass(User);
 
 // Hashing the password before saving
@@ -114,7 +120,7 @@ UserSchema.pre<Query<UserDocument, UserDocument>>(/^find/, function (next) {
  */
 
 // Check if the password is correct
-UserSchema.methods.correctPassword = async function (
+UserSchema.methods.isCorrectPassword = async function (
   this: UserDocument,
   candidatePassword: string
 ): Promise<boolean> {
@@ -122,7 +128,7 @@ UserSchema.methods.correctPassword = async function (
 };
 
 // Check if the user has changed the password after the token was issued
-UserSchema.methods.changedPasswordAfter = function (
+UserSchema.methods.hasPasswordChangedAfterTokenIssued = function (
   this: UserDocument,
   JWTTimestamp: number
 ): boolean {
@@ -148,7 +154,7 @@ UserSchema.methods.createPasswordResetToken = function (): string {
 };
 
 // Create a confirm token when user signs up
-UserSchema.methods.createConfirmToken = function (): string {
+UserSchema.methods.createEmailConfirmToken = function (): string {
   const confirmToken = crypto.randomBytes(18).toString('hex');
   this.accountConfirmToken = crypto
     .createHash('sha256')

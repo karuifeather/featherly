@@ -1,0 +1,39 @@
+import { Controller, Get, Post, Patch, Body, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
+
+import { AuthService } from './auth.service';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  @Post('/signup')
+  async signUp(
+    @Body() createUserDto: CreateUserDto,
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    return this.authService.signup(createUserDto, req, res);
+  }
+
+  @Get('confirmEmail/:token')
+  confirmEmail() {
+    return this.authService.confirmEmail();
+  }
+
+  @Post('/login')
+  login() {
+    return this.authService.login();
+  }
+
+  @Post('/forgotPassword')
+  forgotPassword() {
+    return this.authService.forgotPassword();
+  }
+
+  @Patch('/resetPassword/:token')
+  resetPassword() {
+    return this.authService.resetPassword();
+  }
+}
