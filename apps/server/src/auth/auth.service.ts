@@ -46,13 +46,18 @@ export class AuthService {
       secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
     });
 
-    return res.status(HttpStatus.CREATED).json({
+    const responseBody = {
       status: 'success',
       token,
       data: {
         user: newUser,
       },
-    });
+    };
+
+    res.status(HttpStatus.CREATED).json(responseBody);
+
+    // for testing purposes
+    return responseBody;
   }
 
   confirmEmail() {

@@ -12,7 +12,10 @@ export class UserService {
     @InjectModel(UserSchema.name) private userModel: Model<UserDocument>
   ) {}
 
-  async create(createUserDto: CreateUserDto, req: Request) {
+  async create(
+    createUserDto: CreateUserDto,
+    req: Request
+  ): Promise<UserDocument> {
     try {
       const newUser = await this.userModel.create(createUserDto);
       const confirmationToken = newUser.createEmailConfirmToken();
