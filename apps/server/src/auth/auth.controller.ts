@@ -29,13 +29,6 @@ export class AuthController {
     return this.authService.signup(createUserDto, req, res);
   }
 
-  @Get('admin-dashboard')
-  @Roles('admin')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  getProfile(@Req() req) {
-    return req.user;
-  }
-
   @Get('confirmEmail/:token')
   confirmEmail() {
     return this.authService.confirmEmail();

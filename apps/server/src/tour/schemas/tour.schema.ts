@@ -7,7 +7,7 @@ import slugify from 'slugify';
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 })
-export class Tour {
+export class Tour extends Document {
   @Prop({
     type: String,
     required: [true, 'A tour must have a name'],
@@ -151,7 +151,7 @@ export class Tour {
   guides: string[];
 }
 
-export type TourDocument = Tour & Document;
+export interface TourDocument extends Tour, Document {}
 
 export const TourSchema = SchemaFactory.createForClass(Tour);
 
