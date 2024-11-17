@@ -4,6 +4,9 @@ import { Model } from 'mongoose';
 
 import { CRUDFactory } from '../shared/crud.factory';
 import { Tour, TourDocument } from './schemas/tour.schema';
+import { CreateTourDto } from './dtos/create-tour.dto';
+import { UpdateTourDto } from './dtos/update-tour.dto';
+import { QueryToursDto } from './dtos/query-tour.dto';
 
 @Injectable()
 export class TourService {
@@ -17,19 +20,19 @@ export class TourService {
   }
 
   // CRUD operations
-  async getAllTours(queryParams: any) {
+  async getAllTours(queryParams: QueryToursDto) {
     return this.crud.getAll(queryParams);
   }
 
-  async getTour(id: string, populateOptions?: any) {
+  async getTour(id: string, populateOptions?: string) {
     return this.crud.getOne(id, populateOptions);
   }
 
-  async createTour(data: Partial<TourDocument>) {
+  async createTour(data: CreateTourDto) {
     return this.crud.createOne(data);
   }
 
-  async updateTour(id: string, data: Partial<TourDocument>) {
+  async updateTour(id: string, data: UpdateTourDto) {
     return this.crud.updateOne(id, data);
   }
 
@@ -38,8 +41,8 @@ export class TourService {
   }
 
   // Custom logic: alias top tours
-  aliasTopTours(query: any) {
-    query.limit = '5';
+  aliasTopTours(query: QueryToursDto) {
+    query.limit = 5;
     query.sort = '-ratingsAverage,price';
     query.fields = 'name,price,ratingsAverage,summary,difficulty';
     return this.getAllTours(query);
