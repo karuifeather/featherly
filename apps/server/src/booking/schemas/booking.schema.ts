@@ -29,6 +29,8 @@ export class Booking extends Document {
   paid: boolean;
 }
 
+export interface BookingDocument extends Booking, Document {}
+
 // Create the schema with the correct type
 export const BookingSchema = SchemaFactory.createForClass(Booking);
 

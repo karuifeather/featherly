@@ -2,11 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
-  Delete,
   Param,
   Body,
+  Delete,
+  Patch,
   UseGuards,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
@@ -17,8 +19,27 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Get('/check-out-session/:tourId')
-  async getCheckoutSession(@Param('tourId') tourId: string) {
-    return this.bookingService.getCheckoutSession(tourId);
+  async getCheckoutSession(
+    @Param('tourId') tourId: string,
+    @Req() req,
+    @Res() res
+  ) {
+    const session = await this.bookingService.getCheckoutSession(
+      tourId,
+      req.user,
+      req.protocol,
+      req.get('host')
+    );
+    return res.status(200).json({ status: 'success', session });
+  }
+
+  @Post('/webhook-checkout')
+  async webhookCheckout(@Req() req, @Res() res) {
+    await this.bookingService.webhookCheckout(
+      req.body,
+      req.headers['stripe-signature']
+    );
+    return res.status(200).json({ received: true });
   }
 
   @Get()

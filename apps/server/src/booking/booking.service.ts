@@ -1,34 +1,128 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import Stripe from 'stripe';
+import { ConfigService } from '@nestjs/config';
+import { Booking, BookingDocument } from './schemas/booking.schema';
+import { Tour } from '../tour/schemas/tour.schema';
+import { User } from '../user/schemas/user.schema';
+import { CRUDFactory } from '../shared/crud.factory';
 
 @Injectable()
 export class BookingService {
-  async getCheckoutSession(tourId: string) {
-    // Logic to generate a checkout session
-    return { sessionId: 'mock-session-id', tourId };
+  private readonly stripe: Stripe;
+  private readonly crud: CRUDFactory<BookingDocument>;
+
+  constructor(
+    @InjectModel('Booking') private readonly bookingModel: Model<Booking>,
+    @InjectModel('Tour') private readonly tourModel: Model<Tour>,
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private readonly configService: ConfigService
+  ) {
+    this.stripe = new Stripe(
+      this.configService.get<string>('STRIPE_SECRET_KEY'),
+      {
+        apiVersion: '2024-10-28.acacia',
+      }
+    );
+
+    this.crud = new CRUDFactory<BookingDocument>(this.bookingModel);
+  }
+
+  async getCheckoutSession(
+    tourId: string,
+    user: any,
+    protocol: string,
+    host: string
+  ) {
+    const tour = await this.tourModel.findById(tourId);
+
+    if (!tour) {
+      throw new BadRequestException('Tour not found');
+    }
+
+    const session = await this.stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      success_url: `${protocol}://${host}/my-tours?alert=booking`,
+      cancel_url: `${protocol}://${host}/${tour.slug}`,
+      customer_email: user.email,
+      client_reference_id: tourId,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `${tour.name} Tour`,
+              description: tour.summary,
+              images: [`${protocol}://${host}/img/tours/${tour.imageCover}`],
+            },
+            unit_amount: tour.price * 100, // Stripe uses cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+    });
+
+    return session;
+  }
+
+  async webhookCheckout(payload: any, signature: string) {
+    const endpointSecret = this.configService.get<string>(
+      'STRIPE_WEBHOOK_SECRET'
+    );
+
+    let event;
+
+    try {
+      event = this.stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        endpointSecret
+      );
+    } catch (err) {
+      throw new BadRequestException(`Webhook error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+      await this.createBookingCheckout(session);
+    }
+  }
+
+  private async createBookingCheckout(session: Stripe.Checkout.Session) {
+    const tourId = session.client_reference_id;
+    const user = await this.userModel.findOne({
+      email: session.customer_details.email,
+    });
+    const price = session.amount_total / 100;
+
+    await this.bookingModel.create({
+      tour: tourId,
+      user: user._id,
+      price,
+    });
   }
 
   async getBookings() {
-    // Logic to fetch all bookings
-    return [{ id: 1, tour: 'Tour 1', user: 'User 1' }];
+    return this.bookingModel.find();
   }
 
   async createBooking(createBookingDto: any) {
-    // Logic to create a new booking
-    return { id: 1, ...createBookingDto };
+    return this.crud.createOne(createBookingDto);
   }
 
   async getBooking(id: string) {
-    // Logic to fetch a specific booking
-    return { id, tour: 'Tour 1', user: 'User 1' };
+    return this.bookingModel.findById(id);
   }
 
   async updateBooking(id: string, updateBookingDto: any) {
-    // Logic to update a booking
-    return { id, ...updateBookingDto };
+    return this.bookingModel.findByIdAndUpdate(id, updateBookingDto, {
+      new: true,
+    });
   }
 
   async deleteBooking(id: string) {
-    // Logic to delete a booking
-    return { message: `Booking with ID ${id} deleted successfully.` };
+    return this.bookingModel.findByIdAndDelete(id);
   }
 }
