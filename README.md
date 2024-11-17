@@ -1,4 +1,4 @@
-# Featherly
+# ![Featherly](https://res.cloudinary.com/drj6tdlhy/image/upload/v1731837525/logo-green-small_llobkj.png)
 
 Featherly is a project that’s close to my heart. Years ago, I built my first real-world project with Node and Express after taking a course on Udemy. That feeling of creating something people could use sparked my passion to become a Software Engineer.
 

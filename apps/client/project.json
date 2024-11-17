@@ -15,14 +15,14 @@
         "main": "apps/client/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/client/tsconfig.app.json",
-        "inlineStyleLanguage": "sass",
+        "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
             "input": "apps/client/public"
           }
         ],
-        "styles": ["apps/client/src/styles.sass"],
+        "styles": ["apps/client/src/global.scss"],
         "scripts": []
       },
       "configurations": {
