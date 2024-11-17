@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 
 export interface QueryParams {
+  tourId?: string; // Filter by tour ID
   sort?: string; // Sort fields, e.g., '-price,name'
   page?: number; // Page number for pagination
   limit?: number; // Maximum number of results per page
@@ -15,6 +16,8 @@ export class CRUDFactory<T> {
     filter: FilterQuery<T> = {}, // Strongly typed filter keys
     queryParams: QueryParams = {}
   ): Promise<T[]> {
+    if (queryParams.tourId) filter = { tour: queryParams.tourId };
+
     const { sort, page = 1, limit = 10, fields, ...filters } = queryParams;
     const query = this.model.find(filter);
 
@@ -40,9 +43,6 @@ export class CRUDFactory<T> {
     return await query.exec();
   }
 
-  // Populate options are optional which can be used to populate referenced documents
-  // eg. 'reviews' to populate the reviews field in the Tour document
-  // https://mongoosejs.com/docs/populate.html
   async getOne(id: string, populateOptions?: string): Promise<T> {
     let query = this.model.findById(id);
     if (populateOptions) {

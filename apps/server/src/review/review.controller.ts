@@ -21,12 +21,12 @@ export class ReviewController {
   constructor(private readonly reviewsService: ReviewService) {}
 
   // GET /tours/:tourId/reviews or GET /reviews
-  @Get()
+  @Get('')
   async getAllReviews(
     @Query('tourId') tourId: string,
     @Query() queryParams: any
   ) {
-    return this.reviewsService.getAllReviews(tourId, queryParams);
+    return this.reviewsService.getAllReviews({ tourId, ...queryParams });
   }
 
   // POST /tours/:tourId/reviews

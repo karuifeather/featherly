@@ -3,6 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CRUDFactory } from '../shared/crud.factory'; // Import the generic CRUDFactory
 import { Review } from './schemas/review.schema';
+import { QueryReviewsDto } from './dtos/query-review.dto';
+import { CreateReviewDto } from './dtos/create-review.dto';
+import { UpdateReviewDto } from './dtos/update-review.dto';
 
 @Injectable()
 export class ReviewService {
@@ -11,15 +14,14 @@ export class ReviewService {
   constructor(
     @InjectModel('Review') private readonly reviewModel: Model<Review>
   ) {
-    // Manually instantiate CrudFactory
     this.crudFactory = new CRUDFactory<Review>(this.reviewModel);
   }
 
-  async getAllReviews(filter = {}, queryParams = {}) {
-    return this.crudFactory.getAll(filter, queryParams);
+  async getAllReviews(queryParams: QueryReviewsDto = {}) {
+    return this.crudFactory.getAll(queryParams);
   }
 
-  async createReview(data: any) {
+  async createReview(data: CreateReviewDto) {
     return this.crudFactory.createOne(data);
   }
 
@@ -27,7 +29,7 @@ export class ReviewService {
     return this.crudFactory.getOne(id);
   }
 
-  async updateReview(id: string, data: any) {
+  async updateReview(id: string, data: UpdateReviewDto) {
     return this.crudFactory.updateOne(id, data);
   }
 

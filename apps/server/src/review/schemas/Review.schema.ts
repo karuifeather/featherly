@@ -1,15 +1,12 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 
-import { Tour } from '../../tour/schemas/tour.schema';
-import { User } from '../../user/schemas/user.schema';
-
 export interface ReviewDocument extends Document {
   review: string;
   rating: number;
   createdAt: Date;
-  tour: Tour;
-  user: User;
+  tour: MongooseSchema.Types.ObjectId;
+  user: MongooseSchema.Types.ObjectId;
   constructor: typeof Review; // This is important for static methods
 }
 
@@ -33,14 +30,14 @@ export class Review extends Document {
     ref: 'Tour',
     required: [true, 'Review must belong to a tour.'],
   })
-  tour: Tour;
+  tour: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
     required: [true, 'Review must belong to a user.'],
   })
-  user: User;
+  user: MongooseSchema.Types.ObjectId;
 }
 
 // Create the schema
