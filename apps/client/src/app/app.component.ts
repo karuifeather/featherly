@@ -1,14 +1,39 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PopupComponent } from './components/popup/popup.component';
+
+import { AboutComponent } from './pages/home/about/about.component';
+import { FeaturesComponent } from './pages/home/features/features.component';
+import { ToursComponent } from './pages/home/tours/tours.component';
+import { StoriesComponent } from './pages/home/stories/stories.component';
+import { BookingComponent } from './pages/home/booking/booking.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
-  standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.sass',
+  standalone: true,
+  imports: [
+    NavigationComponent,
+    HeaderComponent,
+    AboutComponent,
+    FeaturesComponent,
+    ToursComponent,
+    StoriesComponent,
+    BookingComponent,
+    FooterComponent,
+    PopupComponent,
+  ],
 })
 export class AppComponent {
-  title = 'client';
+  constructor(private titleService: Title) {
+    this.setTitle('Featherly | Find Exciting tours for adventurous people');
+  }
+
+  setTitle(newTitle: string) {
+    this.titleService.setTitle(newTitle);
+  }
 }
