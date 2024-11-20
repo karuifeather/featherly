@@ -1,3 +1,5 @@
+@import '../../../shared/main.scss';
+
 .footer {
   background-color: $color-grey-dark-3;
   padding: 10rem 0;
@@ -7,8 +9,9 @@
   @include respond(tab-port) {
     padding: 8rem 0;
   }
+
   &__logo-box {
-    text-align: center;
+    width: 100%;
     margin-bottom: 8rem;
 
     @include respond(tab-port) {
@@ -17,11 +20,13 @@
   }
 
   &__logo {
-    width: 15rem;
-    height: auto;
+    display: block;
+    margin: 0 auto;
+    width: 20rem;
 
     img {
-      width: 20%;
+      height: auto;
+      width: 100%;
     }
   }
 

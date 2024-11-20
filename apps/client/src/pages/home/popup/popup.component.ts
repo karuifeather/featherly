@@ -6,6 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './popup.component.html',
-  styles: ``
+  styleUrl: './popup.component.scss',
 })
 export class PopupComponent {}

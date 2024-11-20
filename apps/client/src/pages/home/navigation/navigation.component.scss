@@ -1,3 +1,5 @@
+@import '../../../shared/main.scss';
+
 .navigation {
   &__checkbox {
     display: none;
@@ -40,7 +42,6 @@
     );
     z-index: 200; // z le kaam karna postion defined hunu parxa hai
 
-    
     transition: all 0.8s cubic-bezier(0.86, 0, 0.07, 1); //easings.net
 
     @include respond(tab-port) {
@@ -107,7 +108,7 @@
 
       @include respond(phone) {
         font-size: 2.3rem;
-        padding: .75rem 1.55rem;
+        padding: 0.75rem 1.55rem;
       }
     }
 
@@ -146,7 +147,7 @@
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       left: 0;
       transition: all 0.1s;

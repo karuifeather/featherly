@@ -6,6 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './navigation.component.html',
-  styles: ``
+  styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {}
