@@ -1,0 +1,62 @@
+<header class="header">
+  <!-- Success Alert -->
+  <div
+    *ngIf="user?.accountConfirmToken"
+    class="alert alert--success"
+    style="
+      position: absolute;
+      bottom: 0;
+      text-align: none;
+      padding: 1.6rem 1.7rem;
+    "
+  >
+    <span id="close-error">x</span>
+    Check your inbox to see the confirmation email. Didn't get it?
+    <a class="nav__el" href="/" style="border-bottom: 1px solid #fff">
+      Send again
+    </a>
+    <p>
+      If this message does not go away after a reload, you need to try again.
+    </p>
+  </div>
+
+  <!-- Navigation for Tours -->
+  <nav class="nav nav--tours">
+    <a class="nav__el" href="/overview">All tours</a>
+  </nav>
+
+  <!-- Logo -->
+  <div class="header__logo">
+    <a href="/">
+      <img src="/img/logo-white.png" alt="Featherly logo" />
+    </a>
+  </div>
+
+  <!-- User Navigation -->
+  <nav class="nav nav--user">
+    <ng-container *ngIf="user; else guestLinks">
+      <button
+        class="nav__el nav__el--logout"
+        (click)="logout()"
+        (keydown.enter)="logout()"
+        (keydown.space)="logout()"
+      >
+        Logout
+      </button>
+      <a class="nav__el" href="/me">
+        <img
+          class="nav__user-img"
+          [src]="'/img/users/' + user?.photo"
+          [alt]="user?.name"
+        />
+        <span *ngIf="user?.name">{{ user!.name.split(' ')[0] }}</span>
+      </a>
+    </ng-container>
+
+    <!-- Guest Links -->
+    <ng-template #guestLinks>
+      <a class="nav__el" href="/login">Log in</a>
+      <a class="nav__el nav__el--cta" href="/signup">Sign up</a>
+    </ng-template>
+  </nav>
+</header>
