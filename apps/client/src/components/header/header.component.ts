@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
@@ -21,6 +22,17 @@ export class HeaderComponent {
   };
 
   dropdownOpen = false; // Tracks if the dropdown is open
+
+  isDashboard = false; // Tracks whether the current route is /dashboard
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Check if the current route is /dashboard
+    this.router.events.subscribe(() => {
+      this.isDashboard = this.router.url.startsWith('/dashboard');
+    });
+  }
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
