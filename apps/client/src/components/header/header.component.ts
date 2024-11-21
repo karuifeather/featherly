@@ -15,7 +15,8 @@ export class HeaderComponent {
     accountConfirmToken?: string;
   } | null = {
     name: 'John Doe',
-    photo: 'john.jpg',
+    photo:
+      'https://res.cloudinary.com/drj6tdlhy/image/upload/v1732165738/png-transparent-default-avatar_gpkcme.png',
     accountConfirmToken: 'sample-token', // Example value
   };
 
@@ -27,7 +28,7 @@ export class HeaderComponent {
 
   logout() {
     console.log('User logged out');
-    this.user = null; // Simulate logout
+    this.user = null; // Simulate logging out
   }
 
   @HostListener('window:scroll', [])
