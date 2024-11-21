@@ -1,0 +1,171 @@
+<section
+  class="section-background relative bg-cover bg-center h-screen"
+  style="
+    background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828695/hero_jpyuex.jpg');
+    height: 95vh;
+  "
+>
+  <!-- Blurred Overlay -->
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+
+  <!-- Sign-Up Form -->
+  <div class="relative z-10 flex items-center justify-evenly h-full px-6">
+    <div class="">
+      <h1 class="text-4xl font-bold text-white text-center mb-6">
+        Create Your Account
+      </h1>
+      <p class="text-lg text-gray-300 text-center mb-10">
+        Join us and start your adventure today!
+      </p>
+    </div>
+
+    <form
+      class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 backdrop-blur-md"
+      (submit)="onSubmit(signUpForm)"
+      #signUpForm="ngForm"
+    >
+      <!-- First Name -->
+      <div class="mb-6">
+        <label
+          for="firstName"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >First Name</label
+        >
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          placeholder="Enter your first name"
+          class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
+          required
+          minlength="2"
+          #firstName="ngModel"
+          [(ngModel)]="user.firstName"
+        />
+
+        <!-- Error Message -->
+        <p
+          *ngIf="firstName.invalid && firstName.touched"
+          class="text-red-500 text-sm mt-1"
+        >
+          First name is required and must be at least 2 characters long.
+        </p>
+      </div>
+
+      <!-- Last Name -->
+      <div class="mb-6">
+        <label
+          for="lastName"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >Last Name</label
+        >
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
+          placeholder="Enter your last name"
+          required
+          minlength="2"
+          #lastName="ngModel"
+          [(ngModel)]="user.lastName"
+        />
+        <!-- Error Message -->
+        <p
+          *ngIf="lastName.invalid && lastName.touched"
+          class="text-red-500 text-sm mt-1"
+        >
+          Last name is required and must be at least 2 characters long.
+        </p>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-6">
+        <label
+          for="email"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >Email</label
+        >
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
+          placeholder="Enter your email"
+          required
+          email
+          #email="ngModel"
+          [(ngModel)]="user.email"
+        />
+        <!-- Error Message -->
+        <p
+          *ngIf="email.invalid && email.touched"
+          class="text-red-500 text-sm mt-1"
+        >
+          Please enter a valid email address.
+        </p>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-6">
+        <label
+          for="password"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >Password</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
+          placeholder="Enter your password"
+          required
+          minlength="8"
+          #password="ngModel"
+          [(ngModel)]="user.password"
+        />
+        <p
+          *ngIf="password.invalid && password.touched"
+          class="text-red-500 text-sm mt-1"
+        >
+          Password must be at least 8 characters long.
+        </p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="mb-6">
+        <label
+          for="confirmPassword"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
+          placeholder="Confirm your password"
+          required
+          [ngModel]="user.confirmPassword"
+          #confirmPassword="ngModel"
+        />
+        <p
+          *ngIf="
+            confirmPassword.touched && user.password !== user.confirmPassword
+          "
+          class="text-red-500 text-sm mt-1"
+        >
+          Passwords do not match.
+        </p>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 focus:ring-4 focus:ring-green-500 focus:outline-none"
+      >
+        Sign Up
+      </button>
+    </form>
+  </div>
+</section>
