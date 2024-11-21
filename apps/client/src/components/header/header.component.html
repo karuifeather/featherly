@@ -1,122 +1,111 @@
 <header
   id="main-header"
-  class="py-6 fixed top-0 left-0 w-full z-10 transition-all duration-300 dark"
+  class="py-6 fixed top-0 left-0 w-full z-50 transition-all duration-300 dark"
 >
-  <div class="container mx-auto flex items-center justify-between">
+  <div class="container mx-auto flex items-center justify-between w-full">
     <!-- Logo -->
     <a href="/" class="flex items-center text-green-600 dark:text-green-400">
       <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
       <span class="text-xl font-bold">Featherly</span>
     </a>
 
-    <!-- Search Bar -->
-    <div
-      class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 w-1/2"
-    >
-      <input
-        type="text"
-        placeholder="Search tours, locations..."
-        class="bg-transparent focus:outline-none w-full dark:text-gray-200"
-      />
+    <div class="flex items-center justify-between w-1/2">
+      <!-- Search Bar -->
+      <div
+        class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 w-1/2"
+      >
+        <input
+          type="text"
+          placeholder="Search tours, locations..."
+          class="bg-transparent focus:outline-none w-full dark:text-gray-200"
+        />
 
-      <button class="text-gray-500 dark:text-gray-400 ml-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          class="h-5 w-5"
+        <button class="text-gray-500 dark:text-gray-400 ml-4">
+          <i class="fas fa-search text-gray-500 text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Navigation & User Menu -->
+      <div class="flex items-center space-x-6">
+        <!-- Navigation Links -->
+        <a
+          href="/about"
+          class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+          >About</a
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 16l-2.29-2.29a1 1 0 011.42-1.42L8 13.59l5.29-5.3a1 1 0 111.42 1.42L9.42 15l-1.42 1.41z"
-          ></path>
-        </svg>
-      </button>
-    </div>
+        <a
+          href="/contact"
+          class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+          >Contact</a
+        >
 
-    <!-- Navigation & User Menu -->
-    <div class="flex items-center space-x-6">
-      <!-- Navigation Links -->
-      <a
-        href="/about"
-        class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
-        >About</a
-      >
-      <a
-        href="/contact"
-        class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
-        >Contact</a
-      >
-
-      <div class="relative">
-        <!-- Check if user is logged in -->
-        <ng-container *ngIf="user; else guestMenu">
-          <!-- Profile Button -->
-          <button
-            id="profile-menu"
-            class="flex items-center space-x-2 focus:outline-none"
-            (click)="toggleDropdown()"
-          >
-            <img
-              [src]="
-                user.photo ||
-                'https://res.cloudinary.com/drj6tdlhy/image/upload/v1732165738/png-transparent-default-avatar_gpkcme.png'
-              "
-              alt="User Avatar"
-              class="h-8 w-8 rounded-full"
-            />
-            <span
-              class="hidden sm:inline-block text-gray-700 dark:text-gray-300"
-            >
-              {{ user.name }}
-            </span>
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div
-            id="dropdown"
-            *ngIf="dropdownOpen"
-            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md"
-          >
-            <a
-              href="/profile"
-              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              Profile
-            </a>
-            <a
-              href="/settings"
-              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              Settings
-            </a>
+        <div class="relative">
+          <!-- Check if user is logged in -->
+          <ng-container *ngIf="user; else guestMenu">
+            <!-- Profile Button -->
             <button
-              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              (click)="logout()"
+              id="profile-menu"
+              class="flex items-center space-x-2 focus:outline-none"
+              (click)="toggleDropdown()"
             >
-              Logout
+              <img
+                [src]="
+                  user.photo ||
+                  'https://res.cloudinary.com/drj6tdlhy/image/upload/v1732165738/png-transparent-default-avatar_gpkcme.png'
+                "
+                alt="User Avatar"
+                class="h-8 w-8 rounded-full"
+              />
+              <span
+                class="hidden sm:inline-block text-gray-700 dark:text-gray-300"
+              >
+                {{ user.name }}
+              </span>
             </button>
-          </div>
-        </ng-container>
 
-        <!-- Guest Menu -->
-        <ng-template #guestMenu>
-          <a
-            href="/login"
-            class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            Log In
-          </a>
-          <a
-            href="/signup"
-            class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700"
-          >
-            Sign Up
-          </a>
-        </ng-template>
+            <!-- Dropdown Menu -->
+            <div
+              id="dropdown"
+              *ngIf="dropdownOpen"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md"
+            >
+              <a
+                href="/profile"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Profile
+              </a>
+              <a
+                href="/settings"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Settings
+              </a>
+              <button
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                (click)="logout()"
+              >
+                Logout
+              </button>
+            </div>
+          </ng-container>
+
+          <!-- Guest Menu -->
+          <ng-template #guestMenu>
+            <a
+              href="/login"
+              class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              Log In
+            </a>
+            <a
+              href="/signup"
+              class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700"
+            >
+              Sign Up
+            </a>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>
