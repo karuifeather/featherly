@@ -8,7 +8,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
   standalone: true,
   imports: [RouterModule, HeaderComponent, FooterComponent],
   templateUrl: './portal.component.html',
-  styleUrl: './portal.component.css',
+  styleUrl: './portal.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
 export class PortalComponent {}

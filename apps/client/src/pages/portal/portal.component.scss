@@ -1,0 +1,49 @@
+.section {
+  &-background {
+    position: relative;
+    height: 95vh; /* Each section will have a height of 60% of the viewport */
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+  }
+
+  &-content {
+    position: relative;
+    z-index: 2; /* Place content above the gradient */
+    color: white; /* Ensure text is visible */
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.5) 15%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.4) 70%,
+    rgba(0, 0, 0, 0.5) 90%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+
+  z-index: 1;
+
+  &--hero {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.6) 20%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.4) 70%,
+      rgba(0, 0, 0, 0.8) 90%,
+      rgba(0, 0, 0, 1) 100%
+    ) !important;
+  }
+}
