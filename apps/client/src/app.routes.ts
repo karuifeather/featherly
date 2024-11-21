@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ForgotPasswordComponent } from './pages/forgotPassword/forgot-password.component';
 import { ResetPasswordComponent } from './pages/resetPassword/reset-password.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const appRoutes: Route[] = [
   { path: '', component: LandingComponent },
@@ -11,5 +12,6 @@ export const appRoutes: Route[] = [
   { path: 'signup', component: SignupComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

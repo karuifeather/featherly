@@ -22,7 +22,10 @@
             "input": "apps/client/public"
           }
         ],
-        "styles": ["apps/client/src/global.scss"],
+        "styles": [
+          "node_modules/swiper/swiper-bundle.min.css",
+          "apps/client/src/global.scss"
+        ],
         "scripts": []
       },
       "configurations": {
