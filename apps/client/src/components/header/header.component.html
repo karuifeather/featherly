@@ -1,62 +1,99 @@
-<header class="header">
-  <!-- Success Alert -->
-  <div
-    *ngIf="user?.accountConfirmToken"
-    class="alert alert--success"
-    style="
-      position: absolute;
-      bottom: 0;
-      text-align: none;
-      padding: 1.6rem 1.7rem;
-    "
-  >
-    <span id="close-error">x</span>
-    Check your inbox to see the confirmation email. Didn't get it?
-    <a class="nav__el" href="/" style="border-bottom: 1px solid #fff">
-      Send again
+<header
+  id="main-header"
+  class="py-6 fixed top-0 left-0 w-full z-10 transition-all duration-300 dark"
+>
+  <div class="container mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center text-green-600 dark:text-green-400">
+      <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
+      <span class="text-xl font-bold">Featherly</span>
     </a>
-    <p>
-      If this message does not go away after a reload, you need to try again.
-    </p>
-  </div>
 
-  <!-- Navigation for Tours -->
-  <nav class="nav nav--tours">
-    <a class="nav__el" href="/overview">All tours</a>
-  </nav>
+    <!-- Search Bar -->
+    <div
+      class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 w-1/2"
+    >
+      <input
+        type="text"
+        placeholder="Search tours, locations..."
+        class="bg-transparent focus:outline-none w-full dark:text-gray-200"
+      />
 
-  <!-- Logo -->
-  <div class="header__logo">
-    <a href="/">
-      <img src="/img/logo-white.png" alt="Featherly logo" />
-    </a>
-  </div>
-
-  <!-- User Navigation -->
-  <nav class="nav nav--user">
-    <ng-container *ngIf="user; else guestLinks">
-      <button
-        class="nav__el nav__el--logout"
-        (click)="logout()"
-        (keydown.enter)="logout()"
-        (keydown.space)="logout()"
-      >
-        Logout
+      <button class="text-gray-500 dark:text-gray-400 ml-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="h-5 w-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 16l-2.29-2.29a1 1 0 011.42-1.42L8 13.59l5.29-5.3a1 1 0 111.42 1.42L9.42 15l-1.42 1.41z"
+          ></path>
+        </svg>
       </button>
-      <a class="nav__el" href="/me">
-        <img
-          class="nav__user-img"
-          [src]="'/img/users/' + user?.photo"
-          [alt]="user?.name"
-        />
-        <span *ngIf="user?.name">{{ user!.name.split(' ')[0] }}</span>
-      </a>
-    </ng-container>
+    </div>
 
-    <!-- Guest Links -->
-    <ng-template #guestLinks>
-      <a class="nav__el" href="/login">Log in</a>
-      <a class="nav__el nav__el--cta" href="/signup">Sign up</a>
-    </ng-template>
-  </nav>
+    <!-- Navigation & User Menu -->
+    <div class="flex items-center space-x-6">
+      <!-- Navigation Links -->
+      <a
+        href="/about"
+        class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+        >About</a
+      >
+      <a
+        href="/contact"
+        class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+        >Contact</a
+      >
+
+      <div class="relative">
+        <!-- Profile Button -->
+        <button
+          id="profile-menu"
+          class="flex items-center space-x-2 focus:outline-none"
+          (click)="toggleDropdown()"
+        >
+          <img
+            src="/assets/user-avatar.jpg"
+            alt="User Avatar"
+            class="h-8 w-8 rounded-full"
+          />
+          <span class="hidden sm:inline-block text-gray-700 dark:text-gray-300"
+            >John</span
+          >
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          id="dropdown"
+          *ngIf="dropdownOpen"
+          class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md"
+        >
+          <a
+            href="/profile"
+            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            Profile
+          </a>
+          <a
+            href="/settings"
+            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            Settings
+          </a>
+          <button
+            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>

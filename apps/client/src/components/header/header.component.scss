@@ -1,0 +1,32 @@
+/* Default styles (blended with hero) */
+#main-header {
+  @apply bg-transparent text-white shadow-none transition-all duration-300;
+}
+
+/* Light mode: Styles on scroll */
+#main-header.scrolled {
+  @apply bg-white text-black shadow-md;
+}
+
+#main-header.scrolled a {
+  @apply text-black;
+}
+
+#main-header.scrolled a:hover {
+  @apply text-green-500; /* Hover color */
+}
+
+/* Dark mode: Styles on scroll (media-query-based) */
+@media (prefers-color-scheme: dark) {
+  #main-header.scrolled {
+    @apply bg-gray-900 text-white shadow-lg;
+  }
+
+  #main-header.scrolled a {
+    @apply text-white;
+  }
+
+  #main-header.scrolled a:hover {
+    @apply text-green-400; /* Softer hover color for dark mode */
+  }
+}
