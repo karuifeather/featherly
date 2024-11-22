@@ -1,0 +1,66 @@
+<div class="flex-1 overflow-y-auto py-16 h-full">
+  <!-- Feed -->
+  <div class="flex-1 p-6 space-y-6 flex flex-col items-center">
+    <div
+      *ngFor="let post of tourPosts"
+      class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden w-full max-w-3xl my-8"
+    >
+      <!-- Swipeable Image Slider -->
+      <div class="relative">
+        <swiper-container
+          [slides-per-view]="1"
+          [space-between]="10"
+          navigation
+          [pagination]="{ clickable: true }"
+        >
+          <swiper-slide *ngFor="let image of post.images">
+            <div
+              class="w-full h-96 bg-cover bg-center"
+              [style.backgroundImage]="'url(' + image + ')'"
+            ></div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+
+      <!-- Post Info -->
+      <div class="p-4">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+          {{ post.title }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400">
+          {{ post.description }}
+        </p>
+        <div class="flex items-center mt-4 space-x-4">
+          <button
+            class="flex items-center space-x-1 text-gray-700 dark:text-gray-300"
+          >
+            <i class="fas fa-heart"></i>
+            <span>{{ post.likes }} Likes</span>
+          </button>
+          <button
+            class="flex items-center space-x-1 text-gray-700 dark:text-gray-300"
+          >
+            <i class="fas fa-comment"></i>
+            <span>{{ post.comments.length }} Comments</span>
+          </button>
+          <button
+            class="flex items-center space-x-1 text-gray-700 dark:text-gray-300"
+          >
+            <i class="fas fa-share"></i>
+            <span>Share</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div *ngFor="let comment of post.comments" class="mb-4">
+          <p class="text-gray-800 dark:text-white font-semibold">
+            {{ comment.user }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400">{{ comment.text }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,6 +12,13 @@ export const appRoutes: Route[] = [
   { path: 'signup', component: SignupComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    loadChildren: () =>
+      import('./pages/dashboard/dashboard.routes').then(
+        (m) => m.dashboardRoutes
+      ),
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

@@ -1,17 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  imports: [CommonModule, RouterModule],
-  templateUrl: './dashboard.component.html',
+  selector: 'app-feed',
+  imports: [CommonModule],
+  templateUrl: './feed.component.html',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent {
-  drawerOpen = false;
-
+export class FeedComponent {
   tourPosts = [
     {
       title: 'The Great Canyon Adventure',
@@ -41,8 +38,4 @@ export class DashboardComponent {
     },
     // Add more posts as needed
   ];
-
-  toggleDrawer(): void {
-    this.drawerOpen = !this.drawerOpen;
-  }
 }

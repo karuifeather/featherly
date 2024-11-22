@@ -32,6 +32,7 @@
     "crypto": "^1.0.1",
     "helmet": "^8.0.0",
     "hpp": "^0.2.3",
+    "mapbox-gl": "^3.8.0",
     "mongoose": "^8.8.1",
     "ng": "^0.0.0",
     "passport-jwt": "^4.0.1",

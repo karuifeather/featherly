@@ -23,17 +23,6 @@ export class HeaderComponent {
 
   dropdownOpen = false; // Tracks if the dropdown is open
 
-  isDashboard = false; // Tracks whether the current route is /dashboard
-
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    // Check if the current route is /dashboard
-    this.router.events.subscribe(() => {
-      this.isDashboard = this.router.url.startsWith('/dashboard');
-    });
-  }
-
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }

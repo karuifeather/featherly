@@ -1,5 +1,7 @@
-<app-header />
-<main class="bg-gray-50 dark:bg-gray-900">
+<ng-container *ngIf="!isDashboard"> <app-header /> </ng-container>
+
+<main class="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300">
   <router-outlet></router-outlet>
 </main>
-<app-footer />
+
+<ng-container *ngIf="!isDashboard"> <app-footer /> </ng-container>

@@ -24,6 +24,7 @@
         ],
         "styles": [
           "node_modules/swiper/swiper-bundle.min.css",
+          "mapbox-gl/dist/mapbox-gl.css",
           "apps/client/src/global.scss"
         ],
         "scripts": []
