@@ -43,6 +43,27 @@
     </div>
   </section>
 
+  <!-- Create your own tour -->
+  <div
+    class="py-10 bg-gradient-to-r from-green-700 to-green-900 text-white p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:justify-between"
+  >
+    <div class="mx-auto w-1/2 flex justify-between">
+      <div class="text-center md:text-left mb-4 md:mb-0">
+        <h2 class="text-xl font-bold">Create Your Own Adventure!</h2>
+        <p class="text-sm mt-2">
+          Share your unique travel experiences and inspire others. <br />
+          Click below to start creating your tour.
+        </p>
+      </div>
+      <button
+        class="self-center bg-white text-green-600 font-bold px-4 py-2 rounded-md shadow hover:bg-gray-100 transition-all"
+        [routerLink]="['/dashboard/create/tours']"
+      >
+        Create Tour
+      </button>
+    </div>
+  </div>
+
   <!-- Recommended Tours -->
   <section class="py-12">
     <div class="container mx-auto px-6">
