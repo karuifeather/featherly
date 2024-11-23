@@ -1,0 +1,82 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-32">
+  <div class="container mx-auto px-4">
+    <!-- Page Header -->
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">
+      My Bookings
+    </h1>
+
+    <!-- Tabs -->
+    <div class="flex justify-center mb-6">
+      <button
+        class="px-6 py-2 rounded-t-lg font-semibold"
+        [ngClass]="{
+          'bg-green-600 text-white': activeTab === 'upcoming',
+          'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300':
+            activeTab !== 'upcoming'
+        }"
+        (click)="setActiveTab('upcoming')"
+      >
+        Upcoming
+      </button>
+      <button
+        class="px-6 py-2 rounded-t-lg font-semibold"
+        [ngClass]="{
+          'bg-green-600 text-white': activeTab === 'past',
+          'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300':
+            activeTab !== 'past'
+        }"
+        (click)="setActiveTab('past')"
+      >
+        Past
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+      <!-- Empty State -->
+      <div *ngIf="activeBookings.length === 0" class="text-center">
+        <p class="text-gray-600 dark:text-gray-400">No bookings found.</p>
+      </div>
+
+      <!-- Bookings Grid -->
+      <div
+        *ngIf="activeBookings.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <div
+          *ngFor="let booking of activeBookings"
+          class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
+        >
+          <!-- Booking Image -->
+          <div class="relative">
+            <img
+              [src]="booking.image"
+              [alt]="booking.title"
+              class="w-full h-48 object-cover"
+            />
+          </div>
+          <!-- Booking Details -->
+          <div class="p-4">
+            <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+              {{ booking.title }}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+              {{ booking.date | date }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+              {{ booking.location }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+              <strong>Guests:</strong> {{ booking.guests }}
+            </p>
+            <button
+              class="bg-green-600 text-white mt-4 px-4 py-2 rounded-md w-full hover:bg-green-700 transition-all"
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
