@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tours',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './tours.component.html',
+  styleUrl: './tours.component.scss',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -55,4 +57,21 @@ export class ToursComponent {
       ],
     },
   ];
+
+  minPrice = 100; // Default minimum price
+  maxPrice = 1000; // Default maximum price
+
+  updatePriceRange(): void {
+    // Prevent overlap: Ensure minPrice is less than or equal to maxPrice
+    if (this.minPrice > this.maxPrice) {
+      this.minPrice = this.maxPrice - 50; // Ensure a minimum step gap
+    }
+    if (this.maxPrice < this.minPrice) {
+      this.maxPrice = this.minPrice + 50; // Ensure a minimum step gap
+    }
+  }
+
+  onSearch() {
+    alert('Filter search hit');
+  }
 }

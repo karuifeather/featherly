@@ -6,6 +6,7 @@
     <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
       Filters
     </h3>
+
     <!-- Tour Categories -->
     <div class="mb-6">
       <h4 class="text-gray-600 dark:text-gray-400 mb-2">Categories</h4>
@@ -31,14 +32,45 @@
 
     <!-- Price Range -->
     <div class="mb-6">
-      <h4 class="text-gray-600 dark:text-gray-400 mb-2">Price Range</h4>
-      <input
-        type="range"
-        min="100"
-        max="1000"
-        step="50"
-        class="w-full accent-green-600"
-      />
+      <h4
+        class="text-gray-600 dark:text-gray-400 mb-2 flex items-center justify-between space-x-4"
+      >
+        Price Range
+        <!-- Range Display -->
+        <span class="text-gray-700 dark:text-gray-300 font-semibold">
+          ${{ minPrice }} to ${{ maxPrice }}
+        </span>
+      </h4>
+      <div class="relative w-full flex items-center space-x-4">
+        <!-- Range Slider -->
+        <div class="relative w-full">
+          <div
+            class="absolute bg-green-600 h-1 rounded-md"
+            [style.left.%]="(minPrice - 100) / 9"
+            [style.right.%]="100 - (maxPrice - 100) / 9"
+          ></div>
+          <!-- Min Price Slider -->
+          <input
+            type="range"
+            min="100"
+            max="1000"
+            step="50"
+            [(ngModel)]="minPrice"
+            (input)="updatePriceRange()"
+            class="absolute w-full accent-green-600 z-20"
+          />
+          <!-- Max Price Slider -->
+          <input
+            type="range"
+            min="100"
+            max="1000"
+            step="50"
+            [(ngModel)]="maxPrice"
+            (input)="updatePriceRange()"
+            class="absolute w-full accent-green-600 z-10"
+          />
+        </div>
+      </div>
     </div>
 
     <!-- Sort Options -->
@@ -55,7 +87,7 @@
     </div>
 
     <!-- Difficulty Levels -->
-    <div>
+    <div class="mb-6">
       <h4 class="text-gray-600 dark:text-gray-400 mb-2">Difficulty</h4>
       <ul class="space-y-2">
         <li>
@@ -84,13 +116,21 @@
         </li>
       </ul>
     </div>
+
+    <!-- Search Button -->
+    <button
+      class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-all"
+      (click)="onSearch()"
+    >
+      Search
+    </button>
   </aside>
 
   <!-- Tours Feed -->
   <div class="flex-1 py-6 flex flex-col items-start overflow-hidden">
     <div
       *ngFor="let post of tourPosts"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-md over w-full max-w-3xl my-8"
+      class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md over w-full max-w-3xl my-8"
     >
       <!-- Swipeable Image Slider -->
       <div class="relative">
