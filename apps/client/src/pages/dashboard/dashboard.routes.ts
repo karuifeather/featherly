@@ -5,6 +5,7 @@ import { HomeComponent } from '../home/home.component';
 import { BookingsComponent } from '../bookings/bookings.component';
 import { DashboardComponent } from './dashboard.component';
 import { SettingsComponent } from '../settings/settings.component';
+import { ProfileComponent } from '../profile/profile.component';
 
 export const dashboardRoutes: Route[] = [
   {
@@ -15,6 +16,7 @@ export const dashboardRoutes: Route[] = [
       { path: 'tours', component: ToursComponent },
       { path: 'tours/:tourSlug', component: TourDetailComponent },
       { path: 'bookings', component: BookingsComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: 'settings', component: SettingsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
