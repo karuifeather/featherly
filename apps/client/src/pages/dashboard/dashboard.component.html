@@ -34,36 +34,43 @@
 
       <!-- Navigation -->
       <ul class="flex-1 space-y-4 items-center justify-center">
+        <!-- Home -->
         <li>
           <a
-            href="#"
+            routerLink="/dashboard"
             class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
           >
             <i class="fas fa-home text-xl"></i>
             <span *ngIf="drawerOpen" class="text-sm">Home</span>
           </a>
         </li>
+
+        <!-- Tours -->
         <li>
           <a
-            href="#"
+            routerLink="/dashboard/tours"
             class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
           >
             <i class="fas fa-plane text-xl"></i>
             <span *ngIf="drawerOpen" class="text-sm">Tours</span>
           </a>
         </li>
+
+        <!-- Bookings -->
         <li>
           <a
-            href="#"
+            routerLink="/dashboard/bookings"
             class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
           >
             <i class="fas fa-book text-xl"></i>
             <span *ngIf="drawerOpen" class="text-sm">Bookings</span>
           </a>
         </li>
+
+        <!-- Profile -->
         <li>
           <a
-            href="#"
+            routerLink="/dashboard/profile"
             class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
           >
             <i class="fas fa-user text-xl"></i>
@@ -75,7 +82,7 @@
       <!-- Footer Links -->
       <div class="mt-6">
         <a
-          href="#"
+          routerLink="/dashboard/settings"
           class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
         >
           <i class="fas fa-cog text-xl"></i>
