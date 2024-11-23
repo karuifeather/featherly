@@ -1,0 +1,172 @@
+<div class="relative flex-1 py-16 h-[5000px] flex gap-10">
+  <!-- Sidebar -->
+  <aside
+    class="sticky top-10 bg-white dark:bg-gray-800 shadow-md p-6 w-full md:w-1/4 lg:w-1/5 items-center mx-24 rounded-xl self-start"
+  >
+    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+      Filters
+    </h3>
+    <!-- Tour Categories -->
+    <div class="mb-6">
+      <h4 class="text-gray-600 dark:text-gray-400 mb-2">Categories</h4>
+      <ul class="space-y-2">
+        <li>
+          <label
+            class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+          >
+            <input type="checkbox" class="form-checkbox text-green-600" />
+            <span>Adventure</span>
+          </label>
+        </li>
+        <li>
+          <label
+            class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+          >
+            <input type="checkbox" class="form-checkbox text-green-600" />
+            <span>Relaxation</span>
+          </label>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Price Range -->
+    <div class="mb-6">
+      <h4 class="text-gray-600 dark:text-gray-400 mb-2">Price Range</h4>
+      <input
+        type="range"
+        min="100"
+        max="1000"
+        step="50"
+        class="w-full accent-green-600"
+      />
+    </div>
+
+    <!-- Sort Options -->
+    <div class="mb-6">
+      <h4 class="text-gray-600 dark:text-gray-400 mb-2">Sort By</h4>
+      <select
+        class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded-md px-4 py-2 w-full"
+      >
+        <option value="popularity">Popularity</option>
+        <option value="priceLowToHigh">Price: Low to High</option>
+        <option value="priceHighToLow">Price: High to Low</option>
+        <option value="rating">Rating</option>
+      </select>
+    </div>
+
+    <!-- Difficulty Levels -->
+    <div>
+      <h4 class="text-gray-600 dark:text-gray-400 mb-2">Difficulty</h4>
+      <ul class="space-y-2">
+        <li>
+          <label
+            class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+          >
+            <input type="checkbox" class="form-checkbox text-green-600" />
+            <span>Easy</span>
+          </label>
+        </li>
+        <li>
+          <label
+            class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+          >
+            <input type="checkbox" class="form-checkbox text-green-600" />
+            <span>Medium</span>
+          </label>
+        </li>
+        <li>
+          <label
+            class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+          >
+            <input type="checkbox" class="form-checkbox text-green-600" />
+            <span>Difficult</span>
+          </label>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Tours Feed -->
+  <div class="flex-1 flex flex-col items-start overflow-hidden">
+    <div
+      *ngFor="let post of tourPosts"
+      class="bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-3xl my-8"
+    >
+      <!-- Swipeable Image Slider -->
+      <div class="relative">
+        <swiper-container
+          [slides-per-view]="1"
+          [space-between]="10"
+          navigation
+          [pagination]="{ clickable: true }"
+        >
+          <swiper-slide *ngFor="let image of post.images">
+            <div
+              class="w-full h-96 bg-cover bg-center"
+              [style.backgroundImage]="'url(' + image + ')'"
+            ></div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+
+      <!-- Post Info -->
+      <div class="p-4">
+        <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+          {{ post.title }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 mt-2">
+          {{ post.description }}
+        </p>
+        <div class="mt-4 flex justify-between items-center">
+          <div class="text-sm">
+            <p class="text-gray-800 dark:text-gray-300">
+              <i class="fas fa-clock mr-2"></i>{{ post.duration }} days
+            </p>
+            <p class="text-gray-800 dark:text-gray-300">
+              <i class="fas fa-user-friends mr-2"></i>Group Size:
+              {{ post.maxGroupSize }}
+            </p>
+          </div>
+          <div>
+            <span class="text-green-600 font-bold text-lg"
+              >${{ post.price }}</span
+            >
+            <span class="text-gray-500 text-sm">/person</span>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <button
+            class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all"
+            [routerLink]="['/dashboard/tours', post.slug]"
+          >
+            View Details
+          </button>
+          <div class="flex space-x-4 text-gray-700 dark:text-gray-300">
+            <button class="hover:text-green-600">
+              <i class="fas fa-heart"></i>
+              <span>{{ post.likes }}</span>
+            </button>
+            <button class="hover:text-green-600">
+              <i class="fas fa-comment"></i>
+              <span>{{ post.comments.length }}</span>
+            </button>
+            <button class="hover:text-green-600">
+              <i class="fas fa-share"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        <h4 class="text-gray-800 dark:text-white font-semibold">Comments</h4>
+        <div *ngFor="let comment of post.comments" class="mt-2">
+          <p class="text-gray-800 dark:text-white font-semibold">
+            {{ comment.user }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400">{{ comment.text }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
