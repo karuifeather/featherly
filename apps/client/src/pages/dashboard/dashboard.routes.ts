@@ -4,6 +4,7 @@ import { ToursComponent } from '../tours/tours.component';
 import { HomeComponent } from '../home/home.component';
 import { BookingsComponent } from '../bookings/bookings.component';
 import { DashboardComponent } from './dashboard.component';
+import { ProfileComponent } from '../profile/profile.component';
 
 export const dashboardRoutes: Route[] = [
   {
@@ -14,7 +15,7 @@ export const dashboardRoutes: Route[] = [
       { path: 'tours', component: ToursComponent },
       { path: 'tours/:tourSlug', component: TourDetailComponent },
       { path: 'bookings', component: BookingsComponent },
-      // { path: 'profile', component: ProfileComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
