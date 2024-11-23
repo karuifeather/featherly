@@ -1,0 +1,151 @@
+<main class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+  <!-- Welcome Section -->
+  <section
+    class="py-12 min-h-[25vw] bg-cover bg-center bg-no-repeat relative flex flex-col items-center justify-center"
+    style="
+      background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828692/nat-9_dz9zov.jpg');
+      background-attachment: fixed;
+    "
+  >
+    <!-- Overlay -->
+    <div
+      class="absolute inset-0 bg-black bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-70"
+    ></div>
+
+    <!-- Content -->
+    <div class="relative container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-white">Welcome Back, John!</h2>
+      <p class="text-gray-300 mt-2">
+        Ready for your next adventure? Let’s explore!
+      </p>
+      <div class="mt-6 flex justify-center space-x-4">
+        <div
+          class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <input
+            type="text"
+            placeholder="Where to?"
+            class="flex-grow px-4 py-2 rounded-md focus:outline-none text-gray-700"
+          />
+          <button
+            class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
+          >
+            Search
+          </button>
+        </div>
+
+        <button
+          class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          View Bookings
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommended Tours -->
+  <section class="py-12">
+    <div class="container mx-auto px-6">
+      <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+        Recommended for You
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Tour Card -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+        >
+          <img
+            src="https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828690/nat-1_spztdy.jpg"
+            alt="Tour"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-4">
+            <h4 class="text-lg font-bold text-gray-800 dark:text-white">
+              Alpine Forest Adventure
+            </h4>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              7-day hike through pristine forests.
+            </p>
+            <div class="mt-4 flex justify-between items-center">
+              <span class="text-gray-800 dark:text-white font-bold">$799</span>
+              <button
+                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Add more tour cards dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Bookings -->
+  <section
+    class="min-h-[20vw] py-12 bg-gray-100 dark:bg-gray-950 flex flex-col justify-around"
+  >
+    <div class="container mx-auto px-6">
+      <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+        Your Upcoming Adventures
+      </h3>
+      <div class="space-y-4">
+        <!-- Booking Card -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex justify-between items-center"
+        >
+          <div>
+            <h4 class="text-lg font-bold text-gray-800 dark:text-white">
+              Grand Canyon Expedition
+            </h4>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Dec 1, 2023 | Boulder, Colorado
+            </p>
+          </div>
+          <button
+            class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+          >
+            View Details
+          </button>
+        </div>
+        <!-- Add more bookings dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore More -->
+  <section
+    class="py-12 min-h-[20vw] bg-cover bg-center bg-no-repeat relative flex flex-col items-center justify-center"
+    style="
+      background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828692/nat-9_dz9zov.jpg');
+      background-attachment: fixed;
+    "
+  >
+    <!-- Overlay -->
+    <div
+      class="absolute inset-0 bg-black bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-70 z-0"
+    ></div>
+
+    <!-- Content -->
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <h3 class="text-2xl font-bold text-gray-800 dark:text-white">
+        Why Not Explore?
+      </h3>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">
+        Discover new destinations and hidden gems.
+      </p>
+      <div class="mt-6 flex justify-center space-x-4">
+        <button
+          class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
+        >
+          Browse Categories
+        </button>
+        <button
+          class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-6 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          Random Tour
+        </button>
+      </div>
+    </div>
+  </section>
+</main>

@@ -12,6 +12,7 @@ export const dashboardRoutes: Route[] = [
       { path: 'tours/:tourSlug', component: TourDetailComponent },
       // { path: 'bookings', component: BookingsComponent },
       // { path: 'profile', component: ProfileComponent },
+      { path: '**', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
 ];
