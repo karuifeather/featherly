@@ -3,13 +3,13 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-settings',
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+  templateUrl: './settings.component.html',
+  styleUrl: './settings.component.scss',
 })
-export class ProfileComponent {
+export class SettingsComponent {
   isChanged = false;
 
   profile = {
