@@ -32,3 +32,25 @@ input[type='range']::-ms-thumb {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.blur-overlay {
+  position: sticky;
+  z-index: 10; /* Keeps the sticky component above the posts */
+  background: transparent; /* Ensures the sticky content background is visible */
+}
+
+.blur-overlay::before {
+  content: '';
+  position: absolute; /* Fixed positioning to cover the entire viewport */
+  bottom: 0%;
+  left: 0;
+  width: 100%;
+  height: 200%; /* Cover the full area behind the sticky component */
+  backdrop-filter: blur(100px);
+  z-index: -1; /* Place it behind the sticky component */
+  pointer-events: none; /* Prevent interaction issues */
+}
+
+.blur-overlay.dark::before {
+  background: rgba(0, 0, 0, 0.5); /* Adjust for dark mode */
+}

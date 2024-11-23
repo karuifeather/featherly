@@ -126,11 +126,32 @@
     </button>
   </aside>
 
-  <!-- Tours Feed -->
-  <div class="flex-1 py-6 flex flex-col items-start overflow-hidden">
+  <div class="flex-1 py-10 flex flex-col items-start relative">
+    <!-- Create Tour Component -->
+    <div class="blur-overlay top-32 w-full max-w-3xl mb-8">
+      <div
+        class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:justify-between"
+      >
+        <div class="text-center md:text-left mb-4 md:mb-0">
+          <h2 class="text-xl font-bold">Create Your Own Adventure!</h2>
+          <p class="text-sm mt-2">
+            Share your unique travel experiences and inspire others. <br />
+            Click below to start creating your tour.
+          </p>
+        </div>
+        <button
+          class="bg-white text-green-600 font-bold px-4 py-2 rounded-md shadow hover:bg-gray-100 transition-all"
+          [routerLink]="['/dashboard/create/tours']"
+        >
+          Create Tour
+        </button>
+      </div>
+    </div>
+
+    <!-- Tours Feed -->
     <div
       *ngFor="let post of tourPosts"
-      class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md over w-full max-w-3xl my-8"
+      class="z-1 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md over w-full max-w-3xl my-8"
     >
       <!-- Swipeable Image Slider -->
       <div class="relative">
