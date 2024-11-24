@@ -1,0 +1,579 @@
+<div
+  class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center px-4 py-32"
+>
+  <div
+    class="w-4/5 max-w-full h-[40vw] bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-2xl flex flex-col"
+  >
+    <!-- Header -->
+    <div
+      class="h-16 bg-gradient-to-r from-green-500 to-green-600 text-white flex items-center justify-between px-6"
+    >
+      <h1 class="text-xl font-bold">Create Your Adventure</h1>
+      <span class="text-sm opacity-80">Step {{ step }} of 5</span>
+    </div>
+
+    <!-- Form Content -->
+    <div class="flex-1 p-8 overflow-y-auto">
+      <!-- Step 1: General Information -->
+      <ng-container *ngIf="step === 1">
+        <form [formGroup]="generalInfoGroup" class="grid grid-cols-1 gap-12">
+          <!-- Tour Name -->
+          <div>
+            <label
+              for="tour-name"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Tour Name
+            </label>
+            <input
+              id="tour-name"
+              formControlName="name"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              type="text"
+              placeholder="The Alpine Adventure"
+            />
+            <div
+              *ngIf="
+                generalInfoGroup.get('name')?.invalid &&
+                generalInfoGroup.get('name')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span *ngIf="generalInfoGroup.get('name')?.errors?.['required']">
+                Tour Name is required.
+              </span>
+              <span *ngIf="generalInfoGroup.get('name')?.errors?.['minlength']">
+                Name must be at least 10 characters.
+              </span>
+              <span *ngIf="generalInfoGroup.get('name')?.errors?.['maxlength']">
+                Name cannot exceed 40 characters.
+              </span>
+            </div>
+          </div>
+
+          <!-- Tour Summary -->
+          <div>
+            <label
+              for="tour-summary"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Summary
+            </label>
+            <textarea
+              id="tour-summary"
+              formControlName="summary"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Brief summary about the tour"
+              rows="4"
+            ></textarea>
+            <div
+              *ngIf="
+                generalInfoGroup.get('summary')?.invalid &&
+                generalInfoGroup.get('summary')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span
+                *ngIf="generalInfoGroup.get('summary')?.errors?.['required']"
+              >
+                Summary is required.
+              </span>
+              <span
+                *ngIf="generalInfoGroup.get('summary')?.errors?.['maxlength']"
+              >
+                Summary cannot exceed 255 characters.
+              </span>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+      <!-- Step 2: Pricing -->
+      <ng-container *ngIf="step === 2">
+        <form
+          [formGroup]="pricingGroup"
+          class="grid grid-cols-1 md:grid-cols-2 gap-12"
+        >
+          <!-- Price -->
+          <div>
+            <label
+              for="price"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Price
+            </label>
+            <input
+              id="price"
+              formControlName="price"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              type="number"
+              placeholder="$ Price per person"
+            />
+            <div
+              *ngIf="
+                pricingGroup.get('price')?.invalid &&
+                pricingGroup.get('price')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span *ngIf="pricingGroup.get('price')?.errors?.['required']">
+                Price is required.
+              </span>
+              <span *ngIf="pricingGroup.get('price')?.errors?.['min']">
+                Price must be greater than 0.
+              </span>
+            </div>
+          </div>
+
+          <!-- Discount Price -->
+          <div>
+            <label
+              for="discount"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Discount Price
+            </label>
+            <input
+              id="discount"
+              formControlName="priceDiscount"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              type="number"
+              placeholder="$ Discount price"
+            />
+            <div
+              *ngIf="
+                pricingGroup.get('priceDiscount')?.invalid &&
+                pricingGroup.get('priceDiscount')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span *ngIf="pricingGroup.get('priceDiscount')?.errors?.['min']">
+                Discount price must be greater than 0.
+              </span>
+              <span
+                *ngIf="pricingGroup.get('priceDiscount')?.errors?.['discountLessThanPrice']"
+              >
+                Discount price must be less than the regular price.
+              </span>
+            </div>
+          </div>
+
+          <!-- Duration -->
+          <div>
+            <label
+              for="duration"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Duration (Days)
+            </label>
+            <input
+              id="duration"
+              formControlName="duration"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              type="number"
+              placeholder="Duration in days"
+            />
+            <div
+              *ngIf="
+                pricingGroup.get('duration')?.invalid &&
+                pricingGroup.get('duration')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span *ngIf="pricingGroup.get('duration')?.errors?.['required']">
+                Duration is required.
+              </span>
+              <span *ngIf="pricingGroup.get('duration')?.errors?.['min']">
+                Duration must be greater than 0 days.
+              </span>
+            </div>
+          </div>
+
+          <!-- Difficulty -->
+          <div>
+            <label
+              for="difficulty"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Difficulty
+            </label>
+            <select
+              id="difficulty"
+              formControlName="difficulty"
+              class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="difficult">Difficult</option>
+            </select>
+            <div
+              *ngIf="
+                pricingGroup.get('difficulty')?.invalid &&
+                pricingGroup.get('difficulty')?.touched
+              "
+              class="text-sm text-red-500 mt-2"
+            >
+              <span
+                *ngIf="pricingGroup.get('difficulty')?.errors?.['required']"
+              >
+                Difficulty is required.
+              </span>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+      <!-- Step 3: Tour Locations -->
+      <ng-container *ngIf="step === 3">
+        <div class="space-y-8">
+          <!-- Start Location Form -->
+          <div [formGroup]="startLocation">
+            <!-- Start Location -->
+            <div class="bg-gray-50 dark:bg-gray-600 p-4 rounded-md shadow-xl">
+              <h3
+                class="text-lg font-semibold text-gray-800 dark:text-white mb-4"
+              >
+                Start Location
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    for="start-location-address"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
+                    Address
+                  </label>
+                  <input
+                    id="start-location-address"
+                    formControlName="address"
+                    class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    type="text"
+                    placeholder="Starting location address"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="start-location-description"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    id="start-location-description"
+                    formControlName="description"
+                    class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    rows="3"
+                    placeholder="Starting location description"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Locations -->
+          <div [formGroup]="tourForm" class="space-y-8">
+            <div formArrayName="locations">
+              <div
+                *ngFor="let loc of additionalLocations.controls; let i = index"
+                [formGroupName]="i"
+                class="bg-gray-50 dark:bg-gray-600 p-4 rounded-md shadow-xl mb-8"
+              >
+                <h3
+                  class="text-lg font-semibold text-gray-800 dark:text-white mb-4"
+                >
+                  Location {{ i + 1 }}
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      for="loc-address-{{ i }}"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Address
+                    </label>
+                    <input
+                      id="loc-address-{{ i }}"
+                      formControlName="address"
+                      class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                      type="text"
+                      placeholder="Location address"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="loc-description-{{ i }}"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      id="loc-description-{{ i }}"
+                      formControlName="description"
+                      class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                      rows="3"
+                      placeholder="Location description"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label
+                      for="loc-day-{{ i }}"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Day
+                    </label>
+                    <input
+                      id="loc-day-{{ i }}"
+                      formControlName="day"
+                      class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                      type="number"
+                      placeholder="Day of the tour"
+                    />
+                  </div>
+                </div>
+                <div class="text-right">
+                  <button
+                    type="button"
+                    (click)="removeLocation(i)"
+                    class="text-red-500 hover:underline"
+                  >
+                    Remove Location
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Location Button -->
+            <button
+              type="button"
+              (click)="addLocation()"
+              class="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
+            >
+              Add Location
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Step 4: Image Upload -->
+      <ng-container *ngIf="step === 4">
+        <form [formGroup]="images">
+          <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+            Upload Images
+          </h2>
+          <div class="space-y-6">
+            <!-- Cover Image -->
+            <div>
+              <label
+                for="cover-image"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Cover Image
+              </label>
+              <input
+                id="cover-image"
+                type="file"
+                accept="image/*"
+                (change)="onCoverImageSelected($event)"
+                class="block w-full text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
+              />
+              <div *ngIf="images.get('imageCover')?.value" class="mt-4">
+                <img
+                  [src]="images.get('imageCover')?.value"
+                  alt="Cover Image Preview"
+                  class="w-1/4 rounded-md shadow-md"
+                />
+              </div>
+            </div>
+
+            <!-- Gallery Images -->
+            <div>
+              <label
+                for="gallery-images"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                Gallery Images
+              </label>
+              <input
+                id="gallery-images"
+                type="file"
+                multiple
+                accept="image/*"
+                (change)="onGalleryImagesSelected($event)"
+                class="block w-full text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
+              />
+              <div
+                *ngIf="images.get('gallery')?.value.length > 0"
+                class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4"
+              >
+                <img
+                  *ngFor="let img of images.get('gallery')?.value"
+                  [src]="img"
+                  alt="Gallery Image Preview"
+                  class="rounded-md shadow-md w-full h-32 object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+      <!-- Step 5: Review & Finalize -->
+      <ng-container *ngIf="step === 5">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+          Review & Finalize
+        </h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+          Review the tour details below and click 'Submit' to create your tour.
+        </p>
+
+        <!-- Tour Overview -->
+        <div
+          class="bg-gray-100 dark:bg-gray-600 p-6 rounded-md shadow space-y-6"
+        >
+          <!-- Tour Name and Summary -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Tour Name:
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              {{ tourForm.get('generalInfo')?.get('name')?.value }}
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Summary:
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              {{ tourForm.get('generalInfo')?.get('summary')?.value }}
+            </p>
+          </div>
+
+          <!-- Pricing and Difficulty -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Price:
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300">
+                ${{ tourForm.get('pricing')?.get('price')?.value }}
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Difficulty:
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 capitalize">
+                {{ tourForm.get('pricing')?.get('difficulty')?.value }}
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Duration:
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300">
+                {{ tourForm.get('pricing')?.get('duration')?.value }} days
+              </p>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                Group Size:
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300">
+                {{ tourForm.get('pricing')?.get('maxGroupSize')?.value }} people
+              </p>
+            </div>
+          </div>
+
+          <!-- Cover Image -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Cover Image:
+            </h3>
+            <img
+              *ngIf="images.get('imageCover')?.value"
+              [src]="images.get('imageCover')?.value"
+              alt="Cover Image"
+              class="w-full h-64 object-cover rounded-md shadow"
+            />
+          </div>
+
+          <!-- Gallery Images -->
+          <div *ngIf="images.get('gallery')?.value.length > 0">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Gallery Images:
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              <img
+                *ngFor="let image of images.get('gallery')?.value"
+                [src]="image"
+                alt="Gallery Image"
+                class="w-full h-40 object-cover rounded-md shadow"
+              />
+            </div>
+          </div>
+
+          <!-- Start Location -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Start Location:
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              {{ startLocation.value['address'] }}<br />
+              {{ startLocation.value['description'] }}
+            </p>
+          </div>
+
+          <!-- Locations -->
+          <div *ngIf="additionalLocations.controls.length > 0">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Tour Locations:
+            </h3>
+            <ul class="list-disc pl-6 mt-2 text-gray-700 dark:text-gray-300">
+              <li
+                *ngFor="
+                  let location of additionalLocations.controls;
+                  let i = index
+                "
+              >
+                <p><strong>Address:</strong> {{ location.value['address'] }}</p>
+                <p>
+                  <strong>Description:</strong>
+                  {{ location.value['description'] }}
+                </p>
+                <p><strong>Day:</strong> {{ location.value['day'] }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Footer Navigation -->
+    <div
+      class="h-16 bg-gray-100 dark:bg-gray-700 flex items-center justify-between px-6"
+    >
+      <button
+        *ngIf="step > 1"
+        class="px-4 py-2 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-white"
+        (click)="prevStep()"
+      >
+        Back
+      </button>
+      <button
+        *ngIf="step < 5"
+        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        [disabled]="!canProceed()"
+        (click)="nextStep()"
+      >
+        Next
+      </button>
+      <button
+        *ngIf="step === 5"
+        class="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600"
+        (click)="submitTour()"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
