@@ -18,6 +18,8 @@
     </p>
 
     <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
       class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 backdrop-blur-md"
     >
       <!-- Email -->
@@ -28,11 +30,25 @@
           >Email</label
         >
         <input
+          formControlName="email"
           type="email"
           id="email"
           class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
           placeholder="Enter your email"
         />
+        <div
+          *ngIf="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+          class="text-sm text-red-500 mt-2"
+        >
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">
+            Email is required.
+          </span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">
+            Enter a valid email.
+          </span>
+        </div>
       </div>
 
       <!-- Password -->
@@ -43,17 +59,30 @@
           >Password</label
         >
         <input
+          formControlName="password"
           type="password"
           id="password"
           class="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 dark:text-gray-300"
           placeholder="Enter your password"
         />
+        <div
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          class="text-sm text-red-500 mt-2"
+        >
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required.
+          </span>
+        </div>
       </div>
 
       <!-- Remember Me -->
       <div class="flex items-center justify-between mb-6">
         <label class="flex items-center">
           <input
+            formControlName="rememberMe"
             type="checkbox"
             class="h-4 w-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
           />
@@ -73,6 +102,7 @@
       <button
         type="submit"
         class="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 focus:ring-4 focus:ring-green-500 focus:outline-none"
+        [disabled]="loginForm.invalid"
       >
         Log In
       </button>
