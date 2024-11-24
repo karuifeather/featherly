@@ -15,6 +15,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtAuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
+import { LoginAuthDto } from './dtos/login-dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,14 +30,18 @@ export class AuthController {
     return this.authService.signup(createUserDto, req, res);
   }
 
+  @Post('/login')
+  login(
+    @Body() loginAuthDto: LoginAuthDto,
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    return this.authService.login(loginAuthDto, req, res);
+  }
+
   @Get('confirmEmail/:token')
   confirmEmail() {
     return this.authService.confirmEmail();
-  }
-
-  @Post('/login')
-  login() {
-    return this.authService.login();
   }
 
   @Post('/forgotPassword')

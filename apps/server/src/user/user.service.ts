@@ -38,6 +38,10 @@ export class UserService {
     }
   }
 
+  async findUserByEmail(email: string, select = '') {
+    return this.userModel.findOne({ email }).select(select);
+  }
+
   async findById(id: string) {
     return this.userModel.findById(id);
   }

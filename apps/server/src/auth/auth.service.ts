@@ -1,10 +1,18 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpStatus,
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { LoginAuthDto } from './dtos/login-dto';
+import { UserDocument } from '../user/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -24,13 +32,14 @@ export class AuthService {
     );
   }
 
-  async signup(createUserDto: CreateUserDto, req: Request, res: Response) {
-    const newUser = await this.userService.create(createUserDto, req);
-
-    const token = await this.signToken(newUser.id);
-
-    // Remove password from the newUser object
-    newUser.password = undefined;
+  private async sendAuthResponse(
+    user: UserDocument,
+    token: string,
+    req: Request,
+    res: Response
+  ) {
+    // Remove password from the User object
+    user.password = undefined;
 
     // Set cookie for JWT token
     res.cookie('jwt', token, {
@@ -50,7 +59,7 @@ export class AuthService {
       status: 'success',
       token,
       data: {
-        user: newUser,
+        user,
       },
     };
 
@@ -60,11 +69,42 @@ export class AuthService {
     return responseBody;
   }
 
-  confirmEmail() {
-    return 'this is a test response from auth controller';
+  async signup(createUserDto: CreateUserDto, req: Request, res: Response) {
+    const newUser = await this.userService.create(createUserDto, req);
+
+    const token = await this.signToken(newUser.id);
+
+    return this.sendAuthResponse(newUser, token, req, res);
   }
 
-  login() {
+  async login(loginAuthDto: LoginAuthDto, req: Request, res: Response) {
+    const { email, password } = loginAuthDto;
+
+    // 1 If email and password don't exist
+    if (!email || !password) {
+      throw new BadRequestException('Please provide email and password');
+    }
+
+    // 2 If email user exists && password is correct
+    // + is needed because select in password is set to false. See user model.
+    const user = await this.userService.findUserByEmail(email, '+password');
+
+    // Check if user exists
+    if (!user) {
+      throw new NotFoundException('User does not exist. Please sign up!');
+    }
+
+    // Check if password is correct
+    if (!(await user.isPasswordCorrect(password))) {
+      throw new UnauthorizedException('Incorrect email or password!');
+    }
+
+    const token = await this.signToken(user.id);
+
+    return this.sendAuthResponse(user, token, req, res);
+  }
+
+  confirmEmail() {
     return 'this is a test response from auth controller';
   }
 

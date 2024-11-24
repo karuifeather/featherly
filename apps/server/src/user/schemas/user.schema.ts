@@ -86,11 +86,10 @@ export class User extends Document {
 }
 
 export interface UserDocument extends User, Document {
-  isCorrectPassword(candidatePassword: string): Promise<boolean>;
+  isPasswordCorrect(candidatePassword: string): Promise<boolean>;
   hasPasswordChangedAfterTokenIssued(JWTTimestamp: number): boolean;
   createPasswordResetToken(): string;
   createEmailConfirmToken(): string;
-  correctPassword(candidatePassword: string): Promise<boolean>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -120,7 +119,7 @@ UserSchema.pre<Query<UserDocument, UserDocument>>(/^find/, function (next) {
  */
 
 // Check if the password is correct
-UserSchema.methods.isCorrectPassword = async function (
+UserSchema.methods.isPasswordCorrect = async function (
   this: UserDocument,
   candidatePassword: string
 ): Promise<boolean> {
