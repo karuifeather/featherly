@@ -20,8 +20,16 @@ async function bootstrap() {
   // Enable graceful shutdown
   app.enableShutdownHooks();
 
-  // Enable CORS
-  app.enableCors();
+  // Enable CORS in development
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors({
+      origin: 'http://localhost:4200',
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    });
+  }
+
   const { default: cookierParser } = await import('cookie-parser');
   app.use(cookierParser());
 
