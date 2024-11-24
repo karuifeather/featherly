@@ -8,17 +8,22 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -31,20 +36,15 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
-    const { email, password, rememberMe } = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
 
     this.authService.login(email, password).subscribe({
-      next: (response) => {
-        console.log('Login successful:', response);
-        // Handle success
+      next: () => {
+        this.snackBar.open('Login successful!', 'Close');
+        // Redirect or handle success
       },
       error: (error) => {
-        console.error('Login error:', error);
-        // Handle error
-      },
-      complete: () => {
-        console.log('Login request completed.');
-        // Optional: Handle completion if needed
+        this.snackBar.open(error?.response?.data?.message, 'Close');
       },
     });
   }
