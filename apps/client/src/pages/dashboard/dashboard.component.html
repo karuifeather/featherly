@@ -86,24 +86,133 @@
   <!-- Main Content -->
   <div class="flex-1 h-full">
     <!-- Header -->
-    <header
-      class="bg-white dark:bg-gray-800 shadow p-4 flex items-center justify-between w-full fixed z-50"
+    <div
+      class="w-full bg-white dark:bg-gray-800 shadow-md h-20 fixed z-50 flex justify-center items-center"
     >
-      <button
-        class="p-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 md:hidden"
-        (click)="toggleDrawer()"
+      <header
+        class="bg-white dark:bg-gray-800 p-4 flex items-center justify-between w-11/12 fixed mx-auto"
       >
-        <i class="fas fa-bars"></i>
-      </button>
-      <h1 class="text-lg font-bold text-gray-800 dark:text-white">
-        Welcome to Featherly!
-      </h1>
-      <button
-        class="p-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
-      >
-        <i class="fas fa-bell"></i>
-      </button>
-    </header>
+        <!-- Left Section -->
+        <div class="flex items-center space-x-4">
+          <!-- Logo -->
+          <a
+            routerLink="/dashboard/home"
+            class="flex items-center text-green-600 dark:text-green-400"
+          >
+            <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
+            <span class="text-xl font-bold">Featherly</span>
+          </a>
+        </div>
+
+        <!-- Right Section -->
+        <div class="flex items-center space-x-6">
+          <!-- Search -->
+          <div
+            class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md shadow-sm w-72"
+          >
+            <i class="fas fa-search text-gray-400 dark:text-gray-300"></i>
+            <input
+              type="text"
+              placeholder="Search..."
+              class="bg-transparent text-gray-600 dark:text-gray-200 focus:outline-none ml-2 w-full"
+            />
+          </div>
+
+          <!-- Notifications -->
+          <div class="relative">
+            <button
+              class="relative p-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+              aria-label="View Notifications"
+              (click)="toggleNotificationsDropdown()"
+            >
+              <i class="fas fa-bell"></i>
+              <span
+                *ngIf="getUnreadNotificationsCount() > 0"
+                class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center"
+              >
+                {{ getUnreadNotificationsCount() }}
+              </span>
+            </button>
+
+            <!-- Notifications Dropdown -->
+            <div
+              *ngIf="isNotificationsOpen"
+              class="absolute t right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-md shadow-lg overflow-hidden z-50"
+            >
+              <div
+                *ngIf="notifications.length > 0; else noNotifications"
+                class="divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <div
+                  *ngFor="let notification of notifications"
+                  class="p-4 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <p
+                    class="text-sm text-gray-800 dark:text-gray-300"
+                    [class.font-bold]="!notification.read"
+                  >
+                    {{ notification.message }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- No Notifications Placeholder -->
+              <ng-template #noNotifications>
+                <div
+                  class="p-4 text-center text-sm text-gray-500 dark:text-gray-400"
+                >
+                  No new notifications
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <!-- User Dropdown -->
+          <div class="relative">
+            <button
+              class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none"
+              (click)="toggleUserMenu()"
+              aria-label="User Menu"
+            >
+              <img
+                [src]="user.avatar || 'https://via.placeholder.com/40'"
+                alt="User Avatar"
+                class="w-10 h-10 rounded-full"
+              />
+              <span class="hidden md:inline-block text-sm font-medium">
+                {{ user.firstName }}
+              </span>
+              <i class="fas fa-chevron-down text-xs hidden md:inline-block"></i>
+            </button>
+
+            <!-- User Dropdown Menu -->
+            <div
+              *ngIf="isUserMenuOpen"
+              class="absolute -right-3 mt-2 bg-white dark:bg-gray-900 rounded-md shadow-lg w-48"
+            >
+              <a
+                routerLink="/dashboard/profile"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Profile
+              </a>
+              <a
+                routerLink="/dashboard/settings"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Settings
+              </a>
+              <button
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                (click)="logout()"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
 
     <!-- do not add overflow attribute here; sticky wont work -->
     <main class="w-full">

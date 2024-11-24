@@ -42,7 +42,45 @@ export class DashboardComponent {
     // Add more posts as needed
   ];
 
+  // Mock user data
+  user = {
+    firstName: 'John',
+    lastName: 'Doe',
+    avatar: 'https://via.placeholder.com/40', // Replace with actual avatar URL
+  };
+
+  // Mock notifications
+  notifications = [
+    { id: 1, message: 'New tour booking request', read: false },
+    { id: 2, message: 'Update available for your tour', read: true },
+  ];
+
+  // State for the user menu dropdown
+  isUserMenuOpen = false;
+
+  isNotificationsOpen = false;
+
   toggleDrawer(): void {
     this.drawerOpen = !this.drawerOpen;
+  }
+
+  toggleNotificationsDropdown(): void {
+    this.isNotificationsOpen = !this.isNotificationsOpen;
+  }
+
+  getUnreadNotificationsCount(): number {
+    return this.notifications.filter((notification) => !notification.read)
+      .length;
+  }
+
+  // Toggle the user menu
+  toggleUserMenu(): void {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  // Log the user out
+  logout(): void {
+    console.log('User logged out');
+    // Add your logout logic here (e.g., clear tokens, redirect)
   }
 }
