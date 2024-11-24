@@ -9,22 +9,7 @@
       <span class="text-xl font-bold">Featherly</span>
     </a>
 
-    <div class="flex items-center justify-between w-1/2">
-      <!-- Search Bar -->
-      <div
-        class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 w-1/2"
-      >
-        <input
-          type="text"
-          placeholder="Search tours, locations..."
-          class="bg-transparent focus:outline-none w-full dark:text-gray-200"
-        />
-
-        <button class="text-gray-500 dark:text-gray-400 ml-4">
-          <i class="fas fa-search text-gray-500 text-lg"></i>
-        </button>
-      </div>
-
+    <div class="flex items-center justify-between">
       <!-- Navigation & User Menu -->
       <div class="flex items-center space-x-6">
         <!-- Navigation Links -->
@@ -43,71 +28,18 @@
         </div>
 
         <div class="relative">
-          <!-- Check if user is logged in -->
-          <ng-container *ngIf="user; else guestMenu">
-            <!-- Profile Button -->
-            <button
-              id="profile-menu"
-              class="flex items-center space-x-2 focus:outline-none"
-              (click)="toggleDropdown()"
-            >
-              <img
-                [src]="
-                  user.photo ||
-                  'https://res.cloudinary.com/drj6tdlhy/image/upload/v1732165738/png-transparent-default-avatar_gpkcme.png'
-                "
-                alt="User Avatar"
-                class="h-8 w-8 rounded-full"
-              />
-              <span
-                class="hidden sm:inline-block text-gray-700 dark:text-gray-300"
-              >
-                {{ user.name }}
-              </span>
-            </button>
-
-            <!-- Dropdown Menu -->
-            <div
-              id="dropdown"
-              *ngIf="dropdownOpen"
-              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md"
-            >
-              <a
-                href="/profile"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Profile
-              </a>
-              <a
-                href="/settings"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Settings
-              </a>
-              <button
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                (click)="logout()"
-              >
-                Logout
-              </button>
-            </div>
-          </ng-container>
-
-          <!-- Guest Menu -->
-          <ng-template #guestMenu>
-            <a
-              href="/login"
-              class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              Log In
-            </a>
-            <a
-              href="/signup"
-              class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700"
-            >
-              Sign Up
-            </a>
-          </ng-template>
+          <a
+            href="/login"
+            class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            Log In
+          </a>
+          <a
+            href="/signup"
+            class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700 cta"
+          >
+            Sign Up
+          </a>
         </div>
       </div>
     </div>

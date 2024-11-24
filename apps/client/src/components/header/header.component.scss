@@ -33,6 +33,14 @@
   #main-header.scrolled a:hover {
     @apply text-green-600;
   }
+
+  #main-header.scrolled .cta {
+    @apply text-white;
+
+    &:hover {
+      @apply text-white;
+    }
+  }
 }
 
 /* Relative Header Style for Dashboard */
