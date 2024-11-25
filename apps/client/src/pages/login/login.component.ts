@@ -6,30 +6,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoginService } from './login.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private fb: FormBuilder, private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rememberMe: [false],
     });
   }
 
@@ -38,14 +33,6 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
-      next: () => {
-        this.snackBar.open('Login successful!', 'Close');
-        // Redirect or handle success
-      },
-      error: (error) => {
-        this.snackBar.open(error?.response?.data?.message, 'Close');
-      },
-    });
+    this.loginService.login(email, password);
   }
 }
