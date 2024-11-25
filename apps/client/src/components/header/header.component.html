@@ -4,7 +4,10 @@
 >
   <div class="container mx-auto flex items-center justify-between w-full">
     <!-- Logo -->
-    <a href="/" class="flex items-center text-green-600 dark:text-green-400">
+    <a
+      routerLink="/"
+      class="flex items-center text-green-600 dark:text-green-400"
+    >
       <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
       <span class="text-xl font-bold">Featherly</span>
     </a>
@@ -16,12 +19,12 @@
 
         <div class="space-x-5">
           <a
-            href="/about"
+            routerLink="/about"
             class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
             >About</a
           >
           <a
-            href="/contact"
+            routerLink="/contact"
             class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
             >Contact</a
           >
@@ -29,13 +32,13 @@
 
         <div class="relative">
           <a
-            href="/login"
+            routerLink="/login"
             class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             Log In
           </a>
           <a
-            href="/signup"
+            routerLink="/signup"
             class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700 cta"
           >
             Sign Up
