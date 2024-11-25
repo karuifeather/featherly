@@ -39,6 +39,11 @@ export class AuthController {
     return this.authService.login(loginAuthDto, req, res);
   }
 
+  @Post('/logout')
+  logout(@Req() req: Request, @Res() res: Response) {
+    return this.authService.logout(req, res);
+  }
+
   @Get('confirmEmail/:token')
   confirmEmail() {
     return this.authService.confirmEmail();
