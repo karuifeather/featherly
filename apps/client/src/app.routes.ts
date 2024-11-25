@@ -5,13 +5,22 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { ForgotPasswordComponent } from './pages/forgotPassword/forgot-password.component';
 import { ResetPasswordComponent } from './pages/resetPassword/reset-password.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { NonAuthGuard } from './core/guards/non-auth.guard';
 
 export const appRoutes: Route[] = [
-  { path: '', component: LandingComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'forgotPassword', component: ForgotPasswordComponent },
-  { path: 'resetPassword', component: ResetPasswordComponent },
+  { canActivate: [NonAuthGuard], path: '', component: LandingComponent },
+  { canActivate: [NonAuthGuard], path: 'login', component: LoginComponent },
+  { canActivate: [NonAuthGuard], path: 'signup', component: SignupComponent },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'forgotPassword',
+    component: ForgotPasswordComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'resetPassword',
+    component: ResetPasswordComponent,
+  },
   {
     path: 'dashboard',
     canActivate: [AuthGuard],
