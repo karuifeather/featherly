@@ -17,19 +17,23 @@ export class LoginService {
     private notificationService: NotificationService
   ) {}
 
-  login(email: string, password: string): void {
+  login(email: string, password: string, handleSuccess: () => void): void {
     this.store.dispatch(new LoginRequest({ email, password }));
 
     this.axiosService.instance
       .post('/auth/login', { email, password })
+      // Handle the response
       .then((response) => {
         const { token, data } = response.data;
-        console.log('from here', response.data);
+
         this.store.dispatch(new LoginSuccess({ token, user: data.user }));
         this.notificationService.showSuccess('Login successful!');
+        handleSuccess();
       })
+      // Handle the error
       .catch((error) => {
         const message = error?.response?.data?.message || 'Login failed';
+
         this.store.dispatch(new LoginFailure(message));
         this.notificationService.showError(message);
       });

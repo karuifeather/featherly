@@ -1,4 +1,4 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import {
   LoginRequest,
@@ -19,6 +19,16 @@ import { AuthStateModel } from './auth.model';
 })
 @Injectable()
 export class AuthState {
+  @Selector()
+  static token(state: AuthStateModel): string | null {
+    return state.token;
+  }
+
+  @Selector()
+  static isAuthenticated(state: AuthStateModel): boolean {
+    return !!state.token;
+  }
+
   @Action(LoginRequest)
   loginRequest(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({ loading: true, error: null });

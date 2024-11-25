@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginService } from './login.service';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,12 @@ import { RouterModule } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) {}
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -33,6 +38,12 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.loginForm.value;
 
-    this.loginService.login(email, password);
+    const handleSuccess = () => {
+      const returnUrl =
+        this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+      this.router.navigateByUrl(returnUrl);
+    };
+
+    this.loginService.login(email, password, handleSuccess);
   }
 }

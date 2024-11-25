@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ForgotPasswordComponent } from './pages/forgotPassword/forgot-password.component';
 import { ResetPasswordComponent } from './pages/resetPassword/reset-password.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const appRoutes: Route[] = [
   { path: '', component: LandingComponent },
@@ -13,6 +14,7 @@ export const appRoutes: Route[] = [
   { path: 'resetPassword', component: ResetPasswordComponent },
   {
     path: 'dashboard',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/dashboard/dashboard.routes').then(
         (m) => m.dashboardRoutes
