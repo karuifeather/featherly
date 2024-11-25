@@ -1,4 +1,4 @@
-import { Module, Logger } from '@nestjs/common';
+import { Module, Logger, MiddlewareConsumer } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -51,6 +51,7 @@ import { ReviewModule } from './review/review.module';
         limit: 100,
       },
     ]),
+
     AuthModule,
     UserModule,
     TourModule,
