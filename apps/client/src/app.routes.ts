@@ -6,6 +6,8 @@ import { ForgotPasswordComponent } from './pages/forgotPassword/forgot-password.
 import { ResetPasswordComponent } from './pages/resetPassword/reset-password.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { NonAuthGuard } from './core/guards/non-auth.guard';
+import { AboutComponent } from './pages/about/about.component';
+import { FeaturesComponent } from './pages/features/features.component';
 
 export const appRoutes: Route[] = [
   { canActivate: [NonAuthGuard], path: '', component: LandingComponent },
@@ -20,6 +22,16 @@ export const appRoutes: Route[] = [
     canActivate: [NonAuthGuard],
     path: 'resetPassword',
     component: ResetPasswordComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'about',
+    component: AboutComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'features',
+    component: FeaturesComponent,
   },
   {
     path: 'dashboard',
