@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,4 +30,26 @@ body {
 .mat-snack-bar-container {
   font-size: 14px; /* Example: Adjust the font size for snack bars */
   border-radius: 4px; /* Example: Add rounded corners */
+}
+
+// Success Snack Bar Styling
+.snack-success {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: #3db469,
+      supporting-text-color: #d1e7dd,
+      button-color: #d1e7dd,
+    )
+  );
+}
+
+// Error Snack Bar Styling
+.snack-error {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: #842029,
+      supporting-text-color: #f8d7da,
+      button-color: #f8d7da,
+    )
+  );
 }

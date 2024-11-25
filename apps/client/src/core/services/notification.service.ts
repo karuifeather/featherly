@@ -10,6 +10,7 @@ export class NotificationService {
       duration,
       horizontalPosition: 'center',
       verticalPosition: 'top',
+      panelClass: 'snack-success',
     });
   }
 
@@ -18,6 +19,7 @@ export class NotificationService {
       duration,
       horizontalPosition: 'center',
       verticalPosition: 'top',
+      panelClass: 'snack-error',
     });
   }
 }
