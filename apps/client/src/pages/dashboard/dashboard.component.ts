@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardService } from './dashboard.service';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { AuthStateModel } from '../../core/states/auth/auth.model';
+import { AuthState } from '../../core/states/auth/auth.state';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +15,9 @@ import { DashboardService } from './dashboard.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent {
+  private store = inject(Store);
+  user$: Observable<AuthStateModel['user'] | null>;
+
   drawerOpen = false;
 
   tourPosts = [
@@ -43,40 +50,18 @@ export class DashboardComponent {
     // Add more posts as needed
   ];
 
-  // Mock user data
-  user = {
-    firstName: 'John',
-    lastName: 'Doe',
-    avatar: 'https://via.placeholder.com/40', // Replace with actual avatar URL
-  };
-
-  // Mock notifications
-  notifications = [
-    { id: 1, message: 'New tour booking request', read: false },
-    { id: 2, message: 'Update available for your tour', read: true },
-  ];
-
   // State for the user menu dropdown
   isUserMenuOpen = false;
-
-  isNotificationsOpen = false;
 
   constructor(
     private dashboardService: DashboardService,
     private router: Router
-  ) {}
+  ) {
+    this.user$ = this.store.select(AuthState.user);
+  }
 
   toggleDrawer(): void {
     this.drawerOpen = !this.drawerOpen;
-  }
-
-  toggleNotificationsDropdown(): void {
-    this.isNotificationsOpen = !this.isNotificationsOpen;
-  }
-
-  getUnreadNotificationsCount(): number {
-    return this.notifications.filter((notification) => !notification.read)
-      .length;
   }
 
   // Toggle the user menu

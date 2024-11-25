@@ -7,7 +7,7 @@ import {
   Logout,
   LogoutRequest,
 } from './auth.actions';
-import { AuthStateModel } from './auth.model';
+import { AuthStateModel, User } from './auth.model';
 
 @State<AuthStateModel>({
   name: 'auth',
@@ -28,6 +28,11 @@ export class AuthState {
   @Selector()
   static isAuthenticated(state: AuthStateModel): boolean {
     return !!state.token;
+  }
+
+  @Selector()
+  static user(state: AuthStateModel): User | null {
+    return state.user;
   }
 
   @Action(LoginRequest)
