@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -60,6 +61,11 @@ export class DashboardComponent {
 
   isNotificationsOpen = false;
 
+  constructor(
+    private dashboardService: DashboardService,
+    private router: Router
+  ) {}
+
   toggleDrawer(): void {
     this.drawerOpen = !this.drawerOpen;
   }
@@ -80,7 +86,9 @@ export class DashboardComponent {
 
   // Log the user out
   logout(): void {
-    console.log('User logged out');
-    // Add your logout logic here (e.g., clear tokens, redirect)
+    const handleLogout = () => {
+      this.router.navigate(['/']);
+    };
+    this.dashboardService.logout(handleLogout);
   }
 }

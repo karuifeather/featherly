@@ -1,9 +1,14 @@
 import { User } from './auth.model';
 
-// Action to trigger login API
+// Action to trigger login loading
 export class LoginRequest {
   static readonly type = '[Auth] LoginRequest';
   constructor(public payload: { email: string; password: string }) {}
+}
+
+// Action to trigger logout loading
+export class LogoutRequest {
+  static readonly type = '[Auth] LogoutRequest';
 }
 
 // Action to save login response to state
