@@ -1,7 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { User } from '../../user/schemas/user.schema';
-import { Tour } from '../../tour/schemas/tour.schema';
 
 @Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
 export class Booking extends Document {
@@ -10,14 +8,14 @@ export class Booking extends Document {
     ref: 'Tour',
     required: [true, 'A booking must have a tour.'],
   })
-  tour: Tour;
+  tour: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
     required: [true, 'A booking must belong to a user.'],
   })
-  user: User;
+  user: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: [true, 'Bookings must have price.'] })
   price: number;

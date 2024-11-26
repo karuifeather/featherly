@@ -7,6 +7,8 @@ import { Booking, BookingDocument } from './schemas/booking.schema';
 import { Tour } from '../tour/schemas/tour.schema';
 import { User } from '../user/schemas/user.schema';
 import { CRUDFactory } from '../shared/crud.factory';
+import { QueryBookingDto } from './dtos/query-booking.dto';
+import { CreateBookingDto } from './dtos/create-booking.dto';
 
 @Injectable()
 export class BookingService {
@@ -104,16 +106,16 @@ export class BookingService {
     });
   }
 
-  async getBookings() {
-    return this.bookingModel.find();
+  async getBookings(queryBookingDto: QueryBookingDto) {
+    return this.crud.getAll(queryBookingDto);
   }
 
-  async createBooking(createBookingDto: any) {
+  async createBooking(createBookingDto: CreateBookingDto) {
     return this.crud.createOne(createBookingDto);
   }
 
   async getBooking(id: string) {
-    return this.bookingModel.findById(id);
+    return this.crud.getOne(id);
   }
 
   async updateBooking(id: string, updateBookingDto: any) {
