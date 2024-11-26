@@ -1,18 +1,22 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNotEmpty,
-  IsNumber,
   IsArray,
   IsOptional,
-  IsBoolean,
-  IsEnum,
   MaxLength,
   MinLength,
-  Min,
-  Max,
 } from 'class-validator';
+import { StartLocationDto } from './start-location.dto';
+import { LocationDto } from './locations.dto';
 
 export class CreateTourDto {
+  @ApiProperty({
+    description: 'The name of the tour',
+    example: 'Adventurous Safari',
+    minLength: 10,
+    maxLength: 40,
+  })
   @IsString()
   @IsNotEmpty({ message: 'A tour must have a name' })
   @MinLength(10, {
@@ -23,85 +27,26 @@ export class CreateTourDto {
   })
   name: string;
 
+  @ApiPropertyOptional({
+    description: 'The slug of the tour (URL-friendly name)',
+    example: 'adventurous-safari',
+  })
   @IsString()
   @IsOptional()
   slug?: string;
 
-  @IsNumber()
-  @IsNotEmpty({ message: 'A tour must have a duration' })
-  duration: number;
-
-  @IsNumber()
-  @IsNotEmpty({ message: 'A tour must have a group size' })
-  maxGroupSize: number;
-
-  @IsString()
-  @IsNotEmpty({ message: 'A tour must have a difficulty' })
-  @IsEnum(['easy', 'medium', 'difficult'], {
-    message: "Difficulty can only be 'easy', 'medium' or 'difficult'",
+  @ApiPropertyOptional({
+    description: 'The starting location of the tour',
+    type: StartLocationDto,
   })
-  difficulty: string;
-
-  @IsNumber()
   @IsOptional()
-  @Min(1, { message: 'Rating must be above 1.0' })
-  @Max(5, { message: 'Rating must be below 5.0' })
-  ratingsAverage?: number;
+  startLocation?: StartLocationDto;
 
-  @IsNumber()
+  @ApiPropertyOptional({
+    description: 'The locations visited during the tour',
+    type: [LocationDto],
+  })
   @IsOptional()
-  ratingsQuantity?: number;
-
-  @IsNumber()
-  @IsNotEmpty({ message: 'A tour must have a price' })
-  price: number;
-
-  @IsNumber()
-  @IsOptional()
-  priceDiscount?: number;
-
-  @IsString()
-  @IsNotEmpty({ message: 'A tour must have a summary' })
-  summary: string;
-
-  @IsString()
-  @IsOptional()
-  description?: string;
-
-  @IsString()
-  @IsNotEmpty({ message: 'A tour must have a cover image' })
-  imageCover: string;
-
   @IsArray()
-  @IsOptional()
-  images?: string[];
-
-  @IsArray()
-  @IsOptional()
-  startDates?: Date[];
-
-  @IsBoolean()
-  @IsOptional()
-  secretTour?: boolean;
-
-  @IsOptional()
-  startLocation?: {
-    type: string;
-    coordinates: [number, number];
-    address: string;
-    description: string;
-  };
-
-  @IsOptional()
-  locations?: {
-    type: string;
-    coordinates: [number, number];
-    address: string;
-    description: string;
-    day: number;
-  }[];
-
-  @IsArray()
-  @IsOptional()
-  guides?: string[];
+  locations?: LocationDto[];
 }
