@@ -1,7 +1,20 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 
-@Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
+@Schema({
+  toJSON: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
+  toObject: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
+})
 export class Booking extends Document {
   @Prop({
     type: MongooseSchema.Types.ObjectId,

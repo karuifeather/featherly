@@ -10,7 +10,20 @@ export interface ReviewDocument extends Document {
   constructor: typeof Review; // This is important for static methods
 }
 
-@Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
+@Schema({
+  toJSON: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
+  toObject: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
+})
 export class Review extends Document {
   @Prop({ required: [true, 'A review cannot be empty.'], trim: true })
   review: string;

@@ -5,8 +5,18 @@ import crypto from 'crypto';
 
 @Schema({
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
+  toJSON: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
+  toObject: {
+    virtuals: true,
+    transform: (_, ret) => {
+      delete ret._id;
+    },
+  },
 })
 export class User extends Document {
   @Prop({
