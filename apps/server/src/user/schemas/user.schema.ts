@@ -53,7 +53,8 @@ export class User extends Document {
   @Prop({
     type: String,
     trim: true,
-    default: 'default.jpg',
+    default:
+      'https://res.cloudinary.com/drj6tdlhy/image/upload/v1732165738/png-transparent-default-avatar_gpkcme.png',
   })
   photo: string;
 
@@ -89,7 +90,7 @@ export class User extends Document {
 
   @Prop({
     type: Boolean,
-    default: true,
+    default: false,
     select: false,
   })
   active: boolean;
@@ -119,7 +120,9 @@ UserSchema.pre<UserDocument>('save', async function (next) {
 
 // Query hook to exclude inactive users
 UserSchema.pre<Query<UserDocument, UserDocument>>(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
+  if (!this.getOptions().skipActiveFilter) {
+    this.find({ active: { $ne: false } });
+  }
   next();
 });
 

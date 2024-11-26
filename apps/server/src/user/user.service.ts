@@ -5,10 +5,14 @@ import { Request } from 'express';
 
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
+import { EmailService } from '../shared/email.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private emailService: EmailService
+  ) {}
 
   async create(
     createUserDto: CreateUserDto,
@@ -17,12 +21,19 @@ export class UserService {
     try {
       const newUser = await this.userModel.create(createUserDto);
       const confirmationToken = newUser.createEmailConfirmToken();
+      await newUser.save({ validateBeforeSave: false });
 
       const confrimTokenUrl = `${req.protocol}://${req.get(
         'host'
-      )}/api/v1/users/confirmEmail/${confirmationToken}`;
+      )}/api/auth/confirmEmail/${confirmationToken}`;
 
-      // TODO: Send the email
+      await this.emailService.sendConfirmEmail(
+        {
+          name: newUser.fname,
+          email: newUser.email,
+        },
+        confrimTokenUrl
+      );
 
       newUser.active = undefined; // Hide the  active field from the response
 
@@ -36,6 +47,12 @@ export class UserService {
       }
       throw error;
     }
+  }
+
+  async findUserByToken(token: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({ accountConfirmToken: token })
+      .setOptions({ skipActiveFilter: true });
   }
 
   async findUserByEmail(email: string, select = '') {

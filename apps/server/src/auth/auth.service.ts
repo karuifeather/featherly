@@ -8,18 +8,21 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import * as crypto from 'crypto';
 
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginAuthDto } from './dtos/login-dto';
 import { UserDocument } from '../user/schemas/user.schema';
+import { EmailService } from '../shared/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly emailService: EmailService
   ) {}
 
   private async signToken(id: string): Promise<string> {
@@ -99,6 +102,11 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect email or password!');
     }
 
+    // Check if user has confirmed email
+    if (user.accountConfirmToken) {
+      throw new UnauthorizedException('Please confirm your email!');
+    }
+
     const token = await this.signToken(user.id);
 
     return this.sendAuthResponse(user, token, req, res);
@@ -117,8 +125,32 @@ export class AuthService {
     });
   }
 
-  confirmEmail() {
-    return 'this is a test response from auth controller';
+  async confirmEmail(token: string): Promise<{ status: string }> {
+    // 1. Hash the token
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    // 2. Find the user based on the token
+    const newUser = await this.userService.findUserByToken(hashedToken);
+
+    if (!newUser) {
+      throw new UnauthorizedException('Token is invalid or user is inactive.');
+    }
+
+    // 3. Update user properties
+    newUser.accountConfirmToken = undefined;
+    newUser.accountExpiresIn = undefined;
+    newUser.active = true;
+
+    await newUser.save({ validateBeforeSave: false });
+
+    // 4. Send a welcome email
+    const url = `https://featherly.karuifeather.com/dashboard/profile`; // Adjust as needed
+    await this.emailService.sendWelcomeEmail(
+      { name: newUser.fname, email: newUser.email },
+      url
+    );
+
+    return { status: 'success' };
   }
 
   forgotPassword() {

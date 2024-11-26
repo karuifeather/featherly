@@ -7,6 +7,7 @@ import {
   Req,
   Res,
   UseGuards,
+  Param,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -79,8 +80,8 @@ export class AuthController {
   }
 
   @Get('confirmEmail/:token')
-  confirmEmail() {
-    return this.authService.confirmEmail();
+  confirmEmail(@Param('token') token: string) {
+    return this.authService.confirmEmail(token);
   }
 
   @Post('/forgotPassword')
