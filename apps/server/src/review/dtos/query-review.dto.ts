@@ -1,51 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsNumber,
-  IsMongoId,
-  Min,
-  Max,
-} from 'class-validator';
+import { IsOptional, IsNumber, IsMongoId, Min, Max } from 'class-validator';
+import { BaseQueryDto } from '../../shared/query.dto';
 
-export class QueryReviewsDto {
-  @ApiPropertyOptional({
-    description: 'Sort criteria for the reviews (e.g., "-rating,createdAt").',
-    example: '-rating,createdAt',
-  })
-  @IsOptional()
-  @IsString()
-  sort?: string; // e.g., '-rating,createdAt'
-
-  @ApiPropertyOptional({
-    description:
-      'Comma-separated list of fields to select in the response (e.g., "review,rating").',
-    example: 'review,rating',
-  })
-  @IsOptional()
-  @IsString()
-  fields?: string; // e.g., 'review,rating'
-
-  @ApiPropertyOptional({
-    description: 'Maximum number of results to return per page.',
-    example: 10,
-    minimum: 1,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(1)
-  limit?: number;
-
-  @ApiPropertyOptional({
-    description: 'Page number for pagination.',
-    example: 1,
-    minimum: 1,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(1)
-  page?: number;
-
+export class QueryReviewsDto extends BaseQueryDto {
   @ApiPropertyOptional({
     description: 'Filter reviews by specific rating (1 to 5).',
     example: 5,
