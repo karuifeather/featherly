@@ -1,28 +1,51 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { SignupService } from './signup.service';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, CommonModule],
   standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
 })
 export class SignupComponent {
-  user = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  };
+  signUpForm: FormGroup;
 
-  onSubmit(form: any) {
-    if (form.valid) {
-      console.log('Form Data:', form.value);
-      alert('Sign-up successful!');
-    } else {
-      alert('Please correct the errors before submitting.');
+  constructor(private fb: FormBuilder, private signupService: SignupService) {
+    this.signUpForm = this.fb.group(
+      {
+        fname: ['', [Validators.required, Validators.minLength(2)]],
+        lname: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: [this.passwordsMatchValidator],
+      }
+    );
+  }
+
+  passwordsMatchValidator(
+    group: AbstractControl
+  ): { [key: string]: boolean } | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordsMismatch: true };
+  }
+
+  onSubmit(): void {
+    if (this.signUpForm.valid) {
+      const { fname, lname, email, password } = this.signUpForm.value;
+      this.signupService.signup({ fname, lname, email, password });
     }
   }
 }

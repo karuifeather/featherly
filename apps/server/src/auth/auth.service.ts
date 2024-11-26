@@ -4,6 +4,7 @@ import {
   BadRequestException,
   NotFoundException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -15,6 +16,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginAuthDto } from './dtos/login-dto';
 import { UserDocument } from '../user/schemas/user.schema';
 import { EmailService } from '../shared/email.service';
+import { SignupResponseDto } from './dtos/response/signup-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -66,18 +68,35 @@ export class AuthService {
       },
     };
 
-    res.status(HttpStatus.CREATED).json(responseBody);
+    res.status(HttpStatus.ACCEPTED).json(responseBody);
 
     // for testing purposes
     return responseBody;
   }
 
-  async signup(createUserDto: CreateUserDto, req: Request, res: Response) {
+  async signup(
+    createUserDto: CreateUserDto,
+    req: Request,
+    res: Response
+  ): Promise<SignupResponseDto> {
     const newUser = await this.userService.create(createUserDto, req);
 
-    const token = await this.signToken(newUser.id);
+    if (!newUser) {
+      throw new InternalServerErrorException(
+        'User could not be created at this time. Try again later.'
+      );
+    }
 
-    return this.sendAuthResponse(newUser, token, req, res);
+    const response: SignupResponseDto = {
+      status: 'success',
+      message:
+        'Your account has been created successfully. Please check your email to confirm your account.',
+    };
+
+    res.status(HttpStatus.CREATED).json(response);
+
+    // for testing purposes
+    return response;
   }
 
   async login(loginAuthDto: LoginAuthDto, req: Request, res: Response) {

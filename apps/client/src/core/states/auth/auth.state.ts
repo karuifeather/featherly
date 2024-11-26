@@ -6,6 +6,9 @@ import {
   LoginFailure,
   Logout,
   LogoutRequest,
+  SignupRequest,
+  SignupSuccess,
+  SignupFailure,
 } from './auth.actions';
 import { AuthStateModel, User } from './auth.model';
 
@@ -59,5 +62,20 @@ export class AuthState {
   @Action(Logout)
   logout(ctx: StateContext<AuthStateModel>) {
     ctx.setState({ user: null, token: null, loading: false, error: null });
+  }
+
+  @Action(SignupRequest)
+  signupRequest(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({ loading: true, error: null });
+  }
+
+  @Action(SignupSuccess)
+  signupSuccess(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({ loading: false, error: null });
+  }
+
+  @Action(SignupFailure)
+  signupFailure(ctx: StateContext<AuthStateModel>, action: SignupFailure) {
+    ctx.patchState({ loading: false, error: action.error });
   }
 }

@@ -56,7 +56,10 @@ export class UserService {
   }
 
   async findUserByEmail(email: string, select = '') {
-    return this.userModel.findOne({ email }).select(select);
+    return this.userModel
+      .findOne({ email })
+      .select(select)
+      .setOptions({ skipActiveFilter: true });
   }
 
   async findById(id: string) {

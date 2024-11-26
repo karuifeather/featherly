@@ -30,3 +30,19 @@ export class SetAuthToken {
   static readonly type = '[Auth] SetAuthToken';
   constructor(public token: string) {}
 }
+
+// Action to trigger sign-up loading
+export class SignupRequest {
+  static readonly type = '[Auth] SignupRequest';
+}
+
+// Action for successful sign-up
+export class SignupSuccess {
+  static readonly type = '[Auth] SignupSuccess';
+}
+
+// Action for sign-up failure
+export class SignupFailure {
+  static readonly type = '[Auth] SignupFailure';
+  constructor(public error: string) {}
+}
