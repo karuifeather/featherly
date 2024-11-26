@@ -18,6 +18,12 @@ import { UserDocument } from '../user/schemas/user.schema';
 import { EmailService } from '../shared/email.service';
 import { SignupResponseDto } from './dtos/response/signup-response.dto';
 
+enum ConfirmationToken {
+  EMAIL_CONFIRMED = '5f4dcc3b5aa765d61d8327deb882cf99',
+  PASSWORD_RESET = '6adfb183a4a2c94a2f92dab5ade762a2',
+  ACCOUNT_ACTIVATION = '8d3d3d68a19945b3ac914c0f24d52aef',
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -144,7 +150,11 @@ export class AuthService {
     });
   }
 
-  async confirmEmail(token: string): Promise<{ status: string }> {
+  async confirmEmail(
+    token: string,
+    req: Request,
+    res: Response
+  ): Promise<{ status: string }> {
     // 1. Hash the token
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
@@ -163,11 +173,23 @@ export class AuthService {
     await newUser.save({ validateBeforeSave: false });
 
     // 4. Send a welcome email
-    const url = `https://featherly.karuifeather.com/dashboard/profile`; // Adjust as needed
+    const url = `https://featherly.karuifeather.com/dashboard/profile`;
     await this.emailService.sendWelcomeEmail(
       { name: newUser.fname, email: newUser.email },
       url
     );
+
+    let confirmEmailTokenURL;
+
+    if (this.configService.get<string>('NODE_ENV') === 'development') {
+      confirmEmailTokenURL = `http://localhost:4200/confirmation?token=${ConfirmationToken.EMAIL_CONFIRMED}`;
+    }
+
+    confirmEmailTokenURL = `${req.protocol}://${req.get(
+      'host'
+    )}/confirmation?token=${ConfirmationToken.EMAIL_CONFIRMED}`;
+
+    res.redirect(confirmEmailTokenURL);
 
     return { status: 'success' };
   }

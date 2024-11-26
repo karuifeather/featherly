@@ -80,8 +80,12 @@ export class AuthController {
   }
 
   @Get('confirmEmail/:token')
-  confirmEmail(@Param('token') token: string) {
-    return this.authService.confirmEmail(token);
+  confirmEmail(
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    return this.authService.confirmEmail(token, req, res);
   }
 
   @Post('/forgotPassword')

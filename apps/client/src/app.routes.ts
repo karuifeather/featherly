@@ -8,6 +8,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { NonAuthGuard } from './core/guards/non-auth.guard';
 import { AboutComponent } from './pages/about/about.component';
 import { FeaturesComponent } from './pages/features/features.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 export const appRoutes: Route[] = [
   { canActivate: [NonAuthGuard], path: '', component: LandingComponent },
@@ -32,6 +33,11 @@ export const appRoutes: Route[] = [
     canActivate: [NonAuthGuard],
     path: 'features',
     component: FeaturesComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'confirmation',
+    component: ConfirmationComponent,
   },
   {
     path: 'dashboard',
