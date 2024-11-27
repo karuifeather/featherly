@@ -1,15 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Store } from '@ngxs/store';
 import mapboxgl from 'mapbox-gl';
-
-export type Location = {
-  type: 'Point'; // Fixed value for type
-  coordinates: [number, number]; // Tuple for latitude and longitude
-  address: string; // Address of the location
-  description: string; // Description of the location
-  day: number; // Day number for the location
-};
+import { TourDetailsService } from './tour-details.service';
+import { Location, Tour } from '../../core/states/tour/tour.model';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-tour-detail',
@@ -18,66 +14,9 @@ export type Location = {
   imports: [RouterModule, CommonModule],
 })
 export class TourDetailComponent implements OnInit {
-  tour: any; // Replace with your actual Tour model
-
-  // Example data
-  sampleTour = {
-    name: 'The Alpine Forest Adventure',
-    slug: 'the-alpine-forest-adventure',
-    duration: 7,
-    maxGroupSize: 12,
-    difficulty: 'medium',
-    ratingsAverage: 4.8,
-    ratingsQuantity: 57,
-    price: 799,
-    priceDiscount: 699,
-    summary: 'A breathtaking 7-day hike through pristine alpine forests.',
-    description:
-      'This guided tour takes you deep into the heart of the alpine wilderness, featuring breathtaking views, secluded trails, and incredible wildlife.',
-    imageCover:
-      'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828692/nat-9_dz9zov.jpg',
-    images: [
-      'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828693/nat-5_nye0nq.jpg',
-      'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828693/nat-10_u61elf.jpg',
-    ],
-    startDates: [new Date('2023-12-01'), new Date('2024-01-15')],
-    startLocation: {
-      type: 'Point',
-      coordinates: [-105.2705, 40.015],
-      address: 'Boulder, Colorado, USA',
-      description: 'Tour starting point in Boulder.',
-    },
-    locations: [
-      {
-        type: 'Point',
-        coordinates: [-105.3605, 40.0205],
-        address: 'Trailhead',
-        description: 'The trail begins here.',
-        day: 1,
-      },
-      {
-        type: 'Point',
-        coordinates: [-105.4605, 40.0305],
-        address: 'Campground',
-        description: 'First campsite along the trail.',
-        day: 2,
-      },
-    ],
-    guides: ['John Doe', 'Jane Smith'],
-  };
+  tour$: Observable<Tour | null> = of(null);
 
   lightboxImage: string | null = null;
-
-  openLightbox(image: string): void {
-    this.lightboxImage = image;
-  }
-
-  closeLightbox(event?: Event): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.lightboxImage = null;
-  }
 
   reviews = [
     {
@@ -96,6 +35,51 @@ export class TourDetailComponent implements OnInit {
     },
   ];
 
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private tourDetailService: TourDetailsService,
+    private store: Store
+  ) {}
+
+  ngOnInit(): void {
+    const slug = this.route.snapshot.paramMap.get('tourSlug');
+
+    // Redirect to home if no slug is present in the URL
+    if (!slug) {
+      this.router.navigate(['/dashboard/home']);
+      return;
+    }
+
+    // Fetch the tour details or get from the store
+    this.tour$ = this.store.select(
+      (state) => state.tour.tourDetails?.[slug] || null
+    );
+
+    this.tour$.subscribe((tour) => {
+      if (tour) {
+        this.initializeMap(tour);
+      } else {
+        this.tourDetailService.getTourDetails(slug).then((fetchedTour) => {
+          if (fetchedTour) {
+            this.initializeMap(fetchedTour);
+          }
+        });
+      }
+    });
+  }
+
+  openLightbox(image: string): void {
+    this.lightboxImage = image;
+  }
+
+  closeLightbox(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.lightboxImage = null;
+  }
+
   // Helper to generate stars
   getRatingStars(rating: number): number[] {
     return Array(Math.floor(rating)).fill(0);
@@ -110,28 +94,14 @@ export class TourDetailComponent implements OnInit {
     alert('Redirecting to the write review page...');
   }
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    const slug = this.route.snapshot.paramMap.get('tourSlug');
-
-    // Replace this with an API call to fetch tour data
-    if (slug === 'the-alpine-forest-adventure') {
-      this.tour = this.sampleTour;
-      this.tour.ratingsQuantity = 2;
-    }
-
-    this.initializeMap();
-  }
-
-  initializeMap() {
+  initializeMap(tour: Tour): void {
     (mapboxgl as any).accessToken =
       'pk.eyJ1Ijoia2VtdW1ha2lpaSIsImEiOiJja2psMW5wdW8wMWVlMnVseTZsbHZpYzFiIn0.JwU5WzgEZm8Py3s1eeyBBQ';
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/kemumakiii/ckl8pdp5g06jl17nrq8jpp2ug',
-      center: this.tour.startLocation.coordinates,
+      center: tour.startLocation.coordinates,
       scrollZoom: false,
     });
 
@@ -153,16 +123,16 @@ export class TourDetailComponent implements OnInit {
     };
 
     new mapboxgl.Marker({ element: createMarker(), anchor: 'bottom' })
-      .setLngLat(this.tour.startLocation.coordinates)
+      .setLngLat(tour.startLocation.coordinates)
       .setPopup(
         new mapboxgl.Popup({ offset: 30, closeOnClick: false }).setHTML(
-          `<p>${this.tour.startLocation.description}</p>`
+          `<p>${tour.startLocation.description}</p>`
         )
       )
       .addTo(map);
 
     // Add markers for tour locations
-    this.tour.locations.forEach((location: Location) => {
+    tour.locations!.forEach((location: Location) => {
       new mapboxgl.Marker({ element: createMarker(), anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);
@@ -179,8 +149,8 @@ export class TourDetailComponent implements OnInit {
 
     // Define route coordinates
     const routeCoordinates = [
-      this.tour.startLocation.coordinates,
-      ...this.tour.locations.map((location: Location) => location.coordinates),
+      tour.startLocation.coordinates,
+      ...tour.locations!.map((location: Location) => location.coordinates),
     ];
 
     // Add a line layer for the route

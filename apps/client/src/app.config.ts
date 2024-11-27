@@ -25,6 +25,7 @@ export const appConfig: ApplicationConfig = {
         keys: [
           'auth',
           'tour.popularTours',
+          'tour.tourDetails',
           'user.savedTours',
           'booking.bookings',
         ],

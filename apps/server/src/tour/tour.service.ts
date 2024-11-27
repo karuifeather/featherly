@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -38,6 +42,17 @@ export class TourService {
 
   async deleteTour(id: string): Promise<string> {
     return this.crud.deleteOne(id);
+  }
+
+  // Get tour by slug
+  async getTourBySlug(slug: string): Promise<Tour | null> {
+    const tour = await this.tourModel.findOne({ slug }).exec();
+
+    if (!tour) {
+      throw new NotFoundException(`Tour with slug "${slug}" not found`);
+    }
+
+    return tour;
   }
 
   // Get recommended tours based on user preferences

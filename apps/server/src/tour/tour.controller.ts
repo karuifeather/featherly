@@ -214,9 +214,22 @@ export class TourController {
   })
   @ApiResponse({ status: 200, description: 'Tour retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Tour not found' })
-  @Get(':id')
+  @Get('by-id/:id')
   getTour(@Param('id') id: string) {
     return this.tourService.getTour(id);
+  }
+
+  @ApiOperation({ summary: 'Get a single tour by slug (public)' })
+  @ApiParam({
+    name: 'slug',
+    description: 'Tour slug',
+    example: 'northern-lights-expedition',
+  })
+  @ApiResponse({ status: 200, description: 'Tour retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Tour not found' })
+  @Get('by-slug/:slug')
+  getTourBySlug(@Param('slug') slug: string) {
+    return this.tourService.getTourBySlug(slug);
   }
 
   @ApiBearerAuth()

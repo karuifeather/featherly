@@ -1,6 +1,7 @@
 export interface TourStateModel {
   popularTours: Tour[] | null;
   recommendedTours: Tour[] | null;
+  tourDetails: Record<string, Tour | null> | null;
   toursFeed: Tour[];
   loading: boolean;
   error: string | null;
@@ -28,12 +29,14 @@ export interface Tour {
     address: string;
     description: string;
   };
-  locations?: {
-    type: 'Point';
-    coordinates: [number, number];
-    address: string;
-    description: string;
-    day: number;
-  }[];
+  locations?: Location[];
   user: string;
 }
+
+export type Location = {
+  type: 'Point'; // Fixed value for type
+  coordinates: [number, number]; // Tuple for latitude and longitude
+  address: string; // Address of the location
+  description: string; // Description of the location
+  day: number; // Day number for the location
+};

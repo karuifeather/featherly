@@ -1,50 +1,41 @@
 <!-- Hero Section -->
-<style>
-  .group:hover .group-hover\:scale-105 {
-    transform: scale(1.05);
-  }
-  .group:hover .group-hover\:opacity-100 {
-    opacity: 1;
-  }
-</style>
-
 <section
   class="relative h-[500px] bg-cover bg-center"
-  [style.backgroundImage]="'url(' + tour.imageCover + ')'"
+  [style.backgroundImage]="'url(' + (tour$ | async)?.imageCover + ')'"
 >
   <div
     class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80"
   ></div>
   <div class="absolute bottom-6 left-6 text-white z-10">
-    <h1 class="text-4xl font-bold">{{ tour.name }}</h1>
-    <p class="mt-2 text-lg">{{ tour.summary }}</p>
+    <h1 class="text-4xl font-bold">{{ (tour$ | async)?.name }}</h1>
+    <p class="mt-2 text-lg">{{ (tour$ | async)?.summary }}</p>
   </div>
 </section>
 
-<!-- Tour Overview Section -->
+<!-- Tour Overview -->
 <section class="p-6 md:p-12 bg-gray-50 dark:bg-gray-900">
   <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
     <!-- Overview Details -->
     <div class="col-span-2 space-y-4">
       <h2 class="text-3xl font-bold">About the Tour</h2>
-      <p class=" ">{{ tour.description }}</p>
+      <p>{{ (tour$ | async)?.description }}</p>
       <div class="grid grid-cols-2 gap-4 mt-6">
         <div>
           <h3 class="font-semibold">Duration</h3>
-          <p>{{ tour.duration }} days</p>
+          <p>{{ (tour$ | async)?.duration }} days</p>
         </div>
         <div>
           <h3 class="font-semibold">Group Size</h3>
-          <p>Up to {{ tour.maxGroupSize }} people</p>
+          <p>Up to {{ (tour$ | async)?.maxGroupSize }} people</p>
         </div>
         <div>
           <h3 class="font-semibold">Difficulty</h3>
-          <p class="capitalize">{{ tour.difficulty }}</p>
+          <p class="capitalize">{{ (tour$ | async)?.difficulty }}</p>
         </div>
         <div>
           <h3 class="font-semibold">Price</h3>
           <p>
-            ${{ tour.price }}
+            ${{ (tour$ | async)?.price }}
             <span class="text-sm text-gray-400">per person</span>
           </p>
         </div>
@@ -53,10 +44,11 @@
 
     <!-- Call to Action -->
     <div
-      class="flex flex-col items-center justify-between bg-white dark:bg-gray-800 dark:text-gray-300 rounded-lg shadow-md p-6 space-y-6"
+      class="flex flex-col items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-6"
     >
       <p class="text-lg font-bold">
-        ${{ tour.price }} <span class="text-sm text-gray-500">per person</span>
+        ${{ (tour$ | async)?.price }}
+        <span class="text-sm text-gray-500">per person</span>
       </p>
       <button
         class="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all"
@@ -65,8 +57,8 @@
         Book Now
       </button>
       <div class="text-gray-600 dark:text-gray-300 text-center text-sm">
-        <p>Rated {{ tour.ratingsAverage }} / 5</p>
-        <p>{{ tour.ratingsQuantity }} Reviews</p>
+        <p>Rated {{ (tour$ | async)?.ratingsAverage }} / 5</p>
+        <p>{{ (tour$ | async)?.ratingsQuantity }} Reviews</p>
       </div>
     </div>
   </div>
@@ -77,12 +69,12 @@
   <h2 class="text-3xl font-bold mb-6">Gallery</h2>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
     <div
-      *ngFor="let image of tour.images"
+      *ngFor="let image of (tour$ | async)?.images"
       class="relative group overflow-hidden rounded-lg shadow-md"
     >
       <img
         [src]="image"
-        alt="{{ tour.name }}"
+        alt="Tour Image"
         class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
       />
       <div
@@ -97,27 +89,9 @@
       </div>
     </div>
   </div>
-
-  <!-- Lightbox Modal -->
-  <button
-    *ngIf="lightboxImage"
-    class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-    (click)="closeLightbox()"
-  >
-    <img
-      [src]="lightboxImage"
-      alt="{{ tour.name }}"
-      class="w-2/3 max-h-auto rounded-lg shadow-lg"
-    />
-    <button
-      class="absolute top-4 right-4 text-white text-2xl"
-      (click)="closeLightbox($event)"
-    >
-      &times;
-    </button>
-  </button>
 </section>
 
+<!-- Map Section -->
 <section class="p-6 md:p-12 bg-white dark:bg-gray-900">
   <h2 class="text-3xl font-bold mb-4">Tour Locations</h2>
   <div id="map" class="w-full h-[600px] rounded-lg shadow-md"></div>
@@ -127,20 +101,16 @@
 <section class="p-6 md:p-12 bg-gray-50 dark:bg-gray-950">
   <h2 class="text-3xl font-bold mb-6 text-center">What People Are Saying</h2>
 
-  <!-- Reviews -->
-  <div *ngIf="tour.ratingsQuantity > 0; else noReviews" class="space-y-6">
+  <div *ngIf="reviews.length > 0; else noReviews" class="space-y-6">
     <div
       *ngFor="let review of reviews"
       class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 flex items-start space-x-4"
     >
-      <!-- User Avatar -->
       <img
-        [src]="review.userAvatar || '/assets/default-avatar.png'"
+        [src]="review.userAvatar"
         alt="{{ review.user }}"
         class="w-12 h-12 rounded-full shadow"
       />
-
-      <!-- Review Content -->
       <div class="flex-1">
         <div class="flex justify-between items-center">
           <h3 class="font-semibold text-gray-800 dark:text-white">
@@ -151,7 +121,6 @@
           </p>
         </div>
         <div class="flex items-center mt-1">
-          <!-- Star Rating -->
           <span
             *ngFor="let star of getRatingStars(review.rating)"
             class="text-yellow-400 text-lg"
@@ -165,14 +134,11 @@
             ★
           </span>
         </div>
-        <p class="mt-2 text-gray-600 dark:text-gray-300">
-          {{ review.text }}
-        </p>
+        <p class="mt-2 text-gray-600 dark:text-gray-300">{{ review.text }}</p>
       </div>
     </div>
   </div>
 
-  <!-- No Reviews Placeholder -->
   <ng-template #noReviews>
     <div class="flex flex-col items-center text-center space-y-4">
       <p class="text-gray-500 dark:text-gray-400 text-lg">
@@ -187,3 +153,26 @@
     </div>
   </ng-template>
 </section>
+
+<!-- Lightbox Modal -->
+<div
+  *ngIf="lightboxImage"
+  class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+  (click)="closeLightbox()"
+  tabindex="0"
+  (keyup.enter)="closeLightbox($event)"
+>
+  <img
+    [src]="lightboxImage"
+    alt="Selected Tour Image"
+    class="w-2/3 max-h-auto rounded-lg shadow-lg"
+  />
+  <button
+    class="absolute top-4 right-4 text-white text-2xl"
+    (click)="closeLightbox($event)"
+    (keyup.enter)="closeLightbox($event)"
+    tabindex="0"
+  >
+    &times;
+  </button>
+</div>
