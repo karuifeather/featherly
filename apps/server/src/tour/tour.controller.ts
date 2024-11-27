@@ -48,6 +48,20 @@ export class TourController {
     return this.tourService.getAllTours(query);
   }
 
+  @ApiOperation({ summary: 'Get the top 5 popular tours (public)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Top popular tours retrieved successfully',
+  })
+  @Get('popular')
+  aliasTopPopularTours(@Query() query: QueryToursDto) {
+    query.sort = '-ratingsAverage,-ratingsQuantity';
+    query.limit = 6;
+    query.fields =
+      'name,price,ratingsAverage,ratingsQuantity,summary,imageCover,slug';
+    return this.tourService.getAllTours(query);
+  }
+
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get monthly plan for a specific year (protected)',
