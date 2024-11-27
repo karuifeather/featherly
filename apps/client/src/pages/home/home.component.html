@@ -14,7 +14,9 @@
 
     <!-- Content -->
     <div class="relative container mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold text-white">Welcome Back, John!</h2>
+      <h2 *ngIf="user$ | async as user" class="text-3xl font-bold text-white">
+        Welcome Back, {{ user.fname }}!
+      </h2>
       <p class="text-gray-300 mt-2">
         Ready for your next adventure? Let’s explore!
       </p>
@@ -45,6 +47,7 @@
 
   <!-- Create your own tour -->
   <div
+    *ngIf="isAdmin(user$ | async)"
     class="py-10 bg-gradient-to-r from-green-700 to-green-900 text-white p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:justify-between"
   >
     <div class="mx-auto w-1/2 flex justify-between">
@@ -72,32 +75,37 @@
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Tour Card -->
-        <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
-        >
-          <img
-            src="https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828690/nat-1_spztdy.jpg"
-            alt="Tour"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h4 class="text-lg font-bold text-gray-800 dark:text-white">
-              Alpine Forest Adventure
-            </h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm">
-              7-day hike through pristine forests.
-            </p>
-            <div class="mt-4 flex justify-between items-center">
-              <span class="text-gray-800 dark:text-white font-bold">$799</span>
-              <button
-                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-              >
-                View Details
-              </button>
+        <ng-container *ngIf="recommendedTours$ | async as recommendedTours">
+          <div
+            *ngFor="let tour of recommendedTours"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+          >
+            <img
+              [src]="tour.imageCover"
+              [alt]="tour.name"
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-4">
+              <h4 class="text-lg font-bold text-gray-800 dark:text-white">
+                {{ tour.name }}
+              </h4>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                {{ tour.summary }}
+              </p>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="text-gray-800 dark:text-white font-bold"
+                  >${{ tour.price }}</span
+                >
+                <button
+                  class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                  [routerLink]="['/tours', tour.slug]"
+                >
+                  View Details
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Add more tour cards dynamically -->
+        </ng-container>
       </div>
     </div>
   </section>

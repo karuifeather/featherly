@@ -40,12 +40,36 @@ export class TourService {
     return this.crud.deleteOne(id);
   }
 
-  // Custom logic: alias top tours
-  aliasTopTours(query: QueryToursDto) {
-    query.limit = 5;
-    query.sort = '-ratingsAverage,price';
-    query.fields = 'name,price,ratingsAverage,summary,difficulty';
-    return this.getAllTours(query);
+  // Get recommended tours based on user preferences
+  async getRecommendedTours(userId: string, query: QueryToursDto) {
+    const userPreferences = await this.getUserPreferences(userId);
+
+    const filters: Record<string, any> = {
+      difficulty: userPreferences.difficulty, // Match user's preferred difficulty
+      maxGroupSize: { $gte: userPreferences.minGroupSize || 1 }, // Match group size
+    };
+
+    const {
+      sort = '-ratingsAverage,-ratingsQuantity',
+      limit = 6,
+      fields,
+    } = query;
+
+    const recommendedTours = await this.tourModel
+      .find(filters)
+      .sort(sort)
+      .select(fields ? fields.split(',').join(' ') : '-__v')
+      .limit(limit);
+
+    return recommendedTours;
+  }
+
+  // Todo: Replace this mock function with user model query
+  private async getUserPreferences(userId: string): Promise<any> {
+    return {
+      difficulty: 'medium',
+      minGroupSize: 2,
+    };
   }
 
   // Aggregation for tour statistics

@@ -21,15 +21,6 @@ export class LandingService {
     }
   }
 
-  // async fetchRecommendedTours(userId: string) {
-  //   try {
-  //     const response = await this.api.get(`/users/${userId}/recommended-tours`);
-  //     this.store.dispatch(new SetRecommendedTours(response.data));
-  //   } catch (error) {
-  //     console.error('Error fetching recommended tours:', error);
-  //   }
-  // }
-
   // async fetchToursFeed() {
   //   try {
   //     const response = await this.api.get('/tours');

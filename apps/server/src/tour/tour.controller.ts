@@ -15,6 +15,7 @@ import {
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { TourService } from './tour.service';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
@@ -60,6 +61,60 @@ export class TourController {
     query.fields =
       'name,price,ratingsAverage,ratingsQuantity,summary,imageCover,slug';
     return this.tourService.getAllTours(query);
+  }
+
+  @Get('recommended')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Get recommended tours for the authenticated user',
+    description: `
+    This endpoint retrieves a personalized list of recommended tours for the authenticated user. 
+    The recommendations are based on user preferences, popularity (ratings and reviews), and other criteria.
+    The response includes essential tour details such as name, price, ratings, and a brief summary.
+    `,
+  })
+  @ApiQuery({
+    name: 'userId',
+    type: String,
+    description:
+      'The ID of the user for whom recommendations are to be fetched',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved the recommended tours.',
+    schema: {
+      example: [
+        {
+          name: 'Northern Lights Expedition',
+          price: 799,
+          ratingsAverage: 4.9,
+          ratingsQuantity: 25,
+          summary: 'Witness the magical auroras in the Arctic skies.',
+          imageCover: 'https://cloudinary.com/example.jpg',
+          slug: 'northern-lights-expedition',
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized. The user must be authenticated.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request. Missing or invalid query parameters.',
+  })
+  async getRecommendedTours(
+    @Query() query: QueryToursDto,
+    @Query('userId') userId: string
+  ) {
+    query.sort = '-ratingsAverage,-ratingsQuantity';
+    query.limit = 6;
+    query.fields =
+      'name,price,ratingsAverage,ratingsQuantity,summary,imageCover,slug';
+
+    return this.tourService.getRecommendedTours(userId, query);
   }
 
   @ApiBearerAuth()

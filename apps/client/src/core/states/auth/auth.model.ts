@@ -6,6 +6,7 @@ export interface AuthStateModel {
 }
 
 export interface User {
+  id: string;
   fname: string;
   lname: string;
   email: string;
