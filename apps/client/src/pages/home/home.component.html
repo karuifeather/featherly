@@ -73,12 +73,13 @@
       <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
         Recommended for You
       </h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <div class="flex overflow-x-auto space-x-8 py-5">
         <!-- Tour Card -->
         <ng-container *ngIf="recommendedTours$ | async as recommendedTours">
           <div
             *ngFor="let tour of recommendedTours"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+            class="min-w-[300px] max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex-shrink-0"
           >
             <img
               [src]="tour.imageCover"

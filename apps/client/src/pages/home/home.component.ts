@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable, take } from 'rxjs';
@@ -12,10 +18,12 @@ import { HomeService } from './home.service';
   selector: 'app-dashboard',
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
   standalone: true,
 })
 export class HomeComponent implements OnInit {
   private store = inject(Store);
+  @ViewChild('slider', { static: false }) slider!: ElementRef;
 
   recommendedTours$: Observable<Tour[] | null> = this.store.select(
     TourState.getRecommendedTours
@@ -39,5 +47,13 @@ export class HomeComponent implements OnInit {
 
   isAdmin(user: User | null): boolean {
     return !!user && user.role === 'admin';
+  }
+
+  scrollLeft() {
+    this.slider.nativeElement.scrollLeft -= 300; // Scroll left by 300px
+  }
+
+  scrollRight() {
+    this.slider.nativeElement.scrollLeft += 300; // Scroll right by 300px
   }
 }
