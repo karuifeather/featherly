@@ -38,76 +38,27 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-24">
       <!-- Tour Card 1 -->
-      <div class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden">
+      <div
+        *ngFor="let tour of popularTours$ | async"
+        class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden"
+      >
         <!-- Image -->
         <img
-          src="https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828690/nat-3_jry3ei.jpg"
-          alt="Alpine Adventure"
+          [src]="tour.imageCover || 'https://via.placeholder.com/150'"
+          [alt]="tour.name"
           class="w-full h-48 object-cover"
         />
         <!-- Content -->
         <div class="p-6 text-center flex flex-col justify-around items-center">
-          <h3 class="text-xl font-bold mb-2">Alpine Adventure</h3>
-          <p class="text-gray-400 mb-6">
-            Experience the majestic breathtaking peaks and serene alpine
-            landscapes.
-          </p>
+          <h3 class="text-xl font-bold mb-2">{{ tour.name }}</h3>
+          <p class="text-gray-400 mb-6">{{ tour.summary }}</p>
 
           <button
+            routerLink="/login"
             class="relative bg-green-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-500 hover:scale-105 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-500 focus:outline-none"
           >
             <span
               class="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-md"
-            ></span>
-            <span class="relative z-10">Book Now</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Tour Card 2 -->
-      <div class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden">
-        <!-- Image -->
-        <img
-          src="https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828693/nat-7_lzpvtu.jpg"
-          alt="Desert Oasis"
-          class="w-full h-48 object-cover"
-        />
-        <!-- Content -->
-        <div class="p-6 text-center">
-          <h3 class="text-xl font-bold mb-2">Desert Oasis</h3>
-          <p class="text-gray-400 mb-6">
-            Uncover hidden treasures and tranquil oases in the desert sands.
-          </p>
-          <button
-            class="relative bg-green-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-500 hover:scale-105 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-500 focus:outline-none"
-          >
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-md"
-            ></span>
-            <span class="relative z-10">Book Now</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Tour Card 3 -->
-      <div class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden">
-        <!-- Image -->
-        <img
-          src="https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828690/nat-1_spztdy.jpg"
-          alt="Tropical Paradise"
-          class="w-full h-48 object-cover"
-        />
-        <!-- Content -->
-        <div class="p-6 text-center">
-          <h3 class="text-xl font-bold mb-2">Tropical Paradise</h3>
-          <p class="text-gray-400 mb-6">
-            Soak in the sun and enjoy crystal-clear waters on pristine beaches.
-          </p>
-          <button
-            class="relative bg-green-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-500 hover:scale-105 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-500 focus:outline-none"
-          >
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-purple-400 to-purple-600 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-md"
             ></span>
             <span class="relative z-10">Book Now</span>
           </button>
@@ -280,6 +231,7 @@
         <!-- Submit Button -->
         <button
           type="submit"
+          routerLink="/login"
           class="w-full bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 hover:scale-105 transition-all duration-300 shadow-md focus:ring-4 focus:ring-green-500 focus:outline-none"
         >
           <i class="fas fa-paper-plane mr-2"></i> Book Now
