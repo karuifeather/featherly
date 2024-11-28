@@ -6,7 +6,7 @@ export class FetchPopularTours {
 
 export class SetPopularTours {
   static readonly type = '[Tour] Set Popular Tours';
-  constructor(public payload: any[]) {}
+  constructor(public payload: Tour[]) {}
 }
 
 export class FetchRecommendedTours {
@@ -15,7 +15,7 @@ export class FetchRecommendedTours {
 
 export class SetRecommendedTours {
   static readonly type = '[Tour] Set Recommended Tours';
-  constructor(public payload: any[]) {}
+  constructor(public payload: Tour[]) {}
 }
 
 export class FetchToursFeed {
@@ -24,7 +24,7 @@ export class FetchToursFeed {
 
 export class SetToursFeed {
   static readonly type = '[Tour] Set Tours Feed';
-  constructor(public payload: any[]) {}
+  constructor(public payload: Tour[]) {}
 }
 
 export class FetchTourDetails {

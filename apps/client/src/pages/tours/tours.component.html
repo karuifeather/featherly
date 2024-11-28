@@ -1,4 +1,4 @@
-<div class="flex flex-col md:flex-row relative flex-1">
+<div class="flex flex-col md:flex-row relative flex-1 min-h-[5000px] gap-10">
   <!-- Sidebar -->
   <aside
     class="sm:sticky top-24 bg-white dark:bg-gray-800 shadow-md p-6 w-full md:w-1/4 lg:w-1/5 items-center mx-24 rounded-xl self-start"
@@ -128,13 +128,13 @@
 
   <div class="flex-1 py-10 flex flex-col items-start relative">
     <!-- Tours Feed -->
-    <div *ngIf="paginatedPosts.length > 0; else noTours">
+    <ng-container *ngIf="toursFeed$ | async as tourPosts; else noData">
       <div
-        *ngFor="let post of paginatedPosts"
-        class="z-1 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md w-full max-w-3xl my-14"
+        *ngFor="let post of tourPosts"
+        class="z-1 bg-white dark:bg-gray-800 rounded-lg shadow-md over w-full max-w-3xl my-14"
       >
         <!-- Swipeable Image Slider -->
-        <div class="relative">
+        <div class="relative overflow-hidden rounded-lg">
           <swiper-container
             [slides-per-view]="1"
             [space-between]="10"
@@ -148,12 +148,20 @@
               ></div>
             </swiper-slide>
           </swiper-container>
+          <div class="z-10 absolute bottom-4 right-4">
+            <button
+              class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all"
+              [routerLink]="['/dashboard/tours', post.slug]"
+            >
+              View Details
+            </button>
+          </div>
         </div>
 
         <!-- Post Info -->
         <div class="p-4">
           <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-            {{ post.title }}
+            {{ post.name }}
           </h3>
           <p class="text-gray-600 dark:text-gray-400 mt-2">
             {{ post.description }}
@@ -175,63 +183,25 @@
               <span class="text-gray-500 text-sm">/person</span>
             </div>
           </div>
-          <div class="mt-4 flex items-center justify-between">
-            <button
-              class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all"
-              [routerLink]="['/dashboard/tours', post.slug]"
-            >
-              View Details
-            </button>
-          </div>
         </div>
 
-        <!-- Comments -->
+        <!-- Comments
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-          <h4 class="text-gray-800 dark:text-white font-semibold">Reviews</h4>
+          <h4 class="text-gray-800 dark:text-white font-semibold">Comments</h4>
           <div *ngFor="let comment of post.comments" class="mt-2">
             <p class="text-gray-800 dark:text-white font-semibold">
               {{ comment.user }}
             </p>
             <p class="text-gray-600 dark:text-gray-400">{{ comment.text }}</p>
           </div>
-        </div>
+        </div> -->
       </div>
-
-      <!-- Pagination Controls -->
-      <div class="flex justify-center items-center space-x-4 mt-6">
-        <button
-          class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
-          [disabled]="currentPage === 1"
-          (click)="prevPage()"
-        >
-          Previous
-        </button>
-        <span class="text-gray-800 dark:text-white">
-          Page {{ currentPage }} of {{ totalPages }}
-        </span>
-        <button
-          class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
-          [disabled]="currentPage === totalPages"
-          (click)="nextPage()"
-        >
-          Next
-        </button>
-      </div>
-    </div>
-
-    <!-- No Tours -->
-    <ng-template #noTours>
-      <div class="text-center text-gray-600 dark:text-gray-400 py-12">
-        <p class="text-lg font-semibold">
-          No tours found. Start your journey now!
-        </p>
-        <button
-          class="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition-all"
-          routerLink="/dashboard/create/tours"
-        >
-          Create Tour
-        </button>
-      </div>
-    </ng-template>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #noData>
+  <div class="flex items-center justify-center w-full h-[500px]">
+    <p class="text-gray-600 dark:text-gray-400">No tours found.</p>
+  </div></ng-template
+>
