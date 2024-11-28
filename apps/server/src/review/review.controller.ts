@@ -94,6 +94,28 @@ export class ReviewController {
   }
 
   @ApiOperation({
+    summary: 'Get all reviews for a specific tour.',
+    description: 'Retrieve all reviews for a tour by its unique ID.',
+  })
+  @ApiParam({
+    name: 'tourId',
+    description: 'The unique ID of the tour to retrieve reviews for.',
+    example: '673a1fed070ab388aaf662fa',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reviews retrieved successfully.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Tour not found or no reviews available for this tour.',
+  })
+  @Get('/tours/:tourId')
+  async getReviewsByTourId(@Param('tourId') tourId: string) {
+    return this.reviewsService.getReviewsByTourId(tourId);
+  }
+
+  @ApiOperation({
     summary: 'Update a review by its ID.',
     description: 'Allows users or admins to update an existing review.',
   })

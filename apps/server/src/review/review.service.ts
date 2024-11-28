@@ -36,4 +36,8 @@ export class ReviewService {
   async deleteReview(id: string) {
     return this.crudFactory.deleteOne(id);
   }
+
+  async getReviewsByTourId(tourId: string) {
+    return this.reviewModel.find({ tour: tourId });
+  }
 }
