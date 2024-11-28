@@ -197,7 +197,7 @@ TourSchema.pre<TourDocument>('save', function (next) {
 // Query middleware to populate guides field with user data
 TourSchema.pre<TourDocument>(/^find/, function (next) {
   this.populate({
-    path: 'guides',
+    path: 'user',
     select: '-__v -passwordChangedAt -slug',
   });
   next();
