@@ -53,7 +53,7 @@
                     {{ booking.tour.name }}
                   </h3>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                    {{ booking.createdAt | date }}
+                    {{ booking.startDate | date }}
                   </p>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
                     {{ booking.tour.startLocation.address }}
@@ -90,7 +90,7 @@
                     {{ booking.tour.name }}
                   </h3>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                    {{ booking.createdAt | date }}
+                    {{ booking.startDate | date }}
                   </p>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
                     {{ booking.tour.startLocation.address }}

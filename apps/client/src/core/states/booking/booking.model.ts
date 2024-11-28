@@ -8,6 +8,7 @@ export interface BookingStateModel {
 export interface Booking {
   id: string;
   tour: {
+    slug: string;
     id: string;
     name: string;
     imageCover: string;
@@ -19,4 +20,5 @@ export interface Booking {
   price: number;
   createdAt: Date;
   paid: boolean;
+  startDate: Date;
 }

@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { BookingsService } from './bookings.service';
 import { BookingState } from '../../core/states/booking/booking.state';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-bookings',
@@ -14,7 +15,16 @@ export class BookingsComponent implements OnInit {
   activeTab: 'upcoming' | 'past' = 'upcoming';
   store = inject(Store);
 
-  upcomingBookings$ = this.store.select(BookingState.getUpcomingBookings);
+  upcomingBookings$ = this.store
+    .select(BookingState.getUpcomingBookings)
+    .pipe(
+      map((bookings) =>
+        bookings?.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        )
+      )
+    );
   pastBookings$ = this.store.select(BookingState.getPastBookings);
 
   constructor(private bookingsService: BookingsService) {}

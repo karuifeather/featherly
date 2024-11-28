@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { Observable, take } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { Tour } from '../../core/states/tour/tour.model';
 import { TourState } from '../../core/states/tour/tour.state';
 import { User } from '../../core/states/auth/auth.model';
@@ -23,9 +23,16 @@ export class HomeComponent implements OnInit {
     TourState.getRecommendedTours
   );
 
-  upcomingBookings$: Observable<Booking[] | null> = this.store.select(
-    BookingState.getUpcomingBookings
-  );
+  upcomingBookings$ = this.store
+    .select(BookingState.getUpcomingBookings)
+    .pipe(
+      map((bookings) =>
+        bookings?.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        )
+      )
+    );
 
   user$: Observable<User | null> = this.store.select(
     (state) => state.auth.user
