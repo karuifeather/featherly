@@ -9,6 +9,7 @@ import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { appRoutes } from './app.routes';
 import { AuthState } from './core/states/auth/auth.state';
 import { TourState } from './core/states/tour/tour.state';
+import { BookingState } from './core/states/booking/booking.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     provideStore(
-      [AuthState, TourState],
+      [AuthState, TourState, BookingState],
       withNgxsLoggerPlugin(),
       withNgxsStoragePlugin({
         keys: [

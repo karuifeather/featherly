@@ -116,7 +116,7 @@ export class BookingController {
     status: 404,
     description: 'User not found or no bookings available for this user.',
   })
-  @Get('/bookings/user/:userId')
+  @Get('/user/:userId')
   async getBookingsByUser(
     @Param('userId') userId: string,
     @Query('past') past = false

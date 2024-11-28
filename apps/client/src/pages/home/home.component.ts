@@ -7,6 +7,8 @@ import { Tour } from '../../core/states/tour/tour.model';
 import { TourState } from '../../core/states/tour/tour.state';
 import { User } from '../../core/states/auth/auth.model';
 import { HomeService } from './home.service';
+import { Booking } from '../../core/states/booking/booking.model';
+import { BookingState } from '../../core/states/booking/booking.state';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +23,10 @@ export class HomeComponent implements OnInit {
     TourState.getRecommendedTours
   );
 
+  upcomingBookings$: Observable<Booking[] | null> = this.store.select(
+    BookingState.getUpcomingBookings
+  );
+
   user$: Observable<User | null> = this.store.select(
     (state) => state.auth.user
   );
@@ -31,6 +37,7 @@ export class HomeComponent implements OnInit {
     this.user$.pipe(take(1)).subscribe((user) => {
       if (user) {
         this.homeService.fetchRecommendedTours(user.id);
+        this.homeService.fetchUpcomingBookings(user.id);
       } else {
         console.error('No user found in the state.');
       }
