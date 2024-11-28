@@ -9,11 +9,10 @@ import {
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { ToursFeed, TourStateModel } from '../../core/states/tour/tour.model';
+import { ToursFeed } from '../../core/states/tour/tour.model';
 import { TourState } from '../../core/states/tour/tour.state';
 import { ToursService } from './tours.service';
-import { Observable, take } from 'rxjs';
-import { Tour } from '../../core/states/tour/tour.model';
+import { Observable } from 'rxjs';
 import { ClearToursState } from '../../core/states/tour/tour.actions';
 
 @Component({
@@ -45,7 +44,7 @@ export class ToursComponent implements OnInit, OnDestroy {
     this.toursFeed$.subscribe((toursFeed) => {
       if (toursFeed.tours.length === 0) {
         // Fetch tours if not already fetched
-        this.tourService.fetchTours({ page: 1, limit: 4 });
+        this.tourService.fetchTours({ page: 1, limit: this.limit });
       }
     });
   }
@@ -73,14 +72,14 @@ export class ToursComponent implements OnInit, OnDestroy {
 
   nextPage(currentPage: number, totalPages: number) {
     if (currentPage < totalPages) {
-      this.tourService.fetchTours({ page: currentPage + 1, limit: 4 });
+      this.tourService.fetchTours({ page: currentPage + 1, limit: this.limit });
       this.scrollToTop();
     }
   }
 
   prevPage(currentPage: number) {
     if (currentPage > 1) {
-      this.tourService.fetchTours({ page: currentPage - 1, limit: 4 });
+      this.tourService.fetchTours({ page: currentPage - 1, limit: this.limit });
       this.scrollToTop();
     }
   }
