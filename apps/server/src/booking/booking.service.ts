@@ -118,6 +118,19 @@ export class BookingService {
     return this.crud.getOne(id);
   }
 
+  async getBookingsByUser(userId: string, past: boolean): Promise<Booking[]> {
+    const currentDate = new Date();
+
+    const filter = {
+      user: userId,
+      ...(past
+        ? { createdAt: { $lt: currentDate } } // Past bookings
+        : { createdAt: { $gte: currentDate } }), // Future bookings
+    };
+
+    return this.bookingModel.find(filter).populate('tour').exec();
+  }
+
   async updateBooking(id: string, updateBookingDto: any) {
     return this.bookingModel.findByIdAndUpdate(id, updateBookingDto, {
       new: true,

@@ -17,6 +17,7 @@ import {
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { BookingService } from './booking.service';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
@@ -87,6 +88,40 @@ export class BookingController {
   @Get()
   async getBookings(@Query() queryBookingDto: QueryBookingDto) {
     return this.bookingService.getBookings(queryBookingDto);
+  }
+
+  @ApiOperation({
+    summary: 'Get bookings for a specific user.',
+    description:
+      'Retrieve bookings for a user, filtered by past or future dates.',
+  })
+  @ApiParam({
+    name: 'userId',
+    description: 'The unique ID of the user to retrieve bookings for.',
+    example: '67462556f609e5914c8598b8',
+  })
+  @ApiQuery({
+    name: 'past',
+    required: false,
+    type: Boolean,
+    description:
+      'Set to true for past bookings and false for future bookings. Defaults to false.',
+    example: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Bookings retrieved successfully.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found or no bookings available for this user.',
+  })
+  @Get('/bookings/user/:userId')
+  async getBookingsByUser(
+    @Param('userId') userId: string,
+    @Query('past') past = false
+  ) {
+    return this.bookingService.getBookingsByUser(userId, past);
   }
 
   @ApiOperation({
