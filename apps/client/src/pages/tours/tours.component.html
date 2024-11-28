@@ -1,7 +1,7 @@
-<div class="flex flex-col md:flex-row relative flex-1 min-h-[5000px] gap-10">
+<div class="flex flex-col md:flex-row relative flex-1 min-h-[1000px] py-20">
   <!-- Sidebar -->
   <aside
-    class="sm:sticky top-24 bg-white dark:bg-gray-800 shadow-md p-6 w-full md:w-1/4 lg:w-1/5 items-center mx-24 rounded-xl self-start"
+    class="sm:sticky top-28 bg-white dark:bg-gray-800 shadow-md p-6 w-full md:w-1/4 lg:w-1/5 items-center mx-24 rounded-xl self-start"
   >
     <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
       Filters
@@ -126,11 +126,43 @@
     </button>
   </aside>
 
-  <div class="flex-1 py-10 flex flex-col items-start relative">
+  <div class="flex flex-col items-start relative">
+    <!-- Pagination Controls -->
+    <ng-container *ngIf="currentPage$ | async as currentPage">
+      <ng-container *ngIf="totalPages$ | async as totalPages">
+        <div
+          class="flex self-center justify-center items-center space-x-6 mt-8"
+        >
+          <!-- Previous Button -->
+          <button
+            class="px-6 py-3 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === 1"
+            (click)="prevPage(currentPage)"
+          >
+            <i class="fas fa-chevron-left mr-2"></i> Previous
+          </button>
+
+          <!-- Page Indicator -->
+          <span class="text-lg font-medium text-gray-800 dark:text-gray-300">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+
+          <!-- Next Button -->
+          <button
+            class="px-6 py-3 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === totalPages"
+            (click)="nextPage(currentPage, totalPages)"
+          >
+            Next <i class="fas fa-chevron-right ml-2"></i>
+          </button>
+        </div>
+      </ng-container>
+    </ng-container>
+
     <!-- Tours Feed -->
-    <ng-container *ngIf="toursFeed$ | async as tourPosts; else noData">
+    <ng-container *ngIf="toursFeed$ | async as toursFeed; else noData">
       <div
-        *ngFor="let post of tourPosts"
+        *ngFor="let post of toursFeed.tours"
         class="z-1 bg-white dark:bg-gray-800 rounded-lg shadow-md over w-full max-w-3xl my-14"
       >
         <!-- Swipeable Image Slider -->
@@ -196,6 +228,38 @@
           </div>
         </div> -->
       </div>
+    </ng-container>
+
+    <!-- Pagination Controls -->
+    <ng-container *ngIf="currentPage$ | async as currentPage">
+      <ng-container *ngIf="totalPages$ | async as totalPages">
+        <div
+          class="flex self-center justify-center items-center space-x-6 mt-8"
+        >
+          <!-- Previous Button -->
+          <button
+            class="px-6 py-3 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === 1"
+            (click)="prevPage(currentPage)"
+          >
+            <i class="fas fa-chevron-left mr-2"></i> Previous
+          </button>
+
+          <!-- Page Indicator -->
+          <span class="text-lg font-medium text-gray-800 dark:text-gray-300">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+
+          <!-- Next Button -->
+          <button
+            class="px-6 py-3 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === totalPages"
+            (click)="nextPage(currentPage, totalPages)"
+          >
+            Next <i class="fas fa-chevron-right ml-2"></i>
+          </button>
+        </div>
+      </ng-container>
     </ng-container>
   </div>
 </div>

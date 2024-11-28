@@ -24,7 +24,18 @@ export class FetchToursFeed {
 
 export class SetToursFeed {
   static readonly type = '[Tour] Set Tours Feed';
-  constructor(public payload: Tour[]) {}
+  constructor(
+    public payload: {
+      tours: Tour[];
+      page: number;
+      limit: number;
+      totalPages: number;
+    }
+  ) {}
+}
+
+export class ClearToursState {
+  static readonly type = '[Tour] Clear Tours State';
 }
 
 export class FetchTourDetails {

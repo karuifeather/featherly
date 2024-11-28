@@ -2,9 +2,15 @@ export interface TourStateModel {
   popularTours: Tour[] | null;
   recommendedTours: Tour[] | null;
   tourDetails: Record<string, Tour | null> | null;
-  toursFeed: Tour[];
+  toursFeed: ToursFeed;
   loading: boolean;
   error: string | null;
+}
+
+export interface ToursFeed {
+  currentPage: number;
+  totalPages: number;
+  tours: Tour[];
 }
 
 export interface Tour {

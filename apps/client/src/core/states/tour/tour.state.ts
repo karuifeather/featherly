@@ -2,6 +2,7 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { Tour, TourStateModel } from './tour.model';
 import {
+  ClearToursState,
   FetchPopularTours,
   FetchRecommendedTours,
   FetchTourDetails,
@@ -17,7 +18,11 @@ import {
   defaults: {
     popularTours: null,
     recommendedTours: null,
-    toursFeed: [],
+    toursFeed: {
+      currentPage: 1,
+      totalPages: 0,
+      tours: [],
+    },
     tourDetails: null,
     loading: false,
     error: null,
@@ -53,6 +58,16 @@ export class TourState {
   @Selector()
   static getTourDetails(state: TourStateModel) {
     return (slug: string): Tour | null => state.tourDetails?.[slug] || null;
+  }
+
+  @Selector()
+  static getCurrentPage(state: TourStateModel) {
+    return state.toursFeed.currentPage || 1;
+  }
+
+  @Selector()
+  static getTotalPages(state: TourStateModel) {
+    return state.toursFeed.totalPages || 0;
   }
 
   @Action(FetchPopularTours)
@@ -96,7 +111,30 @@ export class TourState {
 
   @Action(SetToursFeed)
   setToursFeed(ctx: StateContext<TourStateModel>, action: SetToursFeed) {
-    ctx.patchState({ toursFeed: action.payload, loading: false, error: null });
+    const { page, tours, limit, totalPages } = action.payload;
+
+    ctx.patchState({
+      toursFeed: {
+        tours,
+        currentPage: page,
+        totalPages: Math.ceil(totalPages / limit),
+      },
+      loading: false,
+      error: null,
+    });
+  }
+
+  @Action(ClearToursState)
+  clearToursState(ctx: StateContext<TourStateModel>) {
+    ctx.patchState({
+      toursFeed: {
+        tours: [],
+        currentPage: 1,
+        totalPages: 0,
+      },
+      loading: false,
+      error: null,
+    });
   }
 
   @Action(FetchTourDetails)
