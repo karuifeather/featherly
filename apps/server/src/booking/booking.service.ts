@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { Booking, BookingDocument } from './schemas/booking.schema';
@@ -118,17 +118,20 @@ export class BookingService {
     return this.crud.getOne(id);
   }
 
-  async getBookingsByUser(userId: string, past: boolean): Promise<Booking[]> {
-    const currentDate = new Date();
+  async getPastBookingsByUser(userId: string): Promise<Booking[]> {
+    const currentDate = new Date(); // Current date
 
-    const filter = {
-      user: userId,
-      ...(past
-        ? { createdAt: { $lt: currentDate } } // Past bookings
-        : { createdAt: { $gte: currentDate } }), // Future bookings
-    };
+    return this.bookingModel
+      .find({ user: userId, startDate: { $lt: currentDate } })
+      .exec();
+  }
 
-    return this.bookingModel.find(filter).populate('tour').exec();
+  async getUpcomingBookingsByUser(userId: string): Promise<Booking[]> {
+    const currentDate = new Date(); // Current date
+
+    return this.bookingModel
+      .find({ user: userId, startDate: { $gte: currentDate } })
+      .exec();
   }
 
   async updateBooking(id: string, updateBookingDto: any) {

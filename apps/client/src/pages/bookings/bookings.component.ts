@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { BookingsService } from './bookings.service';
+import { BookingState } from '../../core/states/booking/booking.state';
 
 @Component({
   selector: 'app-bookings',
@@ -7,41 +10,41 @@ import { Component } from '@angular/core';
   imports: [CommonModule],
   standalone: true,
 })
-export class BookingsComponent {
+export class BookingsComponent implements OnInit {
   activeTab: 'upcoming' | 'past' = 'upcoming';
+  store = inject(Store);
 
-  bookings = [
-    {
-      title: 'The Alpine Forest Adventure',
-      date: new Date('2024-12-15'),
-      location: 'Boulder, Colorado',
-      guests: 2,
-      image:
-        'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828690/nat-2_hshww7.jpg',
-      status: 'upcoming',
-    },
-    {
-      title: 'The Great Canyon Tour',
-      date: new Date('2023-10-10'),
-      location: 'Grand Canyon, Arizona',
-      guests: 4,
-      image:
-        'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828692/nat-8_tv2m3g.jpg',
-      status: 'past',
-    },
-    {
-      title: 'Relaxation Retreat',
-      date: new Date('2023-09-15'),
-      location: 'Malibu Beach, California',
-      guests: 1,
-      image:
-        'https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828692/nat-9_dz9zov.jpg',
-      status: 'past',
-    },
-  ];
+  upcomingBookings$ = this.store.select(BookingState.getUpcomingBookings);
+  pastBookings$ = this.store.select(BookingState.getPastBookings);
 
-  get activeBookings() {
-    return this.bookings.filter((booking) => booking.status === this.activeTab);
+  constructor(private bookingsService: BookingsService) {}
+
+  ngOnInit() {
+    const user = this.store.selectSnapshot((state) => state.auth.user);
+
+    if (!user) {
+      // Handle the unlikely case where user is not available
+      console.error('User not found in state.');
+      return;
+    }
+
+    // Fetch upcoming bookings if not already fetched
+    const upcomingBookings = this.store.selectSnapshot(
+      BookingState.getUpcomingBookings
+    );
+
+    if (!upcomingBookings) {
+      this.bookingsService.fetchUpcomingBookings(user.id);
+    }
+
+    // Fetch past bookings if not already fetched
+    const pastBookings = this.store.selectSnapshot(
+      BookingState.getPastBookings
+    );
+
+    if (!pastBookings) {
+      this.bookingsService.fetchPastBookings(user.id);
+    }
   }
 
   setActiveTab(tab: 'upcoming' | 'past') {

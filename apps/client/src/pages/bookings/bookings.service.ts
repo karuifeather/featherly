@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { AxiosInstance } from 'axios';
 import { AxiosService } from '../../core/services/axios.service';
 import { Store } from '@ngxs/store';
-import { SetRecommendedTours } from '../../core/states/tour/tour.actions';
-import { AxiosInstance } from 'axios';
 import {
+  FetchPastBookings,
   FetchUpcomingBookings,
+  SetPastBookings,
   SetUpcomingBookings,
 } from '../../core/states/booking/booking.actions';
 import { NotificationService } from '../../core/services/notification.service';
@@ -12,7 +13,7 @@ import { NotificationService } from '../../core/services/notification.service';
 @Injectable({
   providedIn: 'root',
 })
-export class HomeService {
+export class BookingsService {
   private api: AxiosInstance;
 
   constructor(
@@ -23,24 +24,24 @@ export class HomeService {
     this.api = this.axiosService.instance;
   }
 
-  async fetchRecommendedTours(userId: string) {
-    try {
-      const response = await this.api.get(
-        `/tours/recommended?userId=${userId}`
-      );
-      this.store.dispatch(new SetRecommendedTours(response.data));
-    } catch (error) {
-      console.error('Error fetching recommended tours:', error);
-      this.notificationService.showError('Error fetching recommended tours');
-    }
-  }
-
   async fetchUpcomingBookings(userId: string) {
     this.store.dispatch(new FetchUpcomingBookings());
 
     try {
       const response = await this.api.get(`/bookings/user/${userId}/upcoming`);
       this.store.dispatch(new SetUpcomingBookings(response.data));
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      this.notificationService.showError('Error fetching bookings');
+    }
+  }
+
+  async fetchPastBookings(userId: string) {
+    this.store.dispatch(new FetchPastBookings());
+
+    try {
+      const response = await this.api.get(`/bookings/user/${userId}/past`);
+      this.store.dispatch(new SetPastBookings(response.data));
     } catch (error) {
       console.error('Error fetching bookings:', error);
       this.notificationService.showError('Error fetching bookings');

@@ -27,6 +27,7 @@ export class Booking extends Document {
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
     required: [true, 'A booking must belong to a user.'],
+    index: true,
   })
   user: MongooseSchema.Types.ObjectId;
 
@@ -35,6 +36,9 @@ export class Booking extends Document {
 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
+
+  @Prop({ type: Date, required: [true, 'Bookings must have a start date.'] })
+  startDate: Date;
 
   @Prop({ type: Boolean, default: true })
   paid: boolean;
@@ -45,11 +49,13 @@ export interface BookingDocument extends Booking, Document {}
 // Create the schema with the correct type
 export const BookingSchema = SchemaFactory.createForClass(Booking);
 
+BookingSchema.index({ user: 1 });
+
 // Pre Hook to populate tour data on queries
 BookingSchema.pre('find', function (next) {
   this.populate({
     path: 'tour',
-    select: 'name _id',
+    select: 'name _id slug  summary startLocation imageCover startDates',
   });
 
   next();

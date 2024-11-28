@@ -33,50 +33,88 @@
 
     <!-- Tab Content -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-      <!-- Empty State -->
-      <div *ngIf="activeBookings.length === 0" class="text-center">
-        <p class="text-gray-600 dark:text-gray-400">No bookings found.</p>
-      </div>
+      <ng-container *ngIf="activeTab === 'upcoming'">
+        <ng-container *ngIf="upcomingBookings$ | async as upcomingBookings">
+          <div *ngIf="upcomingBookings.length > 0; else emptyState">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                *ngFor="let booking of upcomingBookings"
+                class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
+              >
+                <div class="relative">
+                  <img
+                    [src]="booking.tour.imageCover"
+                    [alt]="booking.tour.name"
+                    class="w-full h-48 object-cover"
+                  />
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+                    {{ booking.tour.name }}
+                  </h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                    {{ booking.createdAt | date }}
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    {{ booking.tour.startLocation.address }}
+                  </p>
+                  <button
+                    class="bg-green-600 text-white mt-4 px-4 py-2 rounded-md w-full hover:bg-green-700 transition-all"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
 
-      <!-- Bookings Grid -->
-      <div
-        *ngIf="activeBookings.length > 0"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <div
-          *ngFor="let booking of activeBookings"
-          class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
-        >
-          <!-- Booking Image -->
-          <div class="relative">
-            <img
-              [src]="booking.image"
-              [alt]="booking.title"
-              class="w-full h-48 object-cover"
-            />
+      <ng-container *ngIf="activeTab === 'past'">
+        <ng-container *ngIf="pastBookings$ | async as pastBookings">
+          <div *ngIf="pastBookings.length > 0; else emptyState">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                *ngFor="let booking of pastBookings"
+                class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
+              >
+                <div class="relative">
+                  <img
+                    [src]="booking.tour.imageCover"
+                    [alt]="booking.tour.name"
+                    class="w-full h-48 object-cover"
+                  />
+                </div>
+                <div class="p-4">
+                  <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+                    {{ booking.tour.name }}
+                  </h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                    {{ booking.createdAt | date }}
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    {{ booking.tour.startLocation.address }}
+                  </p>
+                  <button
+                    class="bg-green-600 text-white mt-4 px-4 py-2 rounded-md w-full hover:bg-green-700 transition-all"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <!-- Booking Details -->
-          <div class="p-4">
-            <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-              {{ booking.title }}
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">
-              {{ booking.date | date }}
-            </p>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-              {{ booking.location }}
-            </p>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-              <strong>Guests:</strong> {{ booking.guests }}
-            </p>
-            <button
-              class="bg-green-600 text-white mt-4 px-4 py-2 rounded-md w-full hover:bg-green-700 transition-all"
-            >
-              View Details
-            </button>
-          </div>
+        </ng-container>
+      </ng-container>
+
+      <!-- Empty State -->
+      <ng-template #emptyState>
+        <div class="text-center">
+          <p class="text-gray-600 dark:text-gray-400">
+            No bookings found in {{ activeTab }}.
+          </p>
         </div>
-      </div>
+      </ng-template>
     </div>
   </div>
 </div>
