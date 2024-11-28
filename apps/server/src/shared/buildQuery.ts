@@ -57,4 +57,8 @@ export class BuildQuery<T> {
   getQuery(): Query<T[], T> {
     return this.query;
   }
+
+  getFilter(): Record<string, any> {
+    return this.filter; // Return the applied filters
+  }
 }

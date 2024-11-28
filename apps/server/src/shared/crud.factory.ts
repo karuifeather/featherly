@@ -4,14 +4,24 @@ import { BuildQuery } from './buildQuery';
 export class CRUDFactory<T extends Document> {
   constructor(private readonly model: Model<T>) {}
 
-  async getAll(queryParams: Record<string, any>): Promise<T[]> {
+  async getAll(
+    queryParams: Record<string, any>
+  ): Promise<{ data: T[] | null; totalPages: number }> {
     const features = new BuildQuery<T>(this.model.find(), queryParams)
       .filter()
       .sort()
       .projectFields()
       .paginate();
 
-    return await features.getQuery().exec();
+    // Count the total documents (before pagination)
+    const totalPages = await this.model.countDocuments(
+      features.getQuery().getFilter()
+    );
+
+    // Fetch paginated results
+    const data = await features.getQuery().exec();
+
+    return { data, totalPages };
   }
 
   async getOne(id: string, populateOptions?: string): Promise<T> {
