@@ -158,7 +158,7 @@ export class Tour extends Document {
       ref: 'User',
     },
   ])
-  guides: string[];
+  user: string;
 }
 
 export interface TourDocument extends Tour, Document {}
