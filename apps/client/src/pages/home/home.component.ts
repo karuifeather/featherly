@@ -1,22 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map, Observable, take } from 'rxjs';
 import { Tour } from '../../core/states/tour/tour.model';
 import { TourState } from '../../core/states/tour/tour.state';
 import { User } from '../../core/states/auth/auth.model';
 import { HomeService } from './home.service';
-import { Booking } from '../../core/states/booking/booking.model';
 import { BookingState } from '../../core/states/booking/booking.state';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './home.component.html',
   standalone: true,
 })
 export class HomeComponent implements OnInit {
+  searchQuery = '';
   private store = inject(Store);
 
   recommendedTours$: Observable<Tour[] | null> = this.store.select(
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
     (state) => state.auth.user
   );
 
-  constructor(private homeService: HomeService) {}
+  constructor(private homeService: HomeService, private router: Router) {}
 
   ngOnInit(): void {
     this.user$.pipe(take(1)).subscribe((user) => {
@@ -48,6 +49,14 @@ export class HomeComponent implements OnInit {
       } else {
         console.error('No user found in the state.');
       }
+    });
+  }
+
+  onSubmit(): void {
+    // Navigate to the search results page with the query as a parameter
+    console.log('searchQuery', this.searchQuery);
+    this.router.navigate(['/dashboard/search'], {
+      queryParams: { keyword: this.searchQuery },
     });
   }
 
