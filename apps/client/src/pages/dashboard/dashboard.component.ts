@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   private store = inject(Store);
   user$: Observable<AuthStateModel['user'] | null>;
   searchQuery = '';
-  hideSearchBar = false;
+  hideSearchBar = true;
   private hiddenRoutes = ['/dashboard', '/dashboard/home', '/dashboard/search']; // Routes where the search bar should be hidden
 
   drawerOpen = false;
@@ -76,7 +76,6 @@ export class DashboardComponent implements OnInit {
       .subscribe((event: any) => {
         const currentRoute = event.url.split('?')[0]; // Remove query params
         this.hideSearchBar = this.hiddenRoutes.includes(currentRoute);
-        console.log('hideSearchBar', this.hideSearchBar);
       });
   }
 
