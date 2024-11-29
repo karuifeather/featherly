@@ -11,5 +11,6 @@ export interface User {
   lname: string;
   email: string;
   photo: string;
+  createdAt: string;
   role: 'user' | 'guide' | 'admin';
 }

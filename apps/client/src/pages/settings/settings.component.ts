@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../../core/states/auth/auth.state';
+import { User } from '../../core/states/auth/auth.model';
 
 @Component({
   selector: 'app-settings',
@@ -11,19 +14,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class SettingsComponent {
   isChanged = false;
+  password = '';
+  private store = inject(Store);
 
-  profile = {
-    firstName: 'John',
-    lastName: 'Doe',
-    imageUrl: 'https://via.placeholder.com/150',
-    email: 'john.doe@example.com',
-    password: '',
-    address: '123 Main Street',
-    city: 'Springfield',
-    zip: '12345',
-    memberSince: new Date('2020-01-01'),
-  };
+  user$ = this.store.selectSnapshot(AuthState.user) as User;
 
+  profile = JSON.parse(JSON.stringify(this.user$));
   originalProfile = { ...this.profile }; // To compare with original values
 
   onFileSelected(event: any): void {
@@ -31,7 +27,7 @@ export class SettingsComponent {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.profile.imageUrl = reader.result as string;
+        this.profile.photo = reader.result as string;
         this.isChanged = true;
       };
       reader.readAsDataURL(file);
@@ -46,15 +42,18 @@ export class SettingsComponent {
   // Check if the current profile is different from the original
   private isProfileChanged(): boolean {
     return (
-      JSON.stringify(this.profile) !== JSON.stringify(this.originalProfile)
+      this.profile.fname !== this.originalProfile.fname ||
+      this.profile.lname !== this.originalProfile.lname ||
+      this.profile.email !== this.originalProfile.email ||
+      this.profile.photo !== this.originalProfile.photo ||
+      this.password.length > 0
     );
   }
 
   saveChanges(): void {
     if (this.isChanged) {
-      console.log('Profile saved:', this.profile);
       this.isChanged = false;
-      alert('Profile changes saved!');
+      alert('Feature coming soon!');
     }
   }
 }

@@ -70,12 +70,16 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Check the current route on initialization
+    const currentRoute = this.router.url.split('?')[0]; // Remove query params
+    this.hideSearchBar = this.hiddenRoutes.includes(currentRoute);
+
     // Listen to route changes
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        const currentRoute = event.url.split('?')[0]; // Remove query params
-        this.hideSearchBar = this.hiddenRoutes.includes(currentRoute);
+        const updatedRoute = event.url.split('?')[0]; // Remove query params
+        this.hideSearchBar = this.hiddenRoutes.includes(updatedRoute);
       });
   }
 

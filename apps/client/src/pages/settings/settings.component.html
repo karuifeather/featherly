@@ -8,7 +8,7 @@
     >
       <div class="relative">
         <img
-          [src]="profile.imageUrl || 'https://via.placeholder.com/150'"
+          [src]="profile.photo || 'https://via.placeholder.com/150'"
           alt="Profile Picture"
           class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg"
         />
@@ -27,10 +27,10 @@
         />
       </div>
       <h1 class="mt-4 text-2xl font-bold">
-        {{ profile.firstName }} {{ profile.lastName }}
+        {{ profile.fname }} {{ profile.lname }}
       </h1>
       <p class="mt-1 text-sm">
-        Member since {{ profile.memberSince | date : 'longDate' }}
+        Member since {{ profile.createdAt | date : 'longDate' }}
       </p>
     </div>
 
@@ -49,7 +49,7 @@
             <label for="first-name" class="label">First Name</label>
             <input
               id="first-name"
-              [(ngModel)]="profile.firstName"
+              [(ngModel)]="profile.fname"
               name="firstName"
               type="text"
               class="input"
@@ -60,7 +60,7 @@
             <label for="last-name" class="label">Last Name</label>
             <input
               id="last-name"
-              [(ngModel)]="profile.lastName"
+              [(ngModel)]="profile.lname"
               name="lastName"
               type="text"
               class="input"
@@ -91,7 +91,7 @@
             <label for="password" class="label">New Password</label>
             <input
               id="password"
-              [(ngModel)]="profile.password"
+              [(ngModel)]="password"
               name="password"
               type="password"
               class="input"
@@ -102,7 +102,7 @@
       </div>
 
       <!-- Address Section -->
-      <div class="px-6 py-6">
+      <!-- <div class="px-6 py-6">
         <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">
           Address Information
         </h2>
@@ -143,7 +143,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </form>
 
     <!-- Save Changes Button -->
