@@ -185,7 +185,46 @@ export class TourController {
   }
 
   @ApiOperation({ summary: 'Get all tours (public)' })
-  @ApiResponse({ status: 200, description: 'Tours retrieved successfully' })
+  @ApiResponse({ status: 200, description: 'Tours retrieved successfully.' })
+  @ApiResponse({ status: 400, description: 'Invalid query parameters.' })
+  @ApiQuery({
+    name: 'keyword',
+    required: false,
+    description: 'Search keyword for full-text search across indexed fields.',
+    example: 'mountain',
+  })
+  @ApiQuery({
+    name: 'filters',
+    required: false,
+    description: `Filter tours by fields. Example: { "price[gte]": 100, "ratingsAverage[gte]": 4.5 }`,
+    type: Object,
+  })
+  @ApiQuery({
+    name: 'sort',
+    required: false,
+    description:
+      'Sort tours by fields. Use "-" for descending order (e.g., "-price").',
+    example: '-createdAt',
+  })
+  @ApiQuery({
+    name: 'fields',
+    required: false,
+    description:
+      'Comma-separated list of fields to include in the response (e.g., "name,price").',
+    example: 'name,price,ratingsAverage',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Maximum number of results per page.',
+    example: 10,
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number for pagination.',
+    example: 1,
+  })
   @Get()
   getAllTours(@Query() query: QueryToursDto) {
     return this.tourService.getAllTours(query);

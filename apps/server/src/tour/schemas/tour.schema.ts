@@ -168,6 +168,24 @@ export const TourSchema = SchemaFactory.createForClass(Tour);
 // This creates a compound index on price and ratingsAverage fields in ascending and descending order respectively
 TourSchema.index({ price: 1, ratingsAverage: -1 });
 
+// Create a text index for the fields you want to search
+TourSchema.index(
+  {
+    name: 'text',
+    description: 'text',
+    summary: 'text',
+    'startLocation.address': 'text',
+  },
+  {
+    weights: {
+      name: 10, // High priority
+      summary: 7,
+      description: 5,
+      'startLocation.address': 2,
+    },
+  }
+);
+
 // Single field index for slug to improve search performance
 TourSchema.index({ slug: 1 });
 

@@ -52,4 +52,12 @@ export class BaseQueryDto {
   @IsOptional()
   @Type(() => Object)
   filters?: Record<string, string | number>;
+
+  @ApiPropertyOptional({
+    description: 'Keyword for full-text search across indexed fields.',
+    example: 'mountain',
+  })
+  @IsOptional()
+  @IsString()
+  keyword?: string; // for search
 }

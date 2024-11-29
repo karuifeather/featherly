@@ -7,6 +7,7 @@ export class BuildQuery<T> {
     fields?: string;
     limit?: number;
     page?: number;
+    keyword?: string;
     filters?: Record<string, string | number>;
   };
 
@@ -17,11 +18,30 @@ export class BuildQuery<T> {
 
   filter(): this {
     const filters = this.queryString.filters || {};
-    let queryStr = JSON.stringify(filters);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    const parsedQuery = JSON.parse(queryStr) as Record<string, any>;
-    this.query = this.query.find(parsedQuery);
+    // Handle keyword search using the text index
+    if (this.queryString.keyword) {
+      const keyword = this.queryString.keyword;
+
+      // Use $text for full-text search
+      this.query = this.query.find({
+        $text: { $search: keyword },
+      });
+    }
+
+    // Apply additional filters if provided
+    if (Object.keys(filters).length > 0) {
+      let queryStr = JSON.stringify(filters);
+      queryStr = queryStr.replace(
+        /\b(gte|gt|lte|lt)\b/g,
+        (match) => `$${match}`
+      );
+      const parsedQuery = JSON.parse(queryStr) as Record<string, any>;
+
+      // Combine text search with additional filters
+      this.query = this.query.find(parsedQuery);
+    }
+
     return this;
   }
 
