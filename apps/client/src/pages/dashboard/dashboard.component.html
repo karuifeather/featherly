@@ -1,16 +1,16 @@
-<div
-  class="flex bg-gray-100 dark:bg-gray-900 w-full max-w-full min-h-screen items-stretch"
->
-  <!-- Drawer -->
-  <aside class="bg-white dark:bg-gray-800 shadow-lg flex-shrink-0 self-stretch">
-    <div
-      class="p-4 py-24 flex flex-col transition-all duration-300 relative"
-      [class.w-64]="drawerOpen"
-      [class.w-16]="!drawerOpen"
+<!-- Main Content -->
+<div class="flex-1 h-full">
+  <!-- Header -->
+  <div
+    class="w-full bg-white dark:bg-gray-800 min-h-15 md:h-20 shadow-md fixed z-50 flex justify-center items-center"
+  >
+    <header
+      class="bg-white dark:bg-gray-800 px-16 flex items-center justify-between w-full fixed mx-auto"
     >
-      <div class="fixed top-20">
-        <!-- Logo -->
-        <div class="mb-6 flex items-center">
+      <!-- Left Section -->
+      <div class="flex items-center space-x-4">
+        <!-- Drawer Button -->
+        <div class="flex items-center mr-4">
           <h2 class="text-xl font-bold text-gray-800 dark:text-white space-x-3">
             <button
               (click)="toggleDrawer()"
@@ -18,157 +18,155 @@
             >
               <i class="fas fa-bars"></i>
             </button>
-            <span *ngIf="drawerOpen" class="text-xl">Dashboard</span>
           </h2>
         </div>
+        <!-- Logo -->
+        <a
+          routerLink="/dashboard/home"
+          class="flex items-center text-green-600 dark:text-green-400"
+        >
+          <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
+          <span class="text-xl font-bold">Featherly</span>
+        </a>
+      </div>
 
-        <!-- Navigation -->
-        <ul class="flex-1 space-y-4 items-center justify-center">
-          <!-- Home -->
-          <li>
-            <a
-              routerLink="/dashboard/home"
-              class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
-            >
-              <i class="fas fa-home text-xl"></i>
-              <span *ngIf="drawerOpen" class="text-sm">Home</span>
-            </a>
-          </li>
+      <!-- Right Section -->
+      <div class="flex items-center space-x-16">
+        <!-- Search -->
+        <div
+          *ngIf="!hideSearchBar"
+          class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md shadow-sm w-72 focus:outline-none focus:ring-2 focus:ring-green-600"
+        >
+          <i class="fas fa-search text-gray-400 dark:text-gray-300"></i>
+          <input
+            type="text"
+            placeholder="Search..."
+            [(ngModel)]="searchQuery"
+            (keydown.enter)="onSearch()"
+            class="bg-transparent text-gray-600 dark:text-gray-200 focus:outline-none ml-2 w-full"
+          />
+        </div>
 
-          <!-- Tours -->
-          <li>
-            <a
-              routerLink="/dashboard/tours"
-              class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
-            >
-              <i class="fas fa-plane text-xl"></i>
-              <span *ngIf="drawerOpen" class="text-sm">Tours</span>
-            </a>
-          </li>
+        <!-- User Dropdown -->
+        <div class="relative">
+          <button
+            class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none"
+            (click)="toggleUserMenu()"
+            aria-label="User Menu"
+          >
+            <img
+              [src]="(user$ | async)?.photo || 'https://via.placeholder.com/40'"
+              alt="User Avatar"
+              class="w-10 h-10 rounded-full"
+            />
+            <span class="hidden md:inline-block text-sm font-medium">
+              {{ (user$ | async)?.fname }} {{ (user$ | async)?.lname }}
+            </span>
+            <i class="fas fa-chevron-down text-xs hidden md:inline-block"></i>
+          </button>
 
-          <!-- Bookings -->
-          <li>
-            <a
-              routerLink="/dashboard/bookings"
-              class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
-            >
-              <i class="fas fa-book text-xl"></i>
-              <span *ngIf="drawerOpen" class="text-sm">Bookings</span>
-            </a>
-          </li>
-
-          <!-- Profile -->
-          <li>
+          <!-- User Dropdown Menu -->
+          <div
+            *ngIf="isUserMenuOpen"
+            class="absolute -right-3 mt-2 bg-white dark:bg-gray-900 rounded-md shadow-lg w-48"
+          >
             <a
               routerLink="/dashboard/profile"
-              class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
+              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <i class="fas fa-user text-xl"></i>
-              <span *ngIf="drawerOpen" class="text-sm">Profile</span>
+              Profile
             </a>
-          </li>
-        </ul>
-
-        <!-- Footer Links -->
-        <div class="mt-6">
-          <a
-            routerLink="/dashboard/settings"
-            class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
-          >
-            <i class="fas fa-cog text-xl"></i>
-            <span *ngIf="drawerOpen" class="text-sm">Settings</span>
-          </a>
+            <a
+              routerLink="/dashboard/settings"
+              class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              Settings
+            </a>
+            <button
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </aside>
+    </header>
+  </div>
 
-  <!-- Main Content -->
-  <div class="flex-1 h-full">
-    <!-- Header -->
-    <div
-      class="w-full bg-white dark:bg-gray-800 shadow-md h-20 fixed z-50 flex justify-center items-center"
+  <div
+    class="flex bg-gray-100 dark:bg-gray-900 w-full max-w-full min-h-screen items-stretch"
+  >
+    <!-- Drawer -->
+    <aside
+      class="bg-white dark:bg-gray-800 shadow-lg flex-shrink-0 self-stretch"
     >
-      <header
-        class="bg-white dark:bg-gray-800 p-4 flex items-center justify-between w-11/12 fixed mx-auto"
+      <div
+        class="p-4 py-24 flex flex-col transition-all duration-300 relative"
+        [class.w-64]="drawerOpen"
+        [class.w-16]="!drawerOpen"
       >
-        <!-- Left Section -->
-        <div class="flex items-center space-x-4">
-          <!-- Logo -->
-          <a
-            routerLink="/dashboard/home"
-            class="flex items-center text-green-600 dark:text-green-400"
-          >
-            <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
-            <span class="text-xl font-bold">Featherly</span>
-          </a>
-        </div>
+        <div class="fixed top-30">
+          <!-- Navigation -->
+          <ul class="flex-1 space-y-4 items-center justify-center">
+            <!-- Home -->
+            <li>
+              <a
+                routerLink="/dashboard/home"
+                class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
+              >
+                <i class="fas fa-home text-xl"></i>
+                <span *ngIf="drawerOpen" class="text-sm">Home</span>
+              </a>
+            </li>
 
-        <!-- Right Section -->
-        <div class="flex items-center space-x-16">
-          <!-- Search -->
-          <div
-            *ngIf="!hideSearchBar"
-            class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-md shadow-sm w-72 focus:outline-none focus:ring-2 focus:ring-green-600"
-          >
-            <i class="fas fa-search text-gray-400 dark:text-gray-300"></i>
-            <input
-              type="text"
-              placeholder="Search..."
-              [(ngModel)]="searchQuery"
-              (keydown.enter)="onSearch()"
-              class="bg-transparent text-gray-600 dark:text-gray-200 focus:outline-none ml-2 w-full"
-            />
-          </div>
+            <!-- Tours -->
+            <li>
+              <a
+                routerLink="/dashboard/tours"
+                class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
+              >
+                <i class="fas fa-plane text-xl"></i>
+                <span *ngIf="drawerOpen" class="text-sm">Tours</span>
+              </a>
+            </li>
 
-          <!-- User Dropdown -->
-          <div class="relative">
-            <button
-              class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none"
-              (click)="toggleUserMenu()"
-              aria-label="User Menu"
-            >
-              <img
-                [src]="
-                  (user$ | async)?.photo || 'https://via.placeholder.com/40'
-                "
-                alt="User Avatar"
-                class="w-10 h-10 rounded-full"
-              />
-              <span class="hidden md:inline-block text-sm font-medium">
-                {{ (user$ | async)?.fname }} {{ (user$ | async)?.lname }}
-              </span>
-              <i class="fas fa-chevron-down text-xs hidden md:inline-block"></i>
-            </button>
+            <!-- Bookings -->
+            <li>
+              <a
+                routerLink="/dashboard/bookings"
+                class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
+              >
+                <i class="fas fa-book text-xl"></i>
+                <span *ngIf="drawerOpen" class="text-sm">Bookings</span>
+              </a>
+            </li>
 
-            <!-- User Dropdown Menu -->
-            <div
-              *ngIf="isUserMenuOpen"
-              class="absolute -right-3 mt-2 bg-white dark:bg-gray-900 rounded-md shadow-lg w-48"
-            >
+            <!-- Profile -->
+            <li>
               <a
                 routerLink="/dashboard/profile"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
               >
-                Profile
+                <i class="fas fa-user text-xl"></i>
+                <span *ngIf="drawerOpen" class="text-sm">Profile</span>
               </a>
-              <a
-                routerLink="/dashboard/settings"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Settings
-              </a>
-              <button
-                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                (click)="logout()"
-              >
-                Logout
-              </button>
-            </div>
+            </li>
+          </ul>
+
+          <!-- Footer Links -->
+          <div class="mt-6">
+            <a
+              routerLink="/dashboard/settings"
+              class="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-green-500 dark:hover:text-green-400"
+            >
+              <i class="fas fa-cog text-xl"></i>
+              <span *ngIf="drawerOpen" class="text-sm">Settings</span>
+            </a>
           </div>
         </div>
-      </header>
-    </div>
+      </div>
+    </aside>
 
     <!-- do not add overflow attribute here; sticky wont work -->
     <main class="w-full">
