@@ -1,22 +1,31 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { DashboardService } from './dashboard.service';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { AuthStateModel } from '../../core/states/auth/auth.model';
 import { AuthState } from '../../core/states/auth/auth.state';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './dashboard.component.html',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private store = inject(Store);
   user$: Observable<AuthStateModel['user'] | null>;
+  searchQuery = '';
+  hideSearchBar = false;
+  private hiddenRoutes = ['/dashboard', '/dashboard/home', '/dashboard/search']; // Routes where the search bar should be hidden
 
   drawerOpen = false;
 
@@ -60,6 +69,17 @@ export class DashboardComponent {
     this.user$ = this.store.select(AuthState.user);
   }
 
+  ngOnInit(): void {
+    // Listen to route changes
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        const currentRoute = event.url.split('?')[0]; // Remove query params
+        this.hideSearchBar = this.hiddenRoutes.includes(currentRoute);
+        console.log('hideSearchBar', this.hideSearchBar);
+      });
+  }
+
   toggleDrawer(): void {
     this.drawerOpen = !this.drawerOpen;
   }
@@ -75,5 +95,17 @@ export class DashboardComponent {
       this.router.navigate(['/']);
     };
     this.dashboardService.logout(handleLogout);
+  }
+
+  onSearch(): void {
+    console.log('Search query:', this.searchQuery);
+    // Navigate to the search results page with the query as a parameter
+    if (this.searchQuery.trim()) {
+      this.router.navigate(['/dashboard/search'], {
+        queryParams: { keyword: this.searchQuery.trim() },
+      });
+    }
+
+    this.searchQuery = '';
   }
 }
