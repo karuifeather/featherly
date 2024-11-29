@@ -14,12 +14,12 @@ import { TourState } from '../../core/states/tour/tour.state';
 import { ToursService } from './tours.service';
 import { Observable } from 'rxjs';
 import { ClearToursState } from '../../core/states/tour/tour.actions';
+import { TourFiltersComponent } from '../../components/filter/filter.component';
 
 @Component({
   selector: 'app-tours',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TourFiltersComponent],
   templateUrl: './tours.component.html',
-  styleUrl: './tours.component.scss',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -37,9 +37,6 @@ export class ToursComponent implements OnInit, OnDestroy {
 
   constructor(private tourService: ToursService) {}
 
-  minPrice = 100; // Default minimum price
-  maxPrice = 1000; // Default maximum price
-
   ngOnInit() {
     this.toursFeed$.subscribe((toursFeed) => {
       if (toursFeed.tours.length === 0) {
@@ -49,25 +46,11 @@ export class ToursComponent implements OnInit, OnDestroy {
     });
   }
 
-  updatePriceRange(): void {
-    // Prevent overlap: Ensure minPrice is less than or equal to maxPrice
-    if (this.minPrice > this.maxPrice) {
-      this.minPrice = this.maxPrice - 50; // Ensure a minimum step gap
-    }
-    if (this.maxPrice < this.minPrice) {
-      this.maxPrice = this.minPrice + 50; // Ensure a minimum step gap
-    }
-  }
-
   scrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
-  }
-
-  onSearch() {
-    alert('Filter search hit');
   }
 
   nextPage(currentPage: number, totalPages: number) {

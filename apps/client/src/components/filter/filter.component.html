@@ -1,0 +1,116 @@
+<div
+  class="bg-white dark:bg-gray-800 p-6 w-full items-center rounded-xl shadow-lg"
+>
+  <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Filters</h3>
+
+  <!-- Price Range -->
+  <div class="mb-6">
+    <h4
+      class="text-gray-600 dark:text-gray-400 mb-2 flex items-center justify-between space-x-4"
+    >
+      Price Range
+      <span class="text-gray-700 dark:text-gray-300 font-semibold">
+        ${{ minPrice }} to ${{ maxPrice }}
+      </span>
+    </h4>
+    <div class="relative w-full flex items-center space-x-4">
+      <div class="relative w-full">
+        <!-- Visual Range Bar -->
+        <div
+          class="absolute bg-green-600 h-1 rounded-md"
+          [style.left.%]="((minPrice - minRange) / (maxRange - minRange)) * 100"
+          [style.right.%]="
+            100 - ((maxPrice - minRange) / (maxRange - minRange)) * 100
+          "
+        ></div>
+
+        <!-- Min Price Slider -->
+        <input
+          type="range"
+          min="100"
+          max="2500"
+          step="50"
+          [(ngModel)]="minPrice"
+          (input)="updatePriceRange()"
+          class="absolute w-full accent-green-600 z-20 pointer-events-auto"
+          style="pointer-events: auto; left: 0"
+        />
+
+        <!-- Max Price Slider -->
+        <input
+          type="range"
+          min="100"
+          max="2500"
+          step="50"
+          [(ngModel)]="maxPrice"
+          (input)="updatePriceRange()"
+          class="absolute w-full accent-green-600 z-10 pointer-events-auto"
+          style="pointer-events: auto; left: 0"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Sort Options -->
+  <div class="mb-6">
+    <h4 class="text-gray-600 dark:text-gray-400 mb-2">Sort By</h4>
+    <select
+      [(ngModel)]="selectedSort"
+      class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded-md px-4 py-2 w-full"
+    >
+      <option value="priceLowToHigh">Price: Low to High</option>
+      <option value="priceHighToLow">Price: High to Low</option>
+      <option value="rating">Rating</option>
+    </select>
+  </div>
+
+  <!-- Difficulty Levels -->
+  <div class="mb-6">
+    <h4 class="text-gray-600 dark:text-gray-400 mb-2">Difficulty</h4>
+    <ul class="space-y-2">
+      <li>
+        <label
+          class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="selectedDifficulties.easy"
+            class="form-checkbox text-green-600"
+          />
+          <span>Easy</span>
+        </label>
+      </li>
+      <li>
+        <label
+          class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="selectedDifficulties.medium"
+            class="form-checkbox text-green-600"
+          />
+          <span>Medium</span>
+        </label>
+      </li>
+      <li>
+        <label
+          class="flex items-center space-x-2 text-gray-700 dark:text-gray-300"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="selectedDifficulties.difficult"
+            class="form-checkbox text-green-600"
+          />
+          <span>Difficult</span>
+        </label>
+      </li>
+    </ul>
+  </div>
+
+  <button
+    class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-all"
+    (click)="onSearch()"
+  >
+    Search
+  </button>
+</div>
