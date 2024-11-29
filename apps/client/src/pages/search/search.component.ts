@@ -2,7 +2,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SearchService } from './search.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
@@ -13,16 +13,19 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './search.component.html',
 })
 export class SearchResultsComponent implements OnInit {
-  searchQuery = 'northern'; // Current search input
-  currentPage = 1; // Current page number
+  searchQuery = ''; // Default search input
+  currentPage = 1; // Default page number
   totalPages = 0; // Total number of pages
   limit = 3; // Items per page
 
   private searchQuery$ = new BehaviorSubject<string>(this.searchQuery);
   searchResults$: Observable<{ data: any[]; totalPages: number }>;
 
-  constructor(private searchService: SearchService) {
-    // Debounce the search input to avoid excessive API calls
+  constructor(
+    private searchService: SearchService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.searchResults$ = this.searchQuery$.pipe(
       debounceTime(400),
       switchMap((query) =>
@@ -36,13 +39,30 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onSearch(); // Trigger initial search
+    this.route.queryParams.subscribe((params) => {
+      this.searchQuery = params['keyword'] || this.searchQuery;
+      this.currentPage = +params['page'] || this.currentPage;
+      this.limit = +params['limit'] || this.limit;
+
+      this.onSearch();
+    });
+
     this.searchResults$.subscribe(
       (res) => (this.totalPages = Math.ceil(res.totalPages / this.limit))
     );
   }
 
   onSearch(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        keyword: this.searchQuery,
+        page: 1,
+        limit: this.limit,
+      },
+      queryParamsHandling: 'merge',
+    });
+
     this.searchQuery$.next(this.searchQuery);
   }
 
