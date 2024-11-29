@@ -9,6 +9,7 @@ import { NonAuthGuard } from './core/guards/non-auth.guard';
 import { AboutComponent } from './pages/about/about.component';
 import { FeaturesComponent } from './pages/features/features.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { SearchResultsComponent } from './pages/search/search.component';
 
 export const appRoutes: Route[] = [
   { canActivate: [NonAuthGuard], path: '', component: LandingComponent },
@@ -38,6 +39,11 @@ export const appRoutes: Route[] = [
     canActivate: [NonAuthGuard],
     path: 'confirmation',
     component: ConfirmationComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'search',
+    component: SearchResultsComponent,
   },
   {
     path: 'dashboard',

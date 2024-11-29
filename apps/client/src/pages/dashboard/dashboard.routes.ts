@@ -8,6 +8,7 @@ import { SettingsComponent } from '../settings/settings.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { CreateTourComponent } from '../createTour/create-tour.component';
 import { RoleGuard } from '../../core/guards/roles.guard';
+import { SearchResultsComponent } from '../search/search.component';
 
 export const dashboardRoutes: Route[] = [
   {
@@ -20,6 +21,7 @@ export const dashboardRoutes: Route[] = [
       { path: 'bookings', component: BookingsComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'settings', component: SettingsComponent },
+      { path: 'search', component: SearchResultsComponent },
       {
         canActivate: [RoleGuard],
         path: 'create/tours',

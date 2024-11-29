@@ -15,7 +15,7 @@ export class LandingService {
   async fetchPopularTours() {
     try {
       const response = await this.api.get('/tours/popular');
-      this.store.dispatch(new SetPopularTours(response.data));
+      this.store.dispatch(new SetPopularTours(response.data.data));
     } catch (error) {
       console.error('Error fetching popular tours:', error);
     }
