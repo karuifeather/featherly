@@ -9,8 +9,6 @@ import { AppModule } from './app.module';
 
 export async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
 
   // Enable graceful shutdown
   app.enableShutdownHooks();
