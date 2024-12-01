@@ -21,6 +21,13 @@ export async function bootstrap() {
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
     });
+  } else {
+    app.enableCors({
+      origin: ['https://featherly.karuifeather.com'],
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    });
   }
 
   const { default: cookierParser } = await import('cookie-parser');
@@ -92,7 +99,7 @@ export async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('docs', app, document, {
     customSiteTitle: 'Featherly API Documentation',
     customCss: swaggerCss,
     swaggerOptions: {
