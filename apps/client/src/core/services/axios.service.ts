@@ -11,7 +11,7 @@ export class AxiosService {
   constructor() {
     this.axiosInstance = axios.create({
       baseURL: environment.apiUrl,
-      timeout: 10000,
+      timeout: 20000,
       withCredentials: true,
     });
 
