@@ -41,30 +41,34 @@
 
 <!-- Popular Tours Section -->
 <section class="bg-gray-100 dark:bg-gray-900 py-16">
-  <div class="z-10 text-center px-24 py-16">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-16">
+  <div class="z-10 text-center px-4 sm:px-12 md:px-24 py-16">
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-12">
       Popular Tours
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-24">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-16">
       <!-- Tour Card 1 -->
       <ng-container *ngIf="popularTours$ | async as popularTours">
         <div
           *ngFor="let tour of popularTours"
-          class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden"
+          class="bg-white dark:bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
         >
           <!-- Image -->
           <img
             [src]="tour.imageCover || 'https://via.placeholder.com/150'"
             [alt]="tour.name"
-            class="w-full h-48 object-cover"
+            class="w-full h-48 object-cover rounded-t-lg"
           />
           <!-- Content -->
           <div
-            class="p-6 text-center flex flex-col justify-around items-center"
+            class="p-6 text-center flex flex-col justify-between items-center"
           >
-            <h3 class="text-xl font-bold mb-2">{{ tour.name }}</h3>
-            <p class="text-gray-400 mb-6">{{ tour.summary }}</p>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+              {{ tour.name }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+              {{ tour.summary }}
+            </p>
 
             <button
               routerLink="/login"
@@ -84,16 +88,18 @@
 
 <!-- Explore Section -->
 <section
-  class="section-background"
+  class="section-background section-background--mobile py-16"
   style="
     background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828693/nat-10_u61elf.jpg');
     background-attachment: fixed;
   "
 >
-  <div class="gradient-overlay"></div>
+  <div class="gradient-overlay absolute"></div>
 
-  <div class="section-content px-10 sm:px-24">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-16">
+  <div class="section-content section-content--mobile px-4 sm:px-24">
+    <h2
+      class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-16 text-center"
+    >
       Discover
     </h2>
 
@@ -185,13 +191,15 @@
 </section>
 
 <!-- Booking section -->
-<section class="bg-gray-100 dark:bg-gray-900 py-32">
+<section class="bg-gray-100 dark:bg-gray-900 py-16 md:py-32">
   <div class="container mx-auto px-6">
     <div
-      class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-10"
+      class="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-10"
     >
       <!-- Form Heading -->
-      <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white">
+      <h2
+        class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white"
+      >
         Book Your Adventure
       </h2>
       <p class="text-center text-gray-600 dark:text-gray-400 mt-2">
@@ -199,7 +207,7 @@
       </p>
 
       <!-- Form -->
-      <form class="mt-6 space-y-10">
+      <form class="mt-6 space-y-8">
         <!-- Select Date -->
         <div class="relative">
           <label
@@ -208,7 +216,7 @@
             >Select Date</label
           >
           <div class="flex items-center mt-2">
-            <div class="absolute left-3 text-gray-400">
+            <div class="absolute left-3 text-gray-400 dark:text-gray-500">
               <i class="fas fa-calendar-alt"></i>
             </div>
             <input
@@ -228,7 +236,7 @@
             >Number of People</label
           >
           <div class="flex items-center mt-2">
-            <div class="absolute left-3 text-gray-400">
+            <div class="absolute left-3 text-gray-400 dark:text-gray-500">
               <i class="fas fa-users"></i>
             </div>
             <input
@@ -247,7 +255,7 @@
         <button
           type="submit"
           routerLink="/login"
-          class="w-full bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 hover:scale-105 transition-all duration-300 shadow-md focus:ring-4 focus:ring-green-500 focus:outline-none"
+          class="w-full bg-green-600 text-white px-4 py-3 rounded-md font-semibold hover:bg-green-700 hover:scale-105 transition-all duration-300 shadow-md focus:ring-4 focus:ring-green-500 focus:outline-none"
         >
           <i class="fas fa-paper-plane mr-2"></i> Book Now
         </button>
@@ -255,6 +263,7 @@
     </div>
   </div>
 </section>
+
 <div class="bg-gray-800 dark:bg-gray-900">
   <div class="container mx-auto text-center py-4">
     <div class="border-t border-gray-700"></div>
