@@ -10,6 +10,7 @@ import { appRoutes } from './app.routes';
 import { AuthState } from './core/states/auth/auth.state';
 import { TourState } from './core/states/tour/tour.state';
 import { BookingState } from './core/states/booking/booking.state';
+import { environment } from './environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideStore(
       [AuthState, TourState, BookingState],
-      withNgxsLoggerPlugin(),
+      ...(environment.production ? [] : [withNgxsLoggerPlugin()]),
       withNgxsStoragePlugin({
         keys: [
           'auth',

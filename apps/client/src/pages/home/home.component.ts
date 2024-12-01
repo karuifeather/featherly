@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit {
 
   onSubmit(): void {
     // Navigate to the search results page with the query as a parameter
-    console.log('searchQuery', this.searchQuery);
     this.router.navigate(['/dashboard/search'], {
       queryParams: { keyword: this.searchQuery },
     });

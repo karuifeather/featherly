@@ -1,5 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://api.featherly.karuifeather.com/',
-  developmentMode: true,
+  apiUrl: 'http://localhost:4500/',
 };

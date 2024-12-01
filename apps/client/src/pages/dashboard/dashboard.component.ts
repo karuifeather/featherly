@@ -101,7 +101,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onSearch(): void {
-    console.log('Search query:', this.searchQuery);
     // Navigate to the search results page with the query as a parameter
     if (this.searchQuery.trim()) {
       this.router.navigate(['/dashboard/search'], {

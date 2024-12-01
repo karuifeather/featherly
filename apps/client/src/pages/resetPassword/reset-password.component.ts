@@ -18,8 +18,7 @@ export class ResetPasswordComponent {
 
   onSubmit(form: any) {
     if (form.valid && this.password === this.confirmPassword) {
-      console.log(form);
-      console.log('Password reset successfully!');
+      console.log('Feature coming soon!');
       alert('Your password has been reset successfully!');
     } else {
       alert('Please ensure passwords match and all fields are valid.');

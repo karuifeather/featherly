@@ -13,8 +13,7 @@ export class ForgotPasswordComponent {
 
   onSubmit(form: any) {
     if (form.valid) {
-      console.log('Reset email sent to:', this.email);
-      alert('A reset link has been sent to your email address!');
+      alert('Feature coming soon!');
     } else {
       alert('Please enter a valid email address.');
     }
