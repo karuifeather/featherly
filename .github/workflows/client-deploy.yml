@@ -39,7 +39,7 @@ jobs:
 
       # Build the Angular project
       - name: Build Angular App
-        run: npm run nx build client --configuration production
+        run: npx nx build client --configuration production
 
       # Configure AWS CLI
       - name: Configure AWS CLI
