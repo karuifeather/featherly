@@ -7,19 +7,10 @@
   "targets": {
     "serve": {
       "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "server:build",
+        "buildTarget": "server:build:main",
         "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "server:build:development"
-        },
-        "production": {
-          "buildTarget": "server:build:production"
-        }
       }
     },
     "build": {
@@ -31,11 +22,29 @@
             "output": "views"
           }
         ]
+      },
+      "defaultConfiguration": "serverless",
+      "configurations": {
+        "main": {
+          "env": {
+            "ENTRY_FILE": "./src/main.ts",
+            "NODE_ENVIRONMENT": "development"
+          }
+        },
+        "serverless": {
+          "env": {
+            "ENTRY_FILE": "./src/serverless.ts",
+            "NODE_ENVIRONMENT": "production"
+          }
+        }
       }
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f apps/server/Dockerfile . -t server"
+      "command": "docker build -f apps/server/Dockerfile . -t server:latest"
+    },
+    "docker-serve": {
+      "command": "docker run -p 3000:8080 --env-file .env server:latest"
     }
   }
 }

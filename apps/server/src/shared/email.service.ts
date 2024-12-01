@@ -5,7 +5,6 @@ import { htmlToText } from 'html-to-text';
 import * as AWS from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { unsubscribe } from 'diagnostics_channel';
 
 @Injectable()
 export class EmailService {
@@ -19,10 +18,14 @@ export class EmailService {
 
   // Set up transport using Amazon SES
   private getTransport() {
+    const isLocal = process.env.NODE_ENV === 'development';
+
     const ses = new AWS.SES({
-      accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
-      region: this.configService.get('AWS_REGION') || 'us-east-1',
+      ...(isLocal && {
+        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+        region: 'us-east-1',
+      }),
     });
 
     return nodemailer.createTransport({
