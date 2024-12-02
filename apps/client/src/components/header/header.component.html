@@ -1,6 +1,6 @@
 <header
   id="main-header"
-  class="p-4 py-6 sm:px-0 sm:py-6 fixed top-0 left-0 w-full z-50 transition-all duration-100 dark"
+  class="p-4 py-6 px-6 sm:px-8 sm:py-6 fixed top-0 left-0 w-full z-50 transition-all duration-100 dark"
 >
   <div class="container mx-auto flex items-center justify-between w-full">
     <!-- Logo -->
@@ -65,7 +65,7 @@
   <!-- Mobile Menu (Hidden Initially) -->
   <div
     *ngIf="menuVisible"
-    class="md:hidden bg-gray-800 text-white p-4 rounded-lg drop-shadow-2xl absolute top-20 right-4 transform transition-all duration-300 ease-in-out max-w-xs w-full z-50"
+    class="md:hidden bg-gray-700 text-white p-4 rounded-lg drop-shadow-2xl absolute top-20 right-4 transform transition-all duration-300 ease-in-out max-w-xs w-full z-50"
     id="mobile-menu"
     (click)="$event.stopPropagation()"
     tabindex="0"

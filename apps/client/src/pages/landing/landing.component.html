@@ -10,7 +10,7 @@
   <div
     class="section-content absolute inset-0 flex flex-col items-center justify-center text-center text-white px-4"
   >
-    <h1 class="text-4xl font-bold sm:text-5xl md:text-6xl">
+    <h1 class="text-4xl font-bold md:text-5xl lg:text-6xl">
       Find Your Next Adventure
     </h1>
     <p class="text-lg sm:text-xl mt-4 max-w-xl mx-auto">
@@ -41,12 +41,14 @@
 
 <!-- Popular Tours Section -->
 <section class="bg-gray-100 dark:bg-gray-900 py-16">
-  <div class="z-10 text-center px-4 sm:px-12 md:px-24 py-16">
+  <div class="z-10 text-center px-8 sm:px-12 md:px-24 py-16">
     <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-12">
       Popular Tours
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-16">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-16 lg:gap-20"
+    >
       <!-- Tour Card 1 -->
       <ng-container *ngIf="popularTours$ | async as popularTours">
         <div
@@ -88,15 +90,17 @@
 
 <!-- Explore Section -->
 <section
-  class="section-background section-background--mobile py-16"
+  class="relative py-16 h-auto md:h-[98vh] lg:h-[70vw] xl:h-[50vw]"
   style="
     background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828693/nat-10_u61elf.jpg');
     background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
   "
 >
   <div class="gradient-overlay absolute"></div>
 
-  <div class="section-content section-content--mobile px-4 sm:px-24">
+  <div class="section-content section-content--mobile px-4 sm:px-16 xl:px-24">
     <h2
       class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-16 text-center"
     >
@@ -104,7 +108,7 @@
     </h2>
 
     <div
-      class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+      class="container mx-auto grid grid-cols-1 gap-6 lg:gap-8 md:grid-cols-2 xl:grid-cols-4"
     >
       <!-- Card 1 -->
       <div
