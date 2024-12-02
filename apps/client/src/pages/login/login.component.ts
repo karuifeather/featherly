@@ -15,9 +15,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  isSubmitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl(returnUrl);
     };
 
+    this.isSubmitting = true;
     this.loginService.login(email, password, handleSuccess);
   }
 }

@@ -10,8 +10,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class ForgotPasswordComponent {
   email = '';
+  isSubmitting = false;
 
   onSubmit(form: any) {
+    this.isSubmitting = true;
     if (form.valid) {
       alert('Feature coming soon!');
     } else {
