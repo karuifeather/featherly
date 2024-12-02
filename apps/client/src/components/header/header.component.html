@@ -1,6 +1,6 @@
 <header
   id="main-header"
-  class="py-6 fixed top-0 left-0 w-full z-50 transition-all duration-300 dark"
+  class="p-4 py-6 px-6 sm:px-8 sm:py-6 fixed top-0 left-0 w-full z-50 transition-all duration-100 dark"
 >
   <div class="container mx-auto flex items-center justify-between w-full">
     <!-- Logo -->
@@ -9,23 +9,22 @@
       class="flex items-center text-green-600 dark:text-green-400"
     >
       <img src="favicon.png" alt="Logo" class="h-8 mr-2" />
-      <span class="text-xl font-bold">Featherly</span>
+      <span class="font-bold text-sm md:text-xl">Featherly</span>
     </a>
 
     <div class="flex items-center justify-between">
       <!-- Navigation & User Menu -->
-      <div class="flex items-center space-x-6">
+      <div class="hidden md:flex items-center space-x-4 sm:space-x-6">
         <!-- Navigation Links -->
-
-        <div class="space-x-5">
+        <div class="space-x-3 sm:space-x-5">
           <a
             routerLink="/about"
-            class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+            class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 text-sm sm:text-base"
             >About</a
           >
           <a
             routerLink="/features"
-            class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+            class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 text-sm sm:text-base"
             >Features</a
           >
         </div>
@@ -33,18 +32,89 @@
         <div class="relative">
           <a
             routerLink="/login"
-            class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-sm sm:text-base"
           >
             Log In
           </a>
           <a
             routerLink="/signup"
-            class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700 cta"
+            class="bg-green-600 text-white px-4 py-2 rounded-md ml-4 hover:bg-green-700 cta text-sm sm:text-base"
           >
             Sign Up
           </a>
         </div>
       </div>
+
+      <!-- Hamburger Button -->
+      <div
+        id="hamburger-btn"
+        tabindex="0"
+        class="md:hidden block cursor-pointer"
+        (click)="toggleMenu()"
+        (keydown.enter)="toggleMenu()"
+        (keydown.space)="toggleMenu()"
+        aria-label="Toggle menu"
+      >
+        <div class="w-6 h-1 bg-white mb-1"></div>
+        <div class="w-6 h-1 bg-white mb-1"></div>
+        <div class="w-6 h-1 bg-white"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu (Hidden Initially) -->
+  <div
+    *ngIf="menuVisible"
+    class="md:hidden bg-gray-700 text-white p-4 rounded-lg drop-shadow-2xl absolute top-20 right-4 transform transition-all duration-300 ease-in-out max-w-xs w-full z-50"
+    id="mobile-menu"
+    (click)="$event.stopPropagation()"
+    tabindex="0"
+    (keydown.enter)="closeMenu()"
+    (keydown.space)="closeMenu()"
+    [ngClass]="{
+      'translate-x-0': menuVisible,
+      'translate-x-full': !menuVisible
+    }"
+  >
+    <!-- Menu Items -->
+    <a
+      routerLink="/about"
+      class="block text-lg font-semibold text-gray-300 hover:text-green-500 py-2 transition duration-200 ease-in-out"
+      (click)="closeMenu()"
+      tabindex="0"
+      (keydown.enter)="closeMenu()"
+      (keydown.space)="closeMenu()"
+      >About</a
+    >
+    <a
+      routerLink="/features"
+      class="block text-lg font-semibold text-gray-300 hover:text-green-500 py-2 transition duration-200 ease-in-out"
+      (click)="closeMenu()"
+      tabindex="0"
+      (keydown.enter)="closeMenu()"
+      (keydown.space)="closeMenu()"
+      >Features</a
+    >
+
+    <div class="space-y-3 mt-6">
+      <a
+        routerLink="/login"
+        class="block text-lg text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 py-2 transition duration-200 ease-in-out"
+        (click)="closeMenu()"
+        tabindex="0"
+        (keydown.enter)="closeMenu()"
+        (keydown.space)="closeMenu()"
+        >Log In</a
+      >
+      <a
+        routerLink="/signup"
+        class="block text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-md transition duration-200 ease-in-out cta"
+        (click)="closeMenu()"
+        tabindex="0"
+        (keydown.enter)="closeMenu()"
+        (keydown.space)="closeMenu()"
+        >Sign Up</a
+      >
     </div>
   </div>
 </header>

@@ -1,10 +1,16 @@
-<section class="bg-gray-50 dark:bg-gray-800 px-6 md:px-12 py-32">
+<section
+  class="bg-gray-50 dark:bg-gray-800 px-6 sm:px-8 md:px-12 py-24 sm:py-28"
+>
   <!-- Hero Section -->
   <div class="max-w-7xl mx-auto text-center">
-    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">
+    <h1
+      class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 dark:text-white"
+    >
       Why Choose Featherly?
     </h1>
-    <p class="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
+    <p
+      class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto"
+    >
       Discover the features that set us apart and make Featherly the ultimate
       choice for your needs.
     </p>
@@ -12,23 +18,24 @@
 
   <!-- Features Section -->
   <div
-    class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+    class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto"
   >
-    <!-- Feature 1 -->
-    <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
+    <!-- Feature Cards -->
+    <div
+      class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
+    >
       <i
         class="fas fa-rocket text-green-500 text-4xl mb-4"
         aria-hidden="true"
       ></i>
-      <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+      <h2 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white">
         Fast and Reliable
       </h2>
-      <p class="text-gray-600 dark:text-gray-300 mt-4">
+      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-4">
         Built with cutting-edge technology, Featherly ensures quick and
         dependable performance for all your needs.
       </p>
     </div>
-
     <!-- Feature 2 -->
     <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
       <i
@@ -107,14 +114,16 @@
 </section>
 
 <!-- CTA Section -->
-<section class="bg-green-600 dark:bg-green-700 py-12 mt-16 text-center">
-  <h2 class="text-3xl font-bold text-white">Ready to experience Featherly?</h2>
-  <p class="text-lg text-green-200 mt-4">
+<section class="bg-green-600 dark:bg-green-700 py-12 mt-16 text-center px-4">
+  <h2 class="text-2xl sm:text-3xl font-bold text-white">
+    Ready to experience Featherly?
+  </h2>
+  <p class="text-base sm:text-lg text-green-200 mt-4 max-w-xl mx-auto">
     Join thousands of satisfied users and see the difference today.
   </p>
   <a routerLink="/signup">
     <button
-      class="mt-6 px-6 py-3 bg-white text-green-600 font-bold rounded-md shadow hover:bg-gray-100 transition-all"
+      class="mt-6 px-6 py-3 bg-white text-green-600 font-bold rounded-md shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all"
     >
       Get Started
     </button>
