@@ -1,174 +1,85 @@
-# Featherly
+# Featherly Architecture
 
-![Featherly](https://res.cloudinary.com/drj6tdlhy/image/upload/v1731837525/logo-green-small_llobkj.png)
+This project is a modern web application with a frontend built using Angular and a backend written in NestJS. It is deployed using AWS services such as Lambda, API Gateway, S3, CloudFront, and Route 53.
 
-Featherly is a project that’s close to my heart. Years ago, I built my first real-world project with Node and Express after taking a course on Udemy. That feeling of creating something people could use sparked my passion to become a Software Engineer.
+## Architecture Overview
 
-Fast forward to today: that project is now old and outdated and in need of major updates. So, I’m introducing Featherly—a modern, scalable tour booking system built with Angular and NestJS. It’s a product of everything I’ve learned, and I’m excited to keep improving and adding new features over time!
+### Frontend (Angular Application - `client`):
 
-## Server `apps/server`
+More details on [client](https://github.com/karuifeather/featherly/tree/main/docs/client.md).
 
-### Overview
+- **Framework**: Built using **Angular** with **Nx** for efficient development.
+- **Hosting**:
+  - Hosted as a static website on **AWS S3**.
+  - Distributed globally via **AWS CloudFront** to ensure fast load times across the world.
+  - **Route 53** manages DNS for the custom domain `featherly.karuifeather.com`, routing traffic to CloudFront.
+- **Functionality**:
+  - Displays tour listings, booking details, and user reviews.
+  - Consumes backend APIs for dynamic data retrieval.
+- **Build and Deployment**:
+  - Automatically built using the `production` configuration for optimized performance and secure deployment.
+  - Deployed via **GitHub Actions** whenever changes are pushed to the `main` branch.
 
-This is the backend server for the project, built with NestJS and designed to run in multiple configurations: standalone, serverless, and Dockerized. The server supports REST API endpoints and is optimized for deployment on AWS Lambda. The Nx workspace is used to manage the project structure and build commands.
+### Backend (NestJS Application - `server`:
 
----
+More details on [server](https://github.com/karuifeather/featherly/tree/main/docs/server.md).
 
-### Key Features
+- **Framework**: Built with **NestJS**, following a modular and service-oriented architecture.
+- **Hosting**:
+  - Deployed as a serverless application using **AWS Lambda**.
+  - Backend code is packaged into a Docker image, hosted on **AWS ECR** (Elastic Container Registry), and pulled by Lambda during execution.
+- **API Gateway**:
+  - **Custom Domain**: `api.featherly.karuifeather.com`, routed by **AWS API Gateway** to the Lambda function.
+  - Configured for secure communication with the frontend using CORS settings.
+- **API Docs**: Documentation done using Swagger is accessible [here](https://api.featherly.karuifeather.com/docs).
 
-- **Multi-Configuration Builds**: Supports both standalone (`main.ts`) and serverless (`serverless.ts`) configurations.
-- **Serverless Compatibility**: Easily deployable on AWS Lambda using the `serverless.ts` entry point.
-- **Dockerized**: Docker support is included for easy local testing and deployment.
-- **Nx Workspace Integration**: Efficient build and serve commands managed via Nx.
-- **Views Support**: EJS templates are included and bundled in the build.
+### Deployment Process:
 
----
+1. **Frontend**:
+   - Built using the Nx build pipeline and deployed to **AWS S3**.
+2. **Backend**:
+   - Dockerized backend is pushed to **ECR** and AWS Lambda is updated to use the new image.
+3. **Automated CI/CD**:
+   - **GitHub Actions** triggers the build and deployment process whenever changes are pushed to the `main` branch, ensuring continuous delivery.
 
-### Prerequisites
+### Current Features
 
-- **Node.js**: Ensure Node.js is installed (minimum version compatible with the project).
-- **Docker**: Install Docker for running containerized builds.
+- **Frontend**:
+  - Displays tours, user interface with Tailwind styling.
+- **Backend**:
+  - API endpoints to fetch data from MongoDB.
+  - Handles user authentication and data processing.
 
-  ```bash
-  npm install -g nx
-  ```
+### How It All Comes Together in Production:
 
-- **Environment Variables**: Provide a `.env` file in the project root with necessary configuration.
+- **Frontend (Client)**:
+  - Users visit the site via the domain `https://featherly.karuifeather.com`, which is served from S3 and CloudFront.
+  - API calls (like fetching tours or making bookings) are routed through `https://api.featherly.karuifeather.com`, managed by API Gateway and Lambda.
+- **Backend (Server)**:
+  - API Gateway routes requests to the backend Lambda function.
+  - Backend handles business logic such as payment processing, fetching tour data, and managing user reviews.
+- **Automated Deployment**:
+  - GitHub Actions handles the deployment of both frontend (Angular app) and backend (NestJS app).
+  - Lambda updates and S3 deployments happen automatically after each push to the `main` branch.
+- **Global Distribution**:
+  - CloudFront ensures that the frontend is cached and served globally with low latency.
+  - API Gateway ensures scalable API access to Lambda.
 
----
+## Next Steps
 
-### Environment Variables
-
-#### `.env` File
-
-The `.env` file should contain the following keys (with correct values):
-
-```env
-NODE_ENV=development
-mongoURI=mongodb://localhost:27017/project
-JWT_PRIVATE=alsdkfjaliewo
-JWT_EXPIRES_IN=90d
-JWT_COOKIE_EXPIRES_IN=30
-STRIPE_SECRET_KEY=sk_test_dkflsadfkewq35dfasgshj5
-AWS_ACCESS_KEY_ID=DAFOIWEJOFAS21SA
-AWS_SECRET_ACCESS_KEY=fa4ldfikjalffdas
-EMAIL_FROM=no-reply@domain.com
-```
-
----
-
-### Build and Run
-
-#### Local Development
-
-1. **Install dependencies**:
-
-   ```bash
-   npm install
-   ```
-
-2. **Start the server in development mode**:
-   ```bash
-   nx serve server
-   ```
-   This uses the `main.ts` entry file and runs in standalone mode.
-
----
-
-### Dockerized Deployment
-
-1. **Build Docker image**:
-
-   ```bash
-   nx docker-build server
-   ```
-
-2. **Run Docker container**:
-
-   ```bash
-   nx docker-serve server
-   ```
-
-3. **Access the API**:
-   The API will be available at `http://localhost:3000`.
+- **Implement Stripe for Booking**:
+  - Build the Angular payment UI.
+  - Add backend support for processing Stripe payments.
+- **Add Review System**:
+  - Implement API routes for handling user reviews.
+  - Integrate review submission in the frontend.
+- **Improve Responsiveness**:
+  - Ensure all components of the website are optimized for mobile devices.
 
 ---
 
-### Nx Commands
+This project is built with best practices for scalability, performance, and ease of deployment using AWS and modern web technologies.
 
-#### Serve
+## License
 
-Starts the server in standalone mode:
-
-```bash
-nx serve server
-```
-
-#### Build
-
-Builds the server (no config defaults to serverless):
-
-```bash
-nx build server --configuration=<main|serverless>
-```
-
-#### Docker Build
-
-Builds the Docker image:
-
-```bash
-nx docker-build server
-```
-
-#### Docker Serve
-
-Runs the Docker container:
-
-```bash
-nx docker-serve server
-```
-
----
-
-### Deployment to AWS Lambda
-
-1. **Build the serverless configuration**:
-
-   ```bash
-   nx build server
-   ```
-
-2. **Commit your changes to `main`**:
-
-   GitHub actions will take it from there. See `./github/server-deploy.yml`.
-
----
-
-## API Endpoints
-
-- **Base URL**:
-
-  - Standalone: `http://localhost:4500`
-  - Serverless: `http://localhost:3000/2015-03-31/functions/function/invocations`
-
-- **Sample Routes**:
-  - `GET /api/tours`
-  - `POST /api/tours`
-
----
-
-## Troubleshooting
-
-- **CORS Errors**:
-  Ensure CORS is configured correctly in the application. Update the CORS configuration in `app.ts` to match the client origin.
-
-- **Environment Variable Issues**:
-  Verify that `.env` is correctly configured and loaded.
-
-- **Docker Build Stuck**:
-  Use the `--no-cache` flag to rebuild from scratch:
-  ```bash
-  docker build --no-cache -f apps/server/Dockerfile .
-  ```
-
----
+This project is licensed under the CC BY-NC License - see the [LICENSE](./LICENSE) file for details.
