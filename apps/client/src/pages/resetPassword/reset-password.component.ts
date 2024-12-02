@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class ResetPasswordComponent {
   password = '';
   confirmPassword = '';
+  isSubmitting = false;
 
   doPasswordsMatch(): boolean {
     return this.password === this.confirmPassword;
@@ -18,6 +19,7 @@ export class ResetPasswordComponent {
 
   onSubmit(form: any) {
     if (form.valid && this.password === this.confirmPassword) {
+      this.isSubmitting = true;
       console.log('Feature coming soon!');
       alert('Your password has been reset successfully!');
     } else {

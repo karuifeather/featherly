@@ -1,7 +1,7 @@
 .section {
   &-background {
     position: relative;
-    height: 95vh; /* Each section will have a height of 60% of the viewport */
+    height: 95vh;
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
@@ -14,6 +14,20 @@
     text-align: center;
     top: 50%;
     transform: translateY(-50%);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .section {
+    &-background--mobile {
+      height: auto;
+    }
+
+    &-content--mobile {
+      top: 0;
+      transform: none;
+      background-size: cover;
+    }
   }
 }
 

@@ -18,6 +18,7 @@ import { SignupService } from './signup.service';
 })
 export class SignupComponent {
   signUpForm: FormGroup;
+  isSubmitting = false;
 
   constructor(private fb: FormBuilder, private signupService: SignupService) {
     this.signUpForm = this.fb.group(
@@ -44,6 +45,7 @@ export class SignupComponent {
 
   onSubmit(): void {
     if (this.signUpForm.valid) {
+      this.isSubmitting = true;
       const { fname, lname, email, password } = this.signUpForm.value;
       this.signupService.signup({ fname, lname, email, password });
     }
