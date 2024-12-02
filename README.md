@@ -82,4 +82,4 @@ This project is built with best practices for scalability, performance, and ease
 
 ## License
 
-This project is licensed under the CC BY-NC License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
