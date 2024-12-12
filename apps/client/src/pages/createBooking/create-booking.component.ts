@@ -5,10 +5,8 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BookingService } from './create-booking.service';
 import { PaymentComponent } from '../../components/payment/payment.component';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { NotificationService } from '../../core/services/notification.service';
@@ -19,12 +17,7 @@ import { TourState } from '../../core/states/tour/tour.state';
 @Component({
   selector: 'app-create-booking',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatSnackBarModule,
-    PaymentComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, PaymentComponent, RouterModule],
   templateUrl: './create-booking.component.html',
   styleUrls: ['./create-booking.component.scss'],
 })

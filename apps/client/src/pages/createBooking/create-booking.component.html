@@ -1,83 +1,117 @@
 <div
-  class="min-h-screen py-24 flex flex-col justify-center items-center bg-gray-100 dark:bg-gray-900"
+  class="relative min-h-screen py-24 flex flex-col justify-center items-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+  style="
+    background-image: url('https://res.cloudinary.com/drj6tdlhy/image/upload/v1731828695/nat-6_muc7i8.jpg');
+    background-position: center;
+    background-size: cover;
+  "
 >
   <div
-    class="w-full max-w-3xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden"
+    class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/90 backdrop-blur-sm"
+  ></div>
+
+  <div
+    class="w-full max-w-3xl mx-auto bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg shadow-xl rounded-2xl overflow-hidden border border-white/30 dark:border-gray-700/30 transition-all duration-300 z-10"
   >
-    <div class="p-8">
-      <!-- Step 1: Select Dates -->
-      <div *ngIf="step === 1" class="step step-dates space-y-6">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+    <div class="p-8 py-10">
+      <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          Now Booking: {{ tourDetails!.name }}
+        </h1>
+      </div>
+
+      <!-- Progress Indicator -->
+      <div class="mb-6">
+        <div
+          class="flex justify-between text-sm text-gray-600 dark:text-gray-400"
+        >
+          <span>Step {{ step }} of 4</span>
+          <span *ngIf="step === 4" class="text-blue-600 dark:text-blue-400"
+            >Final Step</span
+          >
+        </div>
+        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+          <div
+            class="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
+            [style.width]="(step / 4) * 100 + '%'"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Step 1: Select Number of Guests -->
+      <div *ngIf="step === 1" class="step step-dates space-y-6 animate-fadeIn">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">
           Select Number of Guests
         </h2>
-        <form [formGroup]="bookingForm" class="space-y-4">
-          <div>
+        <form [formGroup]="bookingForm" class="space-y-6">
+          <div class="border-b border-gray-300 dark:border-gray-700 pb-8">
             <label
               for="numberOfGuests"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-6"
               >Number of Guests</label
             >
             <input
               type="number"
               id="numberOfGuests"
               formControlName="numberOfGuests"
-              class="input"
+              class="input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white transition-colors duration-300"
               min="1"
+              placeholder="Enter number of guests"
             />
           </div>
         </form>
       </div>
 
       <!-- Step 2: Select Start Date -->
-      <div *ngIf="step === 2" class="step step-start-date space-y-6">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+      <div
+        *ngIf="step === 2"
+        class="step step-start-date space-y-6 animate-fadeIn"
+      >
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">
           Select Start Date
         </h2>
-        <div class="space-y-4">
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Available Dates:
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <button
-              *ngFor="let date of availableStartDates"
-              (click)="onSelectStartDate(date)"
-              [class.bg-blue-500]="bookingForm.value.startDate === date"
-              [class.text-white]="bookingForm.value.startDate === date"
-              class="border border-gray-300 dark:border-gray-600 rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-            >
-              {{ date | date : 'longDate' }}
-            </button>
-          </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Available Dates:</p>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-gray-300 dark:border-gray-700 pb-8"
+        >
+          <button
+            *ngFor="let date of availableStartDates"
+            (click)="onSelectStartDate(date)"
+            [class.bg-blue-500]="bookingForm.value.startDate === date"
+            [class.text-white]="bookingForm.value.startDate === date"
+            class="border border-gray-300 dark:border-gray-600 rounded-md p-3 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 dark:text-gray-200"
+          >
+            {{ date | date : 'MMM d, y' }}
+          </button>
         </div>
       </div>
 
       <!-- Step 3: Review Your Booking -->
-      <div *ngIf="step === 3" class="step step-review space-y-6">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+      <div *ngIf="step === 3" class="step step-review space-y-6 animate-fadeIn">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">
           Review Your Booking
         </h2>
-        <div class="flex items-center space-x-6">
+        <div
+          class="flex items-center space-x-4 border-b border-gray-300 dark:border-gray-700 pb-4 mb-4"
+        >
           <img
             [src]="tourDetails!.imageCover"
             alt="{{ tourDetails!.name }}"
-            class="w-28 h-28 rounded-lg shadow-md object-cover"
+            class="w-24 h-24 rounded-lg shadow-sm object-cover"
           />
           <div>
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-              {{ tourDetails!.name }}
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
               Duration: {{ tourDetails!.duration }} days
             </p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
               Guests: {{ bookingForm.value.numberOfGuests }} people
             </p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
               Price: ${{
                 tourDetails!.price * bookingForm.value.numberOfGuests
               }}
             </p>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-lg text-gray-600 dark:text-gray-300">
               Selected Date:
               {{ bookingForm.value.startDate | date : 'longDate' }}
             </p>
@@ -86,7 +120,10 @@
       </div>
 
       <!-- Step 4: Payment -->
-      <div *ngIf="step === 4" class="step step-payment space-y-6">
+      <div
+        *ngIf="step === 4"
+        class="step step-payment space-y-6 animate-fadeIn"
+      >
         <app-payment
           [amount]="tourDetails!.price * bookingForm.value.numberOfGuests"
           [tourSlug]="tourDetails!.slug"
@@ -98,16 +135,25 @@
 
       <!-- Navigation Buttons -->
       <div class="flex justify-between mt-6">
-        <button
-          *ngIf="step > 1"
-          class="btn-secondary"
-          (click)="onPreviousStep()"
-        >
-          Previous
-        </button>
-        <button class="btn-primary" (click)="onNextStep()">
-          {{ step === 4 ? 'Confirm Booking' : step === 3 ? 'Pay Now' : 'Next' }}
-        </button>
+        <button class="btn-cancel" routerLink="/dashboard/home">Cancel</button>
+
+        <div class="flex space-x-3">
+          <button
+            *ngIf="step > 1"
+            class="btn-secondary bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded-md transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            (click)="onPreviousStep()"
+          >
+            Previous
+          </button>
+          <button
+            class="btn-primary bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-md transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            (click)="onNextStep()"
+          >
+            {{
+              step === 4 ? 'Confirm Booking' : step === 3 ? 'Pay Now' : 'Next'
+            }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
