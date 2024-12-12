@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as bodyParser from 'body-parser';
 import helmet from 'helmet';
 import { swaggerCss } from './swaggerStyles';
 
@@ -15,28 +16,26 @@ export async function bootstrap() {
         : ['error', 'warn'], // Log only errors and warnings in productio
   });
 
+  app.use('/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
+
   // Enable graceful shutdown
   app.enableShutdownHooks();
 
   // Enable CORS in development
-  if (process.env.NODE_ENV === 'development') {
-    app.enableCors({
-      origin: 'http://localhost:4200',
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    });
-  } else {
-    app.enableCors({
-      origin: ['https://featherly.karuifeather.com'],
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    });
-  }
+  app.enableCors({
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:4200'
+        : 'https://featherly.karuifeather.com',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
-  const { default: cookierParser } = await import('cookie-parser');
-  app.use(cookierParser());
+  // Middleware to parse raw body for Stripe Webhook
+
+  const { default: cookieParser } = await import('cookie-parser');
+  app.use(cookieParser());
 
   // Add security headers with CSP including the nonce
   app.use(
@@ -45,7 +44,7 @@ export async function bootstrap() {
         useDefaults: true,
         directives: {
           'script-src': ["'self'", 'api.mapbox.com', 'js.stripe.com'],
-          'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+          'style-src': ["'self'", 'https:'],
           'connect-src': ["'self'", 'api.mapbox.com', 'events.mapbox.com'],
           'img-src': ["'self'", 'data:'],
           'font-src': ["'self'", 'https:', 'data:'],

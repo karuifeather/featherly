@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { TourModule } from './tour/tour.module';
 import { BookingModule } from './booking/booking.module';
 import { ReviewModule } from './review/review.module';
+import { StripeModule } from './stripe/stripe.module';
 import { join } from 'path';
 
 @Module({
@@ -59,8 +60,9 @@ import { join } from 'path';
     AuthModule,
     UserModule,
     TourModule,
-    BookingModule,
     ReviewModule,
+    BookingModule,
+    StripeModule,
   ],
 })
 export class AppModule {}
