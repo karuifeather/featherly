@@ -39,14 +39,8 @@ export class BookingsComponent implements OnInit {
       return;
     }
 
-    // Fetch upcoming bookings if not already fetched
-    const upcomingBookings = this.store.selectSnapshot(
-      BookingState.getUpcomingBookings
-    );
-
-    if (!upcomingBookings) {
-      this.bookingsService.fetchUpcomingBookings(user.id);
-    }
+    // Always Fetch upcoming bookings
+    this.bookingsService.fetchUpcomingBookings(user.id);
 
     // Fetch past bookings if not already fetched
     const pastBookings = this.store.selectSnapshot(
