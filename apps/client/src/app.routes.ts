@@ -10,6 +10,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { FeaturesComponent } from './pages/features/features.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SearchResultsComponent } from './pages/search/search.component';
+import { TourDetailComponent } from './pages/tourdetails/tour-details.component';
 
 export const appRoutes: Route[] = [
   { canActivate: [NonAuthGuard], path: '', component: LandingComponent },
@@ -44,6 +45,11 @@ export const appRoutes: Route[] = [
     canActivate: [NonAuthGuard],
     path: 'search',
     component: SearchResultsComponent,
+  },
+  {
+    canActivate: [NonAuthGuard],
+    path: 'tours/:tourSlug',
+    component: TourDetailComponent,
   },
   {
     path: 'dashboard',
