@@ -4,11 +4,12 @@ import { Store } from '@ngxs/store';
 import { BookingsService } from './bookings.service';
 import { BookingState } from '../../core/states/booking/booking.state';
 import { map } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-bookings',
   templateUrl: './bookings.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   standalone: true,
 })
 export class BookingsComponent implements OnInit {
