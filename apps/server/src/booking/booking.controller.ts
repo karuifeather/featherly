@@ -17,7 +17,6 @@ import {
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { BookingService } from './booking.service';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
@@ -32,51 +31,22 @@ import { QueryBookingDto } from './dtos/query-booking.dto';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  @ApiOperation({
-    summary: 'Get a Stripe checkout session for a tour',
-    description: 'Returns a checkout session for the specified tour.',
-  })
-  @ApiParam({
-    name: 'tourId',
-    description: 'ID of the tour',
-    example: '5c88fa8cf4afda39709c295a',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Checkout session created successfully.',
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized - Token required.' })
-  @Get('/check-out-session/:tourId')
-  async getCheckoutSession(
-    @Param('tourId') tourId: string,
+  @Post('create-payment-intent')
+  async createPaymentIntent(
+    @Body('tourSlug') tourSlug: string,
+    @Body('totalPeople') totalPeople: number,
+    @Body('startDate') startDate: Date,
     @Req() req,
     @Res() res
   ) {
-    const session = await this.bookingService.getCheckoutSession(
-      tourId,
-      req.user,
-      req.protocol,
-      req.get('host')
+    const paymentIntent = await this.bookingService.createPaymentIntent(
+      tourSlug,
+      totalPeople,
+      startDate,
+      req.user.id
     );
-    return res.status(200).json({ status: 'success', session });
-  }
 
-  @ApiOperation({
-    summary: 'Handle Stripe webhook events',
-    description: 'Handles webhook events triggered by Stripe.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Webhook event handled successfully.',
-  })
-  @ApiResponse({ status: 400, description: 'Invalid Stripe signature.' })
-  @Post('/webhook-checkout')
-  async webhookCheckout(@Req() req, @Res() res) {
-    await this.bookingService.webhookCheckout(
-      req.body,
-      req.headers['stripe-signature']
-    );
-    return res.status(200).json({ received: true });
+    return res.status(200).json({ status: 'success', ...paymentIntent });
   }
 
   @ApiOperation({

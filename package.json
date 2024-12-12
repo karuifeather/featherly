@@ -25,6 +25,7 @@
     "@ngxs/logger-plugin": "^18.1.6",
     "@ngxs/storage-plugin": "^18.1.6",
     "@ngxs/store": "^18.1.6",
+    "@stripe/stripe-js": "^5.2.0",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^5.0.0",
     "@types/passport-jwt": "^4.0.1",
