@@ -8,34 +8,41 @@ import {
 } from '../../core/states/auth/auth.actions';
 import { AxiosService } from '../../core/services/axios.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { Axios, AxiosError, AxiosInstance } from 'axios';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
+  private _api: AxiosInstance;
+
   constructor(
     private store: Store,
     private axiosService: AxiosService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this._api = this.axiosService.instance;
+  }
 
-  login(email: string, password: string, handleSuccess: () => void): void {
+  async login(email: string, password: string): Promise<boolean> {
     this.store.dispatch(new LoginRequest({ email, password }));
 
-    this.axiosService.instance
-      .post('/auth/login', { email, password })
-      // Handle the response
-      .then((response) => {
-        const { token, data } = response.data;
+    try {
+      const res = await this._api.post('/auth/login', { email, password });
 
-        this.store.dispatch(new LoginSuccess({ token, user: data.user }));
-        this.notificationService.showSuccess('Login successful!');
-        handleSuccess();
-      })
-      // Handle the error
-      .catch((error) => {
-        const message = error?.response?.data?.message || 'Login failed';
+      const { token, data } = res.data;
 
-        this.store.dispatch(new LoginFailure(message));
-        this.notificationService.showError(message);
-      });
+      this.store.dispatch(new LoginSuccess({ token, user: data.user }));
+      this.notificationService.showSuccess('Login successful!');
+      return true;
+    } catch (error: any) {
+      const errorMessage =
+        (error.response?.data?.message as string) ||
+        (error.message as string) ||
+        'Login failed';
+
+      this.store.dispatch(new LoginFailure(errorMessage));
+      this.notificationService.showError(errorMessage);
+
+      return false;
+    }
   }
 }
