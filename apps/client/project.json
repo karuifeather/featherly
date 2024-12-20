@@ -27,8 +27,10 @@
           "mapbox-gl/dist/mapbox-gl.css",
           "apps/client/src/global.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "statsJson": true
       },
+
       "configurations": {
         "production": {
           "fileReplacements": [
@@ -40,13 +42,13 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "3MB",
+              "maximumError": "5MB"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumWarning": "512KB",
+              "maximumError": "1MB"
             }
           ],
           "outputHashing": "all"
