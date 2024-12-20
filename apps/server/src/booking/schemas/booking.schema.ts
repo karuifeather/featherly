@@ -42,6 +42,35 @@ export class Booking extends Document {
 
   @Prop({ type: Boolean, default: true })
   paid: boolean;
+
+  @Prop({ type: Number, default: 1 })
+  totalPeople: number;
+
+  @Prop({ required: true })
+  totalPrice: number; // Final price (basePrice * totalPeople)
+
+  // New payment details
+  @Prop({
+    required: [true, 'Payment method is required.'],
+    default: 'credit_card',
+  })
+  paymentMethod: string; // e.g., 'credit_card', 'paypal', 'stripe'
+
+  @Prop({ type: String })
+  transactionId: string; // Unique identifier for the payment transaction
+
+  @Prop({
+    type: String,
+    enum: ['pending', 'completed', 'failed', 'refunded'],
+    default: 'pending',
+  })
+  paymentStatus: string; // Status of the payment
+
+  @Prop({ type: String, default: 'stripe' })
+  paymentGateway: string; // e.g., 'stripe', 'paypal'
+
+  @Prop({ type: Date })
+  paymentDate: Date; // When the payment was processed
 }
 
 export interface BookingDocument extends Booking, Document {}

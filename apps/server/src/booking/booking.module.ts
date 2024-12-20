@@ -18,5 +18,6 @@ import { User, UserSchema } from '../user/schemas/user.schema';
   ],
   controllers: [BookingController],
   providers: [BookingService],
+  exports: [BookingService],
 })
 export class BookingModule {}

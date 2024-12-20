@@ -1,0 +1,26 @@
+.card-container {
+  background-color: #2d3748; /* Matches the dark theme */
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #4a5568;
+}
+
+.card-input {
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #1a202c; /* Matches the dark background */
+  border: 1px solid #4a5568;
+}
+
+#card-errors {
+  color: #f56565; /* Error color */
+  font-size: 14px;
+}
+
+button {
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.05);
+}

@@ -61,6 +61,11 @@ export class TourState {
   }
 
   @Selector()
+  static getTourById(state: TourStateModel) {
+    return (id: string) => (state.tourDetails ? state.tourDetails[id] : null);
+  }
+
+  @Selector()
   static getCurrentPage(state: TourStateModel) {
     return state.toursFeed.currentPage || 1;
   }

@@ -1,12 +1,13 @@
 <!-- Hero Section -->
 <section
-  class="relative h-[500px] bg-cover bg-center"
+  class="relative h-[500px]"
   [style.backgroundImage]="'url(' + (tour$ | async)?.imageCover + ')'"
+  style="background-position: center; background-size: cover"
 >
   <div
     class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80"
   ></div>
-  <div class="absolute bottom-6 left-6 text-white z-10">
+  <div class="absolute bottom-6 left-12 text-white z-10">
     <h1 class="text-4xl font-bold">{{ (tour$ | async)?.name }}</h1>
     <p class="mt-2 text-lg">{{ (tour$ | async)?.summary }}</p>
   </div>
@@ -52,7 +53,7 @@
       </p>
       <button
         class="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all"
-        (click)="bookTour()"
+        routerLink="/dashboard/create/booking/{{ (tour$ | async)?.slug }}"
       >
         Book Now
       </button>

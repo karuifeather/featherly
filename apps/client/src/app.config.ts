@@ -29,7 +29,6 @@ export const appConfig: ApplicationConfig = {
           'tour.popularTours',
           'tour.tourDetails',
           'user.savedTours',
-          'booking.bookings',
         ],
       }),
       withNgxsReduxDevtoolsPlugin()

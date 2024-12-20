@@ -35,18 +35,26 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  async onSubmit() {
     if (this.loginForm.invalid) return;
 
     const { email, password } = this.loginForm.value;
 
-    const handleSuccess = () => {
-      const returnUrl =
-        this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-      this.router.navigateByUrl(returnUrl);
-    };
-
     this.isSubmitting = true;
-    this.loginService.login(email, password, handleSuccess);
+    this.loginService.login(email, password);
+
+    const result = await this.loginService.login(email, password);
+
+    if (result) {
+      this.handleSuccess();
+    } else {
+      this.isSubmitting = false;
+    }
   }
+
+  handleSuccess = () => {
+    const returnUrl =
+      this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.router.navigateByUrl(returnUrl);
+  };
 }

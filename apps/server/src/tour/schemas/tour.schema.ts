@@ -108,7 +108,7 @@ export class Tour extends Document {
   @Prop([String])
   images: string[];
 
-  @Prop({ type: Date, default: Date.now() })
+  @Prop({ type: [Date], default: [] })
   startDates: Date[];
 
   @Prop({ type: Boolean, default: false })

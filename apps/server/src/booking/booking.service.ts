@@ -31,79 +31,54 @@ export class BookingService {
     this.crud = new CRUDFactory<BookingDocument>(this.bookingModel);
   }
 
-  async getCheckoutSession(
-    tourId: string,
-    user: any,
-    protocol: string,
-    host: string
+  async createPaymentIntent(
+    tourSlug: string,
+    totalPeople: number,
+    startDate: Date,
+    userId: string
   ) {
-    const tour = await this.tourModel.findById(tourId);
+    const tour = await this.tourModel.findOne({ slug: tourSlug }).exec();
 
     if (!tour) {
       throw new BadRequestException('Tour not found');
     }
 
-    const session = await this.stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      success_url: `${protocol}://${host}/my-tours?alert=booking`,
-      cancel_url: `${protocol}://${host}/${tour.slug}`,
-      customer_email: user.email,
-      client_reference_id: tourId,
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `${tour.name} Tour`,
-              description: tour.summary,
-              images: [`${protocol}://${host}/img/tours/${tour.imageCover}`],
-            },
-            unit_amount: tour.price * 100, // Stripe uses cents
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
+    const totalPrice = tour.price * totalPeople; // Calculate the total price
+
+    // Create a booking with default payment status
+    const booking = new this.bookingModel({
+      tour: tour.id as mongoose.Types.ObjectId,
+      user: new mongoose.Types.ObjectId(userId),
+      price: tour.price,
+      totalPeople: totalPeople,
+      totalPrice: totalPrice,
+      startDate: new Date(startDate),
+      paymentStatus: 'pending',
+      paid: false,
     });
 
-    return session;
-  }
+    await booking.save();
 
-  async webhookCheckout(payload: any, signature: string) {
-    const endpointSecret = this.configService.get<string>(
-      'STRIPE_WEBHOOK_SECRET'
-    );
-
-    let event;
-
-    try {
-      event = this.stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        endpointSecret
-      );
-    } catch (err) {
-      throw new BadRequestException(`Webhook error: ${err.message}`);
-    }
-
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
-      await this.createBookingCheckout(session);
-    }
-  }
-
-  private async createBookingCheckout(session: Stripe.Checkout.Session) {
-    const tourId = session.client_reference_id;
-    const user = await this.userModel.findOne({
-      email: session.customer_details.email,
+    // Create a PaymentIntent in Stripe
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: totalPrice * 100, // Stripe expects amount in cents
+      currency: 'usd',
+      metadata: {
+        bookingId: booking.id,
+        userId: userId,
+        tourId: tour.id,
+      },
     });
-    const price = session.amount_total / 100;
 
-    await this.bookingModel.create({
-      tour: tourId,
-      user: user._id,
-      price,
-    });
+    // Update booking with the transactionId
+    booking.transactionId = paymentIntent.id;
+    await booking.save();
+
+    return {
+      clientSecret: paymentIntent.client_secret,
+      bookingId: booking.id,
+      totalPrice: totalPrice,
+    };
   }
 
   async getBookings(queryBookingDto: QueryBookingDto) {
