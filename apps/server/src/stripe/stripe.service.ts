@@ -57,6 +57,13 @@ export class StripeService {
         // Extract metadata from PaymentIntent
         const bookingId = paymentIntent.metadata.bookingId;
 
+        if (!bookingId) {
+          res
+            .status(400)
+            .send('Booking ID not found in PaymentIntent metadata or invalid.');
+          return;
+        }
+
         // Update booking details in the database
         await this.bookingService.updateBooking(bookingId, {
           paymentStatus: 'completed',
